@@ -1,9 +1,7 @@
 import java.util.Scanner;
 
 public class LoginBoundary {
-    // controller objects contain boundary objects?
-
-    // boundary is similar to view
+    
     LoginController loginController;
 
     void showLoginUI() {
