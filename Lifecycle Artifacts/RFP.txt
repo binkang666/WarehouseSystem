@@ -1,0 +1,211 @@
+Request for Proposal
+
+CECS 343
+
+
+
+Hello Bidders,
+
+I own a small electronics store. I sell many models of tvs and stereos. I keep these in two warehouses and replenish my stock when I have 5 or fewer items of any given model. The number in stock is the number contained in both warehouses. I have 2 salespersons that work in my store. I pay them a commission on what they sell. They have different commission percentages. I have many customers. When a customer buys a product they either take it home or I deliver it to them. I give them an invoice. They mail in checks to pay the invoice. Sometimes it takes several payment receipts to pay an invoice in full. If they pay the invoice in full in less than 10 days I deduct 10% from the invoice. If they don’t pay in full within 30 days I charge a 2% finance charge.
+
+Each product has a selling price which I charge the customer. Each product has a cost price which I pay my supplier.
+
+Each customer has a sales tax % that I apply to their invoice. I don’t want to enter that for every invoice for the same customer. The system should apply the % I assigned to the customer.
+
+If I deliver the product I add a delivery charge to the invoice.
+
+I need to be able to add to the quantity on hand of an inventory item when I receive it from my supplier.
+
+I want a display that for each product shows me: Product name, Selling Price, Cost Price, Total Quantity on Hand, Quantity Sold, Total Sales, Total Cost, Total Profit and Total Profit Percent. I want this sorted in decreasing order of profit percent.
+
+I want a display that shows me the products in my inventory that have 5 or fewer in the warehouse. I want this sorted in increasing order by quantity on hand.
+
+I want a display that shows me quantity on hand for each product by warehouse.
+
+I want a display that shows me what invoices are open sorted in increasing order of invoice date.
+
+I want a display that shows me what invoices are closed (paid) sorted in decreasing order of invoice amount.
+
+I want a display that shows me the total amount of sales $$ and total commission earned for each of my salespeople.
+
+We can discuss the details of these displays during our requirements meetings.
+
+I am happy to answer any questions you have. I am sure I have left out some important details.
+
+I want this to run on my laptop/desktop as a non-networked application. I want it to be password protected. I am the only user so I don’t need a login.
+
+
+
+Questions/Answer:
+
+Does the delivery charge get added before or after the sales tax and/or the finance charge/deduction?
+
+The delivery charge does not contribute to sales tax nor is it subject to discount or finance charge.
+
+Is 2 warehouses enough?
+
+For right now. However, in the next 2 years I will be adding 3 more.
+
+what is the maximum payment receipts to pay an invoice in full?
+
+No maximum
+
+What will be the commission rate for the salespersons and will there be more in the future?
+
+I need to be able to set and change the commission rates as I desire. (i.e., not hard-coded). There may be more salespersons in the future as my sales increase.
+
+Does the client want customer information saved, like shipping information?
+
+We need to capture the shipping information for the sale but not retain it after the invoice is paid in full.
+
+what currencies do you take?
+
+Only US Dollars to 2 decimal place accuracy.
+
+how exactly do you want the display to look?
+
+TBD
+
+Is there a return policy?
+
+No, returns are not allowed.
+
+does the client want the program as an executable?
+
+I don’t know what that means. I run a store, I want my computer to do this stuff any way it can.
+
+What is the maximum time for receiving delivery?
+
+None, we do not track deliveries.
+
+what happens when a client does not pay even past the 30 days? Would it increase 2% every 30 days?
+
+Yes and it is compounded.
+
+Can the client purchase or place holds on out of stock products?
+
+No
+
+What is the max number of items a warehouse can hold
+
+No limit
+
+How do you determine the delivery cost if someone decides to deliver the products they bought?
+
+I simply enter the amount. The computer doesn’t determine it.
+
+would the client like a way to communicate with buyers?
+
+no
+
+Can I be notified when an item is available in stock?
+
+No
+
+If a client pays part and not full and then takes over 30 days to pay the rest, does the 2% effect what they already paid for or just the part that's left?
+
+The finance charge is computed on the invoice balance (compounded)
+
+Would we have to worry about refunds/exchange requests?
+
+No
+
+Would they ever want to remove an item and stop selling it completely?
+
+No
+
+Are there specific delivery options such as express shipping or standard?
+
+No, its delivery Y/N
+
+does the client want each display to be accessible individually, or all in one window?
+
+Individually
+
+Will the client supply us with their current stock of available products? And will the client expect to sell new future products that weren't previously listed?
+
+All item quantities start at 0. New shipments received at a warehouse must be added to the quantity on hand at that warehouse.
+
+Yes, I do want to be able to add new models to my inventory.
+
+Do you want to split how the products are displayed into categories such as tv, stereos, etc, or in a single interface?
+
+Multiple categories. You will see that when I give you the format of the displays.
+
+Will any products share the same name?
+
+No
+
+Do we have admin vs. non-admin access?
+
+No
+
+Does a sale person use the system?
+
+No
+
+Can one invoice contain items from 2 different warehouses?
+
+Yes
+
+What customer info is retained in an invoice?
+
+TBD
+
+Do the delivery charges or Discounts/Finance charges influence the amount the salesperson makes in commission?
+
+No
+
+is sales tax determined per individual customer, or is it the same percentage applied for every customer?
+
+Sales tax would be applied for each customer individually (e.g. different tax rate for each customer)
+
+
+
+Do we need to have a screen for breaking down items by warehouses?
+
+From RFP: "I want a display that shows me quantity on hand for each product by warehouse."
+
+
+
+How should we divide items into each warehouse?
+
+The owner makes decision how to distribute the items to each warehouse.
+
+The owner enters the number of delivered items to each warehouse
+
+
+
+Are we going to keep the count of the items in each warehouse separately? (e.g. 5 Samsung TV in warehouse A, 4Samsung TV in warehouse B)
+
+See 31
+
+
+
+If a customer buys a TV, but does not pay within 30 days. Then if he buys another item does he receive a penalty charge for new item as well?
+
+I think a delinquent customer’s account should be suspended (e.g no new purchasing transaction allowed) until she pays off the amount in total.
+
+
+
+Are OS requirements or minimum hardware requirements part of non-functional requirements?
+
+I wouldn’t put it there although it sounds it is. I would put it in SRS document.
+
+
+
+Should we be able to remove an Invoice?
+
+No
+
+
+
+Can we remove a customer?
+
+A customer can be marked inactive but not deleted. I do not want students to deal with dangling references if the customer has open invoices. Databases are not a required course for 343.
+
+
+
+If there is a user error where the owner sells the product that does not exist in stock?
+
+At the time of sale, if there is not enough quantity on hand the sale is not made. We are not creating an Ordering system. This is simply Sales and Receivables.
