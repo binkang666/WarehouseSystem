@@ -35,13 +35,13 @@ public class Salesperson extends Person {
                 ", Commission Rate: " + getCommissionRate();
     }
 
-    //getter
+    //getter - Boundary
     public double getTotalCommissionEarned() { return totalCommissionEarned; }
     public double getTotalSales() { return totalSales; }
     public LocalDate getStartDate() { return startDate; }
     public double getCommissionRate() { return commissionRate; }
 
-    //setter
+    //setter - Controller
     public void setTotalCommissionEarned(double totalCommissionEarned) { this.totalCommissionEarned = totalCommissionEarned; }
     public void setTotalSales(double totalSales) { this.totalSales = totalSales; }
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
