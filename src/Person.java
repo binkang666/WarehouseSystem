@@ -1,33 +1,44 @@
 import java.util.*;
 
-public class Person {
+public abstract class Person {
     private String first_name;
     private String last_name;
-    private long information;
-    String name;
+    private String phone;
+    private String name;
+    private String address;
 
-    public Person(String firstName, String lastName, long info){
+    public Person(){
+        this.first_name = "";
+        this.last_name = "";
+        this.phone = "";
+        this.address = "";
+    }
+    public Person(String firstName, String lastName, String phone, String address){
         this.first_name = firstName;
         this.last_name = lastName;
-        this.information = info;
-        this.name = first_name + last_name;
+        this.phone = phone;
+        this.address = address;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(information, name);
+    public String toString()
+    {
+        return "Name: " + getName() + ", Address: " + getAddress() + ", Phone: " + getPhone();
     }
 
-    public String toString(){
-        return "Name: " + name + ", Information: " + information;
-    }
+    public abstract String getType();
 
-    public boolean equals(Object o){
-        if (o == this) return true;
-        if (o == null) return false;
-        if (o.getClass() != this.getClass()) return false;
-        Person p = (Person) o;
-        return (this.name.equals(p.name)) && (this.information == p.information);
-    }
+    //getter
+    public String getFirst_name() { return first_name; }
+    public String getLast_name() { return last_name; }
+    public String getPhone() { return phone; }
+    public String getName() { return name = first_name + last_name; }
+    public String getAddress() { return address; }
 
+    //setter
+    public void setFirst_name(String first_name) { this.first_name = first_name; }
+    public void setLast_name(String last_name) { this.last_name = last_name; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public void setName(String name) { this.name = name; }
+    public void setAddress(String address) { this.address = address; }
 }
