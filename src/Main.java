@@ -9,9 +9,12 @@ public class Main {
 
     private static Map<String, Customer> customers;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        // Login
+        LoginController loginController = new LoginController();
+        loginController.loginBoundary.showLoginUI();
 
-        if(args.length <1 ){
+        if(args.length < 1 ){
             sop("Need to pass the name of the input file as argument");
             System.exit(1);
         }
