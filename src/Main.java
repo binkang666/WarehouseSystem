@@ -9,16 +9,68 @@ public class Main {
 
     private static Map<String, Customer> customers;
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        // Login
-        LoginController loginController = new LoginController();
-        loginController.loginBoundary.showLoginUI();
+    public static void main(String[] args) {
 
-        if(args.length < 1 ){
+        //login process here
+
+        //need to try login first, if correct, then proceed the following
+        showMainUI();
+        int choice;
+        Scanner input = new Scanner(System.in);
+        do {
+            choice = input.nextInt();
+            switch (choice) {
+                case 1 -> {
+                    sop("""
+                            1. add customers
+                            2. Show all customers
+                            3. Return to main menu"""
+                    );
+                    int choice_customer = input.nextInt();
+                    switch (choice_customer){
+                        case 1 -> sop("adding customers");
+                        case 2 -> sop("showing all customers");
+                        case 3 -> showMainUI();
+                        default -> sop("Please choose number from 1 - 3");
+                    }
+                }
+                case 2 -> sop("Invoice");
+                case 3 -> sop("Warehouse");
+                case 4 -> {
+                     sop("1. Show all products\n" +
+                            "2. Show products that have 5 or fewer in the warehouse\n" +
+                            "3. Return to main menu"
+                     );
+                         int choice2 = input.nextInt();
+                         switch (choice2){
+                             case 1 -> {
+                                 sop("showing all products");
+                                 //Call showAllProducts method here;
+                                 //break;
+                             }
+                             case 2 ->{
+                                 sop("showing products less then 5");
+                                 //Call showProductsLessThan5 method here;
+                                 //break;
+                             }
+                             case 3 -> showMainUI();
+                             default -> sop("Please select one of the options from 1 - 3");
+                         }
+                }
+                case 5 -> sop("Salesperson");
+                case 6 -> {
+                    sop("Quitting now");
+                    return;
+                }
+                default -> sop("Please select one of the options from 1 - 6");
+            }
+        }while(choice < 7);
+
+      /*  if(args.length <1 ){
             sop("Need to pass the name of the input file as argument");
             System.exit(1);
         }
-        customers = new HashMap<String, Customer>();
+        customers = new HashMap<String, Customer>();*/
 
 
 
@@ -28,6 +80,7 @@ public class Main {
         c.setLastOrderDate(LocalDate.of(2018,11,1));
         System.out.println(c.toString());
         */
+
 
     }
 
@@ -65,5 +118,19 @@ public class Main {
 
     private static void sop(String s){
         System.out.println(s);
+    }
+
+    private static void showMainUI(){
+        sop("*********************************************");
+        sop( "** Welcome to Warehouse Management System  **" );
+        sop("""
+                **            1. Customer                  **
+                **            2. Invoice                   **
+                **            3. Warehouse                 **
+                **            4. Product                   **
+                **            5. Salesperson               **
+                **            6. Quit                      **""");
+        sop("*********************************************\n");
+        sop("How can I help you today? (Enter one of the above numbers to proceed)");
     }
 }
