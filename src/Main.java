@@ -9,9 +9,13 @@ public class Main {
 
     private static Map<String, Customer> customers;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         //login process here
+        LoginController loginController = new LoginController();
+        loginController.loginBoundary.showLoginUI();
+
+
 
         //need to try login first, if correct, then proceed the following
         showMainUI();

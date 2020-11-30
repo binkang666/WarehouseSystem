@@ -19,30 +19,27 @@ public class LoginBoundary {
             String password = sc.nextLine();
             loginController.createPassword(password);
         }
-
+        // It's not the first time the app is running
         else {
-            int input = -1;
-            Boolean valid;
+            int input;
+            Boolean valid = false;
             String password;
 
-            while (input != 3) {
-                System.out.println("Select an option\n" +
-                    "1. Enter password\n" +
-                    "2. Change password\n" +
-                    "3. Exit");
-                    input = sc.nextInt();
+            while (!valid) {
+                System.out.println("""
+                        Select an option
+                        1. Enter password
+                        2. Change password
+                        3. Exit""");
+                input = sc.nextInt();
+
                 // Enter password
                 if (input == 1) {
                     System.out.println("Enter password: ");
                     password = sc.next();
                     valid = loginController.login(password);
 
-                    if (valid) {
-                        showMainUI();
-                        // Ends the program after all actions in MainUI are completed...
-                        break;
-                    }
-                    else {
+                    if (!valid) {
                         System.out.println("Invalid Password\n");
                     }
                 }
@@ -57,6 +54,8 @@ public class LoginBoundary {
                         password = sc.next();
                         loginController.createPassword(password);
                         System.out.println("Your password has been updated.\n");
+                        // Set valid to false so user has to re-enter password.
+                        valid = false;
                     }
                     else {
                         System.out.println("Invalid Password.\n");
@@ -64,13 +63,9 @@ public class LoginBoundary {
                 }
                 // Exit
                 else {
-                    input = 3;
+                    System.exit(1);
                 }
             }
         }
-    }
-
-    void showMainUI() {
-        System.out.println("Main UI");
     }
 }
