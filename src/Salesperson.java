@@ -9,7 +9,7 @@ public class Salesperson extends Person {
     public Salesperson(){
         this.totalCommissionEarned = 0;
         this.totalSales = 0;
-        this.startDate = LocalDate.of(2020,12,11);
+        this.startDate = LocalDate.now();
         this.commissionRate = 0;
 
     }
@@ -20,17 +20,19 @@ public class Salesperson extends Person {
         super(firstName, lastName, phone, address);
         this.totalCommissionEarned =totalCommissionEarned;
         this.totalSales = totalSales;
-        this.startDate = startDate;
+        this.startDate = LocalDate.now();
         this.commissionRate = commissionRate;
     }
     @Override
     public String getType() {
         return "salesPerson";
     }
+
+
     @Override
-    public String toString()
+    public String toString() //get performance of every salesperson
     {
-        return "Type: "+ getType() + super.toString() + ", Commission Earned:" + getTotalCommissionEarned() +
+        return "Type: "+ getType() + ", "+ super.toString() + ", Commission Earned:" + getTotalCommissionEarned() +
                 ", Total sales: " + getTotalSales() + ", Start Date: " + getStartDate() +
                 ", Commission Rate: " + getCommissionRate();
     }
@@ -46,4 +48,8 @@ public class Salesperson extends Person {
     public void setTotalSales(double totalSales) { this.totalSales = totalSales; }
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
     public void setCommissionRate(double commissionRate) { this.commissionRate = commissionRate; }
+    public void payCommission(){
+        double payment = totalCommissionEarned * commissionRate;
+        totalCommissionEarned = 0;
+    }
 }
