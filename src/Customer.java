@@ -8,40 +8,29 @@ import java.util.Map;
 
 public class Customer extends Person {
 
-    private int customerID;
+    private static int customerID;
     private boolean isActive;
-    private List<Invoice> orderHistory;
+    private String orderHistory;
     private double salesTax;
     private LocalDate lastOrderDate;
 
-    // TODO: TESTING INVOICE, DELETE LATER
-    public Customer(int customerID, String firstName, String lastName, String phoneNumber, String address, double salesTax) {
-        super(firstName, lastName, phoneNumber, address);
-        this.customerID = customerID;
-        this.salesTax = salesTax;
-
-    }
-
     public Customer(){
-        this.customerID = 0;
-        this.isActive = false;
+        customerID ++;
+        this.isActive = true;
     }
 
 
-    public Customer(String firstName, String lastName, String phone, String address, int customerID,
-                    boolean isActive, double salesTax) {
+    public Customer(String firstName, String lastName, String phone, String address, double salesTax) {
         super(firstName, lastName, phone, address);
-        this.customerID = customerID;
-        this.isActive = isActive;
+        customerID++;
+        this.isActive = true;
         this.salesTax = salesTax;
-        orderHistory = new ArrayList<>();
     }
 
     @Override
     public String getType() {
         return "customer";
     }
-
     @Override
     public String toString()
     {
@@ -53,34 +42,24 @@ public class Customer extends Person {
     //getter - Boundary
     public int getCustomerID() { return customerID; }
     public boolean isActive() {
-        LocalDate today = LocalDate.now();
-        Period p = Period.between(lastOrderDate, today);
-        long p2 = ChronoUnit.DAYS.between(lastOrderDate, today);
-        return p2 <= 360;
+        return isActive;
     }
-    public ArrayList<Invoice> getOrderHistory(){
-        LocalDate today = LocalDate.now();
-        return getOrderHistory(today);
-    }
-    public ArrayList<Invoice> getOrderHistory(LocalDate today) {
-        ArrayList<Invoice> previousOrders = new ArrayList<>();
-        for(Invoice i: orderHistory){
-            if(ChronoUnit.DAYS.between(lastOrderDate, today) <= 0)
-            previousOrders.add(i);
-        }
-        return previousOrders;
+    public String getOrderHistory() {
+        return orderHistory;
     }
     public double getSalesTax() { return salesTax; }
 
     //setter - Controller
     public void setCustomerID(int customerID) { this.customerID = customerID; }
-    public void changeStatus(boolean status) {
-        if(status = false)
-            status = true;
-        if(status = true)
-            status = false;
+    public void changeActiveStatus() {
+        if(isActive = false)
+            isActive = true;
     }
-    public void setOrderHistory(ArrayList<Invoice> orderHistory) { this.orderHistory = orderHistory; }
+    public void changeNonactiveStatus(){
+        if(isActive = true)
+            isActive = false;
+    }
+    public void setOrderHistory(String orderHistory) { this.orderHistory = orderHistory; }
     public void setSalesTax(double salesTax) { this.salesTax = salesTax; }
     public void setLastOrderDate(LocalDate lastOrderDate) {
         this.lastOrderDate = lastOrderDate;
