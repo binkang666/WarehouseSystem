@@ -14,14 +14,22 @@ public class Customer extends Person {
     private double salesTax;
     private LocalDate lastOrderDate;
 
+    // TODO: TESTING INVOICE, DELETE LATER
+    public Customer(int customerID, String firstName, String lastName, String phoneNumber, String address, double salesTax) {
+        super(firstName, lastName, phoneNumber, address);
+        this.customerID = customerID;
+        this.salesTax = salesTax;
+
+    }
+
     public Customer(){
         this.customerID = 0;
         this.isActive = false;
     }
 
 
-    public Customer(String firstName, String lastName, String phone, String address,int customerID,
-                    boolean isActive,  double salesTax) {
+    public Customer(String firstName, String lastName, String phone, String address, int customerID,
+                    boolean isActive, double salesTax) {
         super(firstName, lastName, phone, address);
         this.customerID = customerID;
         this.isActive = isActive;
@@ -33,6 +41,7 @@ public class Customer extends Person {
     public String getType() {
         return "customer";
     }
+
     @Override
     public String toString()
     {

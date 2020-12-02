@@ -36,7 +36,7 @@ public abstract class Person  {
     public String getFirst_name() { return first_name; }
     public String getLast_name() { return last_name; }
     public String getPhone() { return phone; }
-    public String getName() { return name = first_name + last_name; }
+    public String getName() { return name = first_name + " " + last_name; }
     public String getAddress() { return address; }
 
     //setter - Controller

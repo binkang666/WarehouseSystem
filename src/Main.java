@@ -2,19 +2,22 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
 
 public class Main {
 
-    private static Map<String, Customer> customers;
+
+    private static Map<String, Customer> customers = new HashMap<>();
+    private static Map<Integer, Invoice> invoices = new HashMap<>();
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         //login process here
-        LoginController loginController = new LoginController();
-        loginController.loginBoundary.showLoginUI();
+//        LoginController loginController = new LoginController();
+//        loginController.loginBoundary.showLoginUI();
 
+        customers.put("1", new Customer(1, "name1", "lastname1", "phone1", "add1", .1));
+        customers.put("2", new Customer(2, "name2", "lastname2", "phone2", "add2", .1));
 
 
         //need to try login first, if correct, then proceed the following
@@ -38,7 +41,12 @@ public class Main {
                         default -> sop("Please choose number from 1 - 3");
                     }
                 }
-                case 2 -> sop("Invoice");
+                // Invoice
+                case 2 -> {
+                    InvoiceController invoiceController = new InvoiceController();
+                    invoiceController.invoiceBoundary.showInvoiceUI();
+                    displayAllInvoices();
+                }
                 case 3 -> sop("Warehouse");
                 case 4 -> {
                      sop("1. Show all products\n" +
@@ -88,13 +96,28 @@ public class Main {
 
     }
 
-    private static void displayAllCustomers(){
+    public static void displayAllCustomers() {
         ArrayList<String> names = new ArrayList<>(customers.keySet());
         Collections.sort(names);
-        for(String name : names)
-        {
-            sop("" + customers.get(name));
+        int i = 1;
+        for(String name : names) {
+            sop(i + ". " + customers.get(name) + " ");
+            i++;
         }
+    }
+
+    public static Map<String, Customer> getCustomers() {
+        return customers;
+    }
+
+    public static void displayAllInvoices() {
+        for (Invoice i : invoices.values()) {
+            sop(i.toString());
+        }
+    }
+
+    public static Map<Integer, Invoice> getInvoices() {
+        return invoices;
     }
 
     private static ArrayList<String> readInput(String fileName)
