@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CustomerBoundary {
     CustomerController customerController;
@@ -24,21 +26,34 @@ public class CustomerBoundary {
                 Customer c = new Customer();
 
                 sop("Enter first name for new customer");
-                input.nextLine();
                 String fn = input.nextLine();
+                while(!isValidName(fn)){
+                    fn = input.nextLine();
+                    if(!isValidName(fn)){
+                    sop("Invalid, please enter a valid first name again");}
+                }
                 c.setFirst_name(fn);
+
 
                 sop("Enter last name for new customer");
                 String ln = input.nextLine();
+                while(!isValidName(ln)){
+                    ln = input.nextLine();
+                    if(!isValidName(ln)){
+                    sop("Invalid, please enter a valid last name again");}
+                }
                 c.setLast_name(ln);
+
 
                 sop("Enter phone for new customer");
                 String phone = input.nextLine();
                 c.setPhone(phone);
 
+
                 sop("Enter address for new customer");
                 String add = input.nextLine();
                 c.setAddress(add);
+
 
                 sop("Enter salesTax for new customer");
                 double tax = input.nextDouble();
@@ -66,4 +81,12 @@ public class CustomerBoundary {
     private static void sop(String s){
         System.out.println(s);
     }
+
+    public static boolean isValidName(String input){
+        return Pattern.matches("[a-zA-Z]+", input);
+    }
+
+    /*public static boolean isValidNumber(Double input){
+        return Pattern.matches("[0-9]+[.[0-9]+]?", String.valueOf(input));
+    }*/
 }
