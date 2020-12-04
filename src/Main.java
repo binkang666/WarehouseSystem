@@ -5,10 +5,6 @@ import java.util.*;
 
 public class Main {
 
-    private static Map<String, Person> mPersons;
-    private static Map<String, Customer> mCustomers;
-    private static Map<String, Salesperson> mSalesperson;
-
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         //login process here
@@ -24,56 +20,11 @@ public class Main {
             choice = input.nextInt();
             switch (choice) {
                 case 1 -> {
-                    sop("""
-                            1. add customers
-                            2. Show all customers
-                            3. Change customer status
-                            4. Return to main menu"""
-                    );
-                    int choice_customer = input.nextInt();
-                    switch (choice_customer){
-                        case 1 -> {
-                            sop("\n*********************************************");
-                            sop("adding customers");
-                            Customer c = new Customer();
+                    CustomerController customerController = new CustomerController();
+                    customerController.customerBoundary.showCustomerUI();
+                    EnterToContinue();
+                    showMainUI();
 
-                            sop("Enter first name for new customer");
-                            input.nextLine();
-                            String fn = input.nextLine();
-                            c.setFirst_name(fn);
-
-                            sop("Enter last name for new customer");
-                            String ln = input.nextLine();
-                            c.setLast_name(ln);
-
-                            sop("Enter phone for new customer");
-                            String phone = input.nextLine();
-                            c.setPhone(phone);
-
-                            sop("Enter address for new customer");
-                            String add = input.nextLine();
-                            c.setAddress(add);
-
-                            sop("Enter salesTax for new customer");
-                            double tax = input.nextDouble();
-                            c.setSalesTax(tax);
-
-                            writeCustomer(c);
-                            sop("New Customers added");
-                            showMainUI();
-
-                        }  //OK
-                        case 2 -> {sop("showing all customers");
-                            displayAll("Customer.txt");
-                        }  //OK
-                        case 3 -> {sop("Enter the customer ID for the customer who you want change status");
-                            int id = input.nextInt();
-
-
-                        }  //Need implementation, prob gonna delete this
-                        case 4 -> {showMainUI(); continue menu;} //OK
-                        default -> sop("Please choose number from 1 - 3");
-                    }
                 }
                 case 2 -> sop("Invoice");
                 case 3 -> sop("Warehouse");
@@ -146,20 +97,20 @@ public class Main {
                 }
                 default -> sop("Please select one of the options from 1 - 6");
             }
-        }while(choice < 7);
+        }while(choice <7);
 
 
     }
-    private static void writeCustomer(Customer data){
+    static void writeCustomer(Customer data){
         File file = new File("Customer.txt");
         try{
             try(FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true);
                 BufferedWriter out = new BufferedWriter(fileWriter);) {
-                out.write(data.toString() + "\n");
+                out.write(data + "\n");
                 out.flush();
             }
         }catch (IOException e){
-           e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -183,7 +134,7 @@ public class Main {
     private static void displayAll(String pathname)
     {
         try (FileReader reader =  new FileReader(pathname);
-            BufferedReader br =  new BufferedReader(reader)){
+             BufferedReader br =  new BufferedReader(reader)){
             String line;
             while((line = br.readLine())!=null){
                 sop(line);
@@ -197,7 +148,7 @@ public class Main {
         System.out.println(s);
     }
 
-    private static void showMainUI(){
+    static void showMainUI(){
         sop("*********************************************");
         sop( "** Welcome to Warehouse Management System  **" );
         sop("""
@@ -210,4 +161,24 @@ public class Main {
         sop("*********************************************\n");
         sop("How can I help you today? (Enter one of the above numbers to proceed)");
     }
+
+    public static void displayAllCustomers() {
+        displayAll("Customer.txt");
+    }
+
+    public static Map<String, Customer> getCustomers() {
+        return null;
+    }
+
+    public static <K, V> Map<K,V> getInvoices() {
+        return null;
+    }
+
+    public static void EnterToContinue(){
+        System.out.println("Press any key to return to main menu...");
+        try{System.in.read();}
+        catch(Exception e){	e.printStackTrace();}
+    }
+
+    private static Map<String, Customer> customers;
 }
