@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class SalespersonBoundary {
     SalespersonController salespersonController;
@@ -21,16 +22,38 @@ public class SalespersonBoundary {
                 sop("Enter first name for new salesperson");
                 input.nextLine();
                 String fn = input.nextLine();
+                while(!isValidName(fn)){
+                    fn = input.nextLine();
+                    if(!isValidName(fn)){
+                        sop("Invalid, please enter a valid last name again");}
+                }
                 sp.setFirst_name(fn);
+
                 sop("Enter last name for new salesperson");
                 String ln = input.nextLine();
+                while(!isValidName(ln)){
+                    ln = input.nextLine();
+                    if(!isValidName(ln)){
+                        sop("Invalid, please enter a valid last name again");}
+                }
                 sp.setLast_name(ln);
+
                 sop("Enter phone for new salesperson");
                 String phone = input.nextLine();
                 sp.setPhone(phone);
+
                 sop("Enter address for new salesperson");
                 String address = input.nextLine();
                 sp.setAddress(address);
+
+                sop("Enter start year for new salesperson");
+                int yy  = input.nextInt();
+                sop("Enter start month for new salesperson");
+                int mm  = input.nextInt();
+                sop("Enter start day for new salesperson");
+                int dd  = input.nextInt();
+                sp.setStartDate(yy,mm,dd);
+
                 sop("Enter commission rate for new salesperson");
                 double rate = input.nextDouble();
                 sp.setCommissionRate(rate);
@@ -46,11 +69,18 @@ public class SalespersonBoundary {
             }
 
             case 3 -> {
-                Main.displayAll("Salesperson.txt");
+                Main.showMainUI();
             }
         }
     }
     private static void sop(String s){
         System.out.println(s);
     }
+    public static boolean isValidName(String input){
+        return Pattern.matches("[a-zA-Z]+", input);
+    }
+
+ /*  public static boolean isValidTime(int input){
+        return Pattern.matches("[+-]?[0-9]+", String.valueOf(input));
+    }*/
 }
