@@ -1,31 +1,52 @@
+
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class Customer extends Person {
+public class Customer extends Person implements Comparable<Customer> {
 
-    private static int customerID;
-    private boolean isActive;
-    private String orderHistory;
+    private static int customerID = 0;
+    private int status;
+    private ArrayList<Invoice> InvoiceAssociated;
     private double salesTax;
     private LocalDate lastOrderDate;
 
     public Customer(){
-        customerID ++;
-        this.isActive = true;
+        customerID++;
+        status= 1;
     }
 
 
     public Customer(String firstName, String lastName, String phone, String address, double salesTax) {
         super(firstName, lastName, phone, address);
         customerID++;
-        this.isActive = true;
+        status = 1;
         this.salesTax = salesTax;
     }
+
+    public void addInvoiceAssociated(Invoice ia){
+        InvoiceAssociated.add(ia);
+    }
+
+    public void getInvoiceAssociated(){
+        for(Invoice invoice: InvoiceAssociated){
+            System.out.println(invoice);
+        }
+    }
+
+    public void changeStatus() {
+        if(status == 0){
+            status = 1;
+            System.out.println("the customer is now marked active");}
+        else if (status == 1){
+            status = 0;
+            System.out.println("the customer is now marked inactive");}
+    }
+    public int getCustomerID() { return Customer.customerID; }
+    public int getStatus() { return status; }
+    public double getSalesTax() { return salesTax; }
+    public void setSalesTax(double salesTax) { this.salesTax = salesTax; }
+
 
     @Override
     public String getType() {
@@ -35,33 +56,16 @@ public class Customer extends Person {
     public String toString()
     {
         return "Type: "+ getType() + ", Customer ID: " + getCustomerID() + ", " + super.toString() +
-                ", Status: " + isActive() + ", Order History: " + getOrderHistory() +
-                ", Sales Tax: " + getSalesTax();
+                ", Status: " + getStatus()  + ", Sales Tax: " + getSalesTax();
     }
 
-    //getter - Boundary
-    public int getCustomerID() { return customerID; }
-    public boolean isActive() {
-        return isActive;
+    @Override
+    public int compareTo(Customer o)
+    {
+        if(o == null)
+            return 0;
+        else
+            return (getName().compareTo(o.getName()));
     }
-    public String getOrderHistory() {
-        return orderHistory;
-    }
-    public double getSalesTax() { return salesTax; }
 
-    //setter - Controller
-    public void setCustomerID(int customerID) { this.customerID = customerID; }
-    public void changeActiveStatus() {
-        if(isActive = false)
-            isActive = true;
-    }
-    public void changeNonactiveStatus(){
-        if(isActive = true)
-            isActive = false;
-    }
-    public void setOrderHistory(String orderHistory) { this.orderHistory = orderHistory; }
-    public void setSalesTax(double salesTax) { this.salesTax = salesTax; }
-    public void setLastOrderDate(LocalDate lastOrderDate) {
-        this.lastOrderDate = lastOrderDate;
-    }
 }
