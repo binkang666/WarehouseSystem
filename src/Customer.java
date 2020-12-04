@@ -1,71 +1,96 @@
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+public class CustomerBoundary {
+    CustomerController customerController;
 
-public class Customer extends Person implements Comparable<Customer> {
-
-    private static int customerID = 0;
-    private int status;
-    private ArrayList<Invoice> InvoiceAssociated;
-    private double salesTax;
-    private LocalDate lastOrderDate;
-
-    public Customer(){
-        customerID++;
-        status= 1;
+    public CustomerBoundary(CustomerController customerController){
+        this.customerController = customerController;
     }
 
+    void showCustomerUI(){
 
-    public Customer(String firstName, String lastName, String phone, String address, double salesTax) {
-        super(firstName, lastName, phone, address);
-        customerID++;
-        status = 1;
-        this.salesTax = salesTax;
-    }
+        Scanner input = new Scanner(System.in);
+        sop("""
+                            1. add customers
+                            2. Show all customers
+                            3. Change customer status
+                            4. Return to main menu"""
+        );
+        int choice_customer = input.nextInt();
+        switch (choice_customer){
+            case 1 -> {
+                sop("\n*********************************************");
+                sop("adding customers");
+                Customer c = new Customer();
 
-    public void addInvoiceAssociated(Invoice ia){
-        InvoiceAssociated.add(ia);
-    }
+                sop("Enter first name for new customer");
+                String fn = input.nextLine();
+                while(!isValidName(fn)){
+                    fn = input.nextLine();
+                    if(!isValidName(fn)){
+                    sop("Invalid, please enter a valid first name again");}
+                }
+                c.setFirst_name(fn);
 
-    public void getInvoiceAssociated(){
-        for(Invoice invoice: InvoiceAssociated){
-            System.out.println(invoice);
+
+                sop("Enter last name for new customer");
+                String ln = input.nextLine();
+                while(!isValidName(ln)){
+                    ln = input.nextLine();
+                    if(!isValidName(ln)){
+                    sop("Invalid, please enter a valid last name again");}
+                }
+                c.setLast_name(ln);
+
+
+                sop("Enter phone for new customer");
+                String phone = input.nextLine();
+                c.setPhone(phone);
+
+
+                sop("Enter address for new customer");
+                String add = input.nextLine();
+                c.setAddress(add);
+
+
+                sop("Enter salesTax for new customer");
+                double tax = input.nextDouble();
+                c.setSalesTax(tax);
+
+                Main.writeCustomer(c);
+                sop("New Customers added");
+                
+            }  //OK
+            
+            
+            case 2 -> {sop("showing all customers");
+                Main.displayAllCustomers();
+            }  //OK
+            
+            
+            case 3 -> {sop("Enter the customer ID for the customer who you want change status");
+                
+
+            }  //Need implementation
+            
+            
+            case 4 -> {Main.showMainUI();} //OK
+            default -> sop("Please choose number from 1 - 3");
         }
     }
 
-    public void changeStatus() {
-        if(status == 0){
-            status = 1;
-            System.out.println("the customer is now marked active");}
-        else if (status == 1){
-            status = 0;
-            System.out.println("the customer is now marked inactive");}
-    }
-    public int getCustomerID() { return Customer.customerID; }
-    public int getStatus() { return status; }
-    public double getSalesTax() { return salesTax; }
-    public void setSalesTax(double salesTax) { this.salesTax = salesTax; }
 
-
-    @Override
-    public String getType() {
-        return "customer";
-    }
-    @Override
-    public String toString()
-    {
-        return "Type: "+ getType() + ", Customer ID: " + getCustomerID() + ", " + super.toString() +
-                ", Status: " + getStatus()  + ", Sales Tax: " + getSalesTax();
+    private static void sop(String s){
+        System.out.println(s);
     }
 
-    @Override
-    public int compareTo(Customer o)
-    {
-        if(o == null)
-            return 0;
-        else
-            return (getName().compareTo(o.getName()));
+    public static boolean isValidName(String input){
+        return Pattern.matches("[a-zA-Z]+", input);
     }
 
+    /*public static boolean isValidNumber(Double input){
+        return Pattern.matches("[0-9]+[.[0-9]+]?", String.valueOf(input));
+    }*/
 }
