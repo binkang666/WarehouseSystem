@@ -25,10 +25,10 @@ public class Main {
                     EnterToContinue();
                     showMainUI();
 
-                }
+                } //Customers
                 case 2 -> sop("Invoice");
                 case 3 -> sop("Warehouse");
-                case 4 -> {
+                case 4 -> {sop("Products");
                     sop("1. Show all products\n" +
                             "2. Show products that have 5 or fewer in the warehouse\n" +
                             "3. Return to main menu"
@@ -48,48 +48,12 @@ public class Main {
                         case 3 -> showMainUI();
                         default -> sop("Please select one of the options from 1 - 3");
                     }
-                }
-                case 5 -> {sop("Salesperson");
-                    sop("""
-                            1. Add new Salesperson
-                            2. Check current Salesperson Performance
-                            3. return to main menu""");
-                    int sp_choice = input.nextInt();
-                    switch (sp_choice){
-                        case 1 -> {sop("adding new salesperson");
-                            Salesperson sp = new Salesperson();
-                            sop("Enter first name for new salesperson");
-                            input.nextLine();
-                            String fn = input.nextLine();
-                            sp.setFirst_name(fn);
-                            sop("Enter last name for new salesperson");
-                            String ln = input.nextLine();
-                            sp.setLast_name(ln);
-                            sop("Enter phone for new salesperson");
-                            String phone = input.nextLine();
-                            sp.setPhone(phone);
-                            sop("Enter address for new salesperson");
-                            String address = input.nextLine();
-                            sp.setAddress(address);
-                            sop("Enter commission rate for new salesperson");
-                            double rate = input.nextDouble();
-                            sp.setCommissionRate(rate);
-
-                            writeSalesperson(sp);
-                            sop("salesperson added");
-                            showMainUI();
-
-                        }
-
-                        case 2 -> {
-                            sop("display all salesperson performance");
-                            displayAll("Salesperson.txt");
-                        }
-
-                        case 3 -> {
-                            displayAll("Salesperson.txt");
-                        }
-                    }
+                } //products
+                case 5 -> {
+                    SalespersonController salespersonController = new SalespersonController();
+                    salespersonController.salespersonBoundary.showSalespersonUI();
+                    EnterToContinue();
+                    showMainUI();
                 }
                 case 6 -> {
                     sop("Quitting now");
@@ -118,7 +82,7 @@ public class Main {
 
     }
 
-    private static void writeSalesperson(Salesperson data){
+    static void writeSalesperson(Salesperson data){
         File file = new File("Salesperson.txt");
         try{
             try(FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true);
@@ -131,7 +95,7 @@ public class Main {
         }
     }
 
-    private static void displayAll(String pathname)
+    static void displayAll(String pathname)
     {
         try (FileReader reader =  new FileReader(pathname);
              BufferedReader br =  new BufferedReader(reader)){
