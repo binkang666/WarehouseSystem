@@ -62,16 +62,20 @@ public class CustomerBoundary {
                 Main.writeCustomer(c);
                 sop("New Customers added");
 
-
             }  //OK
+
+
             case 2 -> {sop("showing all customers");
                 Main.displayAllCustomers();
-
             }  //OK
+
+
             case 3 -> {sop("Enter the customer ID for the customer who you want change status");
 
 
-            }  //Need implementation, prob gonna delete this
+            }  //Need implementation
+
+
             case 4 -> {Main.showMainUI();} //OK
             default -> sop("Please choose number from 1 - 3");
         }
