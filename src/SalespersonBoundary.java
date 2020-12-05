@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -10,13 +11,14 @@ public class SalespersonBoundary {
         this.salespersonController = salespersonController;
     }
 
-    void showSalespersonUI(){
+    void showSalespersonUI() throws IOException {
         Scanner input = new Scanner(System.in);
         sop("Salesperson");
         sop("""
                             1. Add new Salesperson
                             2. Check current Salesperson Performance
-                            3. return to main menu""");
+                            3. Search ID for specific Salesperson information
+                            4. return to main menu""");
         int sp_choice = input.nextInt();
         switch (sp_choice){
             case 1 -> {sop("adding new salesperson");
@@ -69,6 +71,9 @@ public class SalespersonBoundary {
                 sp.setCommissionRate(rate);
                 Main.salespeople.put(sp, String.valueOf(rate));
 
+                String id = String.valueOf(sp.getSalespersonID());
+                Main.salespeople.put(sp, id);
+
                 Main.writeSalesperson(Main.salespeople);
                 sop("salesperson added");
 
@@ -80,6 +85,12 @@ public class SalespersonBoundary {
             }
 
             case 3 -> {
+                sop("display salesperson information");
+                String id = input.nextLine();
+                Main.searchSalespersonId(id);
+
+            }
+            case 4 -> {
                 Main.showMainUI();
             }
         }
