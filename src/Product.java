@@ -1,21 +1,17 @@
 public class Product {
     private String productName;
     private double costPrice, sellingPrice;
-    
-    private String storedIn;
-
     private int quantitySold;
     private int quantity;
-    private double totalCost = costPrice * quantity;
-    private double totalProfit = (sellingPrice * quantitySold) - (costPrice * quantitySold);
-    private double totalProfitPercent = (totalProfit / (sellingPrice * quantitySold)) * 100;
-    private double totalSales = quantitySold * sellingPrice;
     
-    //showAllProducts
+    public Product(String productName, double costPrice, double sellingPrice, int quantitySold, int quantity) {
+    	this.productName = productName;
+    	this.costPrice = costPrice;
+    	this.sellingPrice = sellingPrice;
+    	this.quantitySold = quantitySold;
+    	this.quantity = quantity;
+    }
     
-    //showProductsLessThan5
-    
-
     //getter
     public double getSellingPrice() {
         return sellingPrice;
@@ -26,10 +22,33 @@ public class Product {
     public String getProductName() {
         return productName;
     }
+    public int getQuantity() {
+    	return quantity;
+    }
+    public double getTotalProfitPercent() {
+    	return (getTotalProfit() / (sellingPrice * quantitySold)) * 100;
+    }
+    public double getTotalCost() {
+    	return costPrice * quantity;
+    }
+    public double getTotalProfit() {
+    	return (sellingPrice * quantitySold) - (costPrice * quantitySold);
+    }
+    public double getTotalSales() {
+    	return quantitySold * sellingPrice;
+    }
+   
     
+    //setter
+    public void setQuantity(int q) {
+    	quantity = q;
+    }
     
-    
-    
-    
+    public void display() {
+    	String formatting = String.format("%s %lf %lf %d %d %lf %lf %lf %lf", productName, costPrice, 
+    			sellingPrice, quantity, quantitySold, getTotalSales(), getTotalCost(), getTotalProfit(), getTotalProfitPercent());
+    	System.out.println(formatting);
+   
+    }
 }
 
