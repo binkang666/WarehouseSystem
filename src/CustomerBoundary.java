@@ -1,9 +1,10 @@
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CustomerBoundary {
     CustomerController customerController;
+
 
     public CustomerBoundary(CustomerController customerController){
         this.customerController = customerController;
@@ -23,7 +24,8 @@ public class CustomerBoundary {
             case 1 -> {
                 sop("\n*********************************************");
                 sop("adding customers");
-                Customer c = new Customer();
+                Main.customers = new HashMap<Customer, String>();
+                Customer c= new Customer();
 
                 sop("Enter first name for new customer");
                 String fn = input.nextLine();
@@ -33,6 +35,7 @@ public class CustomerBoundary {
                     sop("Invalid, please enter a valid first name again");}
                 }
                 c.setFirst_name(fn);
+                Main.customers.put(c,fn);;
 
 
                 sop("Enter last name for new customer");
@@ -43,23 +46,32 @@ public class CustomerBoundary {
                     sop("Invalid, please enter a valid last name again");}
                 }
                 c.setLast_name(ln);
+                Main.customers.put(c,ln);
 
 
                 sop("Enter phone for new customer");
                 String phone = input.nextLine();
                 c.setPhone(phone);
+                Main.customers.put(c,phone);
 
 
                 sop("Enter address for new customer");
                 String add = input.nextLine();
                 c.setAddress(add);
+                Main.customers.put(c, add);;
 
 
                 sop("Enter salesTax for new customer");
                 double tax = input.nextDouble();
                 c.setSalesTax(tax);
+                Main.customers.put(c, String.valueOf(tax));
 
-                Main.writeCustomer(c);
+                String id = String.valueOf(c.getCustomerID());
+                Main.customers.put(c, id);
+
+
+
+                Main.writeCustomer(Main.customers);
                 sop("New Customers added");
 
             }  //OK
@@ -71,7 +83,7 @@ public class CustomerBoundary {
 
 
             case 3 -> {sop("Enter the customer ID for the customer who you want change status");
-
+                String id = input.nextLine();
 
             }  //Need implementation
 
@@ -93,4 +105,5 @@ public class CustomerBoundary {
     /*public static boolean isValidNumber(Double input){
         return Pattern.matches("[0-9]+[.[0-9]+]?", String.valueOf(input));
     }*/
+
 }
