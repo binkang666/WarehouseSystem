@@ -65,14 +65,19 @@ public class Main {
 
 
     }
-    static void writeCustomer(Customer data){
-        File file = new File("Customer.txt");
+    static void writeCustomer(Map<Customer, String> data){
+        final File file = new File("Customer.txt");
+
         try{
-            try(FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true);
-                BufferedWriter out = new BufferedWriter(fileWriter);) {
-                out.write(data + "\n");
-                out.flush();
+            FileOutputStream fos = new FileOutputStream(file, true);
+            PrintStream pw = new PrintStream(fos);
+
+            for(Map.Entry<Customer, String> m: data.entrySet()){
+                pw.println(m.getValue() + m.getKey());
             }
+            pw.flush();
+            pw.close();
+            fos.close();
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -82,14 +87,19 @@ public class Main {
 
     }
 
-    static void writeSalesperson(Salesperson data){
-        File file = new File("Salesperson.txt");
+    static void writeSalesperson(Map<Salesperson, String> data){
+        final File file = new File("Salesperson.txt");
+
         try{
-            try(FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true);
-                BufferedWriter out = new BufferedWriter(fileWriter);) {
-                out.write(data.toString() + "\n");
-                out.flush();
+            FileOutputStream fos = new FileOutputStream(file, true);
+            PrintStream pw = new PrintStream(fos);
+
+            for(Map.Entry<Salesperson, String> m: data.entrySet()){
+                pw.println(m.getValue() + m.getKey());
             }
+            pw.flush();
+            pw.close();
+            fos.close();
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -144,5 +154,6 @@ public class Main {
         catch(Exception e){	e.printStackTrace();}
     }
 
-    private static Map<String, Customer> customers;
+    static Map<Customer, String> customers;
+    static Map<Salesperson, String> salespeople;
 }
