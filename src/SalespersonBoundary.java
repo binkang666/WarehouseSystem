@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -20,7 +22,9 @@ public class SalespersonBoundary {
             case 1 -> {sop("adding new salesperson");
                 Salesperson sp = new Salesperson();
                 sop("Enter first name for new salesperson");
-                input.nextLine();
+                Main.salespeople = new HashMap<Salesperson, String>();
+
+
                 String fn = input.nextLine();
                 while(!isValidName(fn)){
                     fn = input.nextLine();
@@ -28,6 +32,7 @@ public class SalespersonBoundary {
                         sop("Invalid, please enter a valid last name again");}
                 }
                 sp.setFirst_name(fn);
+                Main.salespeople.put(sp, fn);
 
                 sop("Enter last name for new salesperson");
                 String ln = input.nextLine();
@@ -37,14 +42,17 @@ public class SalespersonBoundary {
                         sop("Invalid, please enter a valid last name again");}
                 }
                 sp.setLast_name(ln);
+                Main.salespeople.put(sp, ln);
 
                 sop("Enter phone for new salesperson");
                 String phone = input.nextLine();
                 sp.setPhone(phone);
+                Main.salespeople.put(sp, phone);
 
                 sop("Enter address for new salesperson");
                 String address = input.nextLine();
                 sp.setAddress(address);
+                Main.salespeople.put(sp, address);
 
                 sop("Enter start year for new salesperson");
                 int yy  = input.nextInt();
@@ -53,12 +61,15 @@ public class SalespersonBoundary {
                 sop("Enter start day for new salesperson");
                 int dd  = input.nextInt();
                 sp.setStartDate(yy,mm,dd);
+                LocalDate temp = sp.getStartDate();
+                Main.salespeople.put(sp, String.valueOf(temp));
 
                 sop("Enter commission rate for new salesperson");
                 double rate = input.nextDouble();
                 sp.setCommissionRate(rate);
+                Main.salespeople.put(sp, String.valueOf(rate));
 
-                Main.writeSalesperson(sp);
+                Main.writeSalesperson(Main.salespeople);
                 sop("salesperson added");
 
             }
