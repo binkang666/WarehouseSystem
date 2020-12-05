@@ -17,7 +17,7 @@ public class Invoice {
 
     // If we're not delivering, deliver charge will be 0
     public Invoice(Customer customer, String shippingAddress, char deliveryMethod, double deliverCharge) {
-        invoiceNumber += 1;
+        invoiceNumber++;
         this.customer = customer;
         this.shippingAddress = shippingAddress;
         this.deliveryMethod = deliveryMethod;

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InvoiceBoundary {
@@ -24,30 +25,38 @@ public class InvoiceBoundary {
         switch (input) {
             // Open Invoice
             case 1 -> {
-                System.out.println("Select a customer to open an invoice for:");
-                Main.displayAllCustomers();
-                String key = sc.next();
-                Customer customer = Main.getCustomers().get(key);
-                System.out.println(customer.toString());
-                System.out.println("Enter the customer's shipping address: ");
-                String address = sc.next();
 
-                //TODO: ADD PRODUCTS TO INVOICE
+                if (Main.customers != null) {
+                    ArrayList<Customer> names = new ArrayList<>(Main.customers.values());
+                    System.out.println("Select a customer to open an invoice for:");
+                    for (Customer customer : names) {
+                        System.out.println(customer.getCustomerID() + ". " + customer.getName());
+                    }
+                    String key = sc.next();
+//                    Customer customer = Main.getCustomers().get(key);
+//                    System.out.println(customer.toString());
+                    System.out.println("Enter the customer's shipping address: ");
+                    String address = sc.next();
+
+                    //TODO: ADD PRODUCTS TO INVOICE
 
 
-                System.out.println("""
+                    System.out.println("""
                         Enter the delivery method:
                         D. Delivery
                         T. Take-out
                         """);
-                char delivery = sc.next().toLowerCase().charAt(0);
-                double deliveryCharge = 0;
-                if (delivery == 'd') {
-                    System.out.println("Enter the delivery charge: ");
-                    deliveryCharge = sc.nextDouble();
+                    char delivery = sc.next().toLowerCase().charAt(0);
+                    double deliveryCharge = 0;
+                    if (delivery == 'd') {
+                        System.out.println("Enter the delivery charge: ");
+                        deliveryCharge = sc.nextDouble();
+                    }
+//                    invoiceController.openInvoice(customer, address, delivery, deliveryCharge);
                 }
-                invoiceController.openInvoice(customer, address, delivery, deliveryCharge);
-
+                else {
+                    System.out.println("No customers are in the system.");
+                }
             }
             case 2 -> invoiceController.closeInvoice();
             case 3 -> invoiceController.showOpenInvoices();

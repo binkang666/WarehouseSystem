@@ -7,22 +7,22 @@ import java.util.List;
 
 public class Customer extends Person implements Comparable<Customer> {
 
-    private static int customerID = 0;
+    private int customerID;
     private boolean status;
     private ArrayList<Invoice> InvoiceAssociated;
     private double salesTax;
     private LocalDate lastOrderDate;
 
     public Customer(){
-        customerID++;
+        this.customerID = 0;
         status= true;
         lastOrderDate = null;
     }
 
 
-    public Customer(String firstName, String lastName, String phone, String address, double salesTax) {
+    public Customer(String firstName, String lastName, String phone, String address, double salesTax, int customerID) {
         super(firstName, lastName, phone, address);
-        customerID++;
+        this.customerID = customerID;
         status = true;
         this.salesTax = salesTax;
         lastOrderDate = null;
@@ -61,7 +61,7 @@ public class Customer extends Person implements Comparable<Customer> {
             status = false;
             System.out.println("the customer is now marked inactive");}
     }
-    public int getCustomerID() { return Customer.customerID; }
+    public int getCustomerID() { return customerID; }
     public boolean getStatus() { return status; }
     public double getSalesTax() { return salesTax; }
     public void setSalesTax(double salesTax) { this.salesTax = salesTax; }

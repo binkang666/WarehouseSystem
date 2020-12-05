@@ -24,9 +24,10 @@ public class CustomerBoundary {
         int choice_customer = input.nextInt();
         switch (choice_customer){
             case 1 -> {
+
                 sop("\n*********************************************");
                 sop("adding customers");
-                Main.customers = new HashMap<Customer, String>();
+                Main.customers = new HashMap<Integer, Customer>();
                 Customer c= new Customer();
 
                 sop("Enter first name for new customer");
@@ -34,10 +35,8 @@ public class CustomerBoundary {
                 while(!isValidName(fn)){
                     fn = input.nextLine();
                     if(!isValidName(fn)){
-                    sop("Invalid, please enter a valid first name again");}
+                        sop("Invalid, please enter a valid first name again");}
                 }
-                c.setFirst_name(fn);
-                Main.customers.put(c,fn);;
 
 
                 sop("Enter last name for new customer");
@@ -45,36 +44,80 @@ public class CustomerBoundary {
                 while(!isValidName(ln)){
                     ln = input.nextLine();
                     if(!isValidName(ln)){
-                    sop("Invalid, please enter a valid last name again");}
+                        sop("Invalid, please enter a valid last name again");}
                 }
-                c.setLast_name(ln);
-                Main.customers.put(c,ln);
 
 
                 sop("Enter phone for new customer");
                 String phone = input.nextLine();
-                c.setPhone(phone);
-                Main.customers.put(c,phone);
-
 
                 sop("Enter address for new customer");
                 String add = input.nextLine();
-                c.setAddress(add);
-                Main.customers.put(c, add);;
 
 
                 sop("Enter salesTax for new customer");
                 double tax = input.nextDouble();
-                c.setSalesTax(tax);
-                Main.customers.put(c, String.valueOf(tax));
 
-                String id = String.valueOf(c.getCustomerID());
-                Main.customers.put(c, id);
+                int id = customerController.findNextCustomerID();
 
-
+                c = new Customer(fn, ln, phone, add, tax, id);
+                Main.customers.put(id, c);
 
                 Main.writeCustomer(Main.customers);
                 sop("New Customers added");
+
+                //TODO: Possibly Uncomment
+//                sop("\n*********************************************");
+//                sop("adding customers");
+//                Main.customers = new HashMap<Customer, String>();
+//                Customer c= new Customer();
+//
+//                sop("Enter first name for new customer");
+//                String fn = input.nextLine();
+//                while(!isValidName(fn)){
+//                    fn = input.nextLine();
+//                    if(!isValidName(fn)){
+//                    sop("Invalid, please enter a valid first name again");}
+//                }
+//                c.setFirst_name(fn);
+//                Main.customers.put(c,fn);;
+//
+//
+//                sop("Enter last name for new customer");
+//                String ln = input.nextLine();
+//                while(!isValidName(ln)){
+//                    ln = input.nextLine();
+//                    if(!isValidName(ln)){
+//                    sop("Invalid, please enter a valid last name again");}
+//                }
+//                c.setLast_name(ln);
+//                Main.customers.put(c,ln);
+//
+//
+//                sop("Enter phone for new customer");
+//                String phone = input.nextLine();
+//                c.setPhone(phone);
+//                Main.customers.put(c,phone);
+//
+//
+//                sop("Enter address for new customer");
+//                String add = input.nextLine();
+//                c.setAddress(add);
+//                Main.customers.put(c, add);;
+//
+//
+//                sop("Enter salesTax for new customer");
+//                double tax = input.nextDouble();
+//                c.setSalesTax(tax);
+//                Main.customers.put(c, String.valueOf(tax));
+//
+//                String id = String.valueOf(c.getCustomerID());
+//                Main.customers.put(c, id);
+//
+//
+//
+//                Main.writeCustomer(Main.customers);
+//                sop("New Customers added");
 
             }  //OK
 

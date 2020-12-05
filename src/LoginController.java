@@ -7,7 +7,8 @@ public class LoginController {
 
     public void createPassword(String password) throws IOException {
         user = new User(password);
-        FileOutputStream f = new FileOutputStream(new File("User.txt"));
+
+        FileOutputStream f = new FileOutputStream("User.txt");
         ObjectOutputStream o = new ObjectOutputStream(f);
 
         o.writeObject(user);

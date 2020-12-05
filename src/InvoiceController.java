@@ -8,7 +8,6 @@ public class InvoiceController {
     }
 
     public void closeInvoice() {
-
     }
 
     public void showOpenInvoices() {

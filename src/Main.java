@@ -28,7 +28,10 @@ public class Main {
                     showMainUI();
 
                 } //Customers
-                case 2 -> sop("Invoice");
+                case 2 -> {
+                    InvoiceController invoiceController = new InvoiceController();
+                    invoiceController.invoiceBoundary.showInvoiceUI();
+                }
              
                 case 3 -> {sop("Warehouse");
                 	sop("1. Add warehouse\n"+
@@ -145,15 +148,36 @@ public class Main {
 
 
     }
-    static void writeCustomer(Map<Customer, String> data){
+    //TODO: Possibly Uncomment
+//    static void writeCustomer(Map<Customer, String> data){
+//        final File file = new File("Customer.txt");
+//
+//        try{
+//            FileOutputStream fos = new FileOutputStream(file, true);
+//            PrintStream pw = new PrintStream(fos);
+//
+//            for(Map.Entry<Customer, String> m: data.entrySet()){
+//                pw.println(m.getValue() + m.getKey());
+//            }
+//            pw.flush();
+//            pw.close();
+//            fos.close();
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
+//    }
+
+
+
+    static void writeCustomer(Map<Integer, Customer> data){
         final File file = new File("Customer.txt");
 
         try{
             FileOutputStream fos = new FileOutputStream(file, true);
             PrintStream pw = new PrintStream(fos);
 
-            for(Map.Entry<Customer, String> m: data.entrySet()){
-                pw.println(m.getValue() + m.getKey());
+            for(Map.Entry<Integer, Customer> m: data.entrySet()){
+                pw.println(String.valueOf(m.getKey()) + m.getValue());
             }
             pw.flush();
             pw.close();
@@ -162,6 +186,7 @@ public class Main {
             e.printStackTrace();
         }
     }
+
 
     private static void modify(){
 
@@ -255,8 +280,9 @@ public class Main {
         }
 
     }
-
-    static Map<Customer, String> customers;
+    static Map<Integer, Customer> customers = new HashMap<>();
+//    static Map<Customer, String> customers;
     static Map<Salesperson, String> salespeople;
     static Map<String, Warehouse> warehouses;
+    static Map<Integer, Invoice> invoices = new HashMap<>();
 }
