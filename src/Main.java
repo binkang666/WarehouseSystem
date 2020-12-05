@@ -1,4 +1,6 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -105,6 +107,8 @@ public class Main {
         }
     }
 
+
+
     static void displayAll(String pathname)
     {
         try (FileReader reader =  new FileReader(pathname);
@@ -136,10 +140,6 @@ public class Main {
         sop("How can I help you today? (Enter one of the above numbers to proceed)");
     }
 
-    public static void displayAllCustomers() {
-        displayAll("Customer.txt");
-    }
-
     public static Map<String, Customer> getCustomers() {
         return null;
     }
@@ -152,6 +152,30 @@ public class Main {
         System.out.println("Press any key to return to main menu...");
         try{System.in.read();}
         catch(Exception e){	e.printStackTrace();}
+    }
+
+    static void searchCustomerId(String id) throws IOException {
+        Scanner input = new Scanner(System.in);
+        id = input.nextLine();
+        List<String> lines = Files.readAllLines(Paths.get("Customer.txt"));
+        for (String line : lines) {
+            if (line.contains(id + " (")) {
+                sop(line);
+            }
+        }
+
+    }
+
+    static void searchSalespersonId(String id) throws IOException {
+        Scanner input = new Scanner(System.in);
+        id = input.nextLine();
+        List<String> lines = Files.readAllLines(Paths.get("Salesperson.txt"));
+        for (String line : lines) {
+            if (line.contains(id + " (")) {
+                sop(line);
+            }
+        }
+
     }
 
     static Map<Customer, String> customers;
