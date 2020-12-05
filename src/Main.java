@@ -29,25 +29,103 @@ public class Main {
 
                 } //Customers
                 case 2 -> sop("Invoice");
-                case 3 -> sop("Warehouse");
+             
+                case 3 -> {sop("Warehouse");
+                	sop("1. Add warehouse\n"+
+                		"2. Show quantity for each product\n"+
+                		"3. Return to main menu");
+                	int choice2 = input.nextInt();
+                	switch(choice2) {
+                	case 1 -> {
+                		Scanner scanner=new Scanner(System.in);
+                		
+                		sop("name: ");
+                		String name = scanner.nextLine();
+                		sop("address: ");
+                		String address = scanner.nextLine();
+                		sop("city: ");
+                		String city = scanner.nextLine();
+                		sop("state: ");
+                		String state = scanner.nextLine();
+                		sop("zip: ");
+                		String zip = scanner.nextLine();
+                		sop("Phone number: ");
+                		String phoneNumber = scanner.nextLine();
+                		
+                		warehouses.put(name, new Warehouse(name, address, city, state,zip,phoneNumber));
+                	}
+                	case 2 -> {
+                		Scanner scanner=new Scanner(System.in);
+                		sop(" Enter warehouse's name: ");
+                		String warehouse = scanner.nextLine();
+                		if(warehouses.containsKey(warehouse)) {
+                			sop(" Unavailable warehouse ");
+                		}
+                		else {
+                			Warehouse foundwarehouse=(Warehouse)warehouses.get(warehouse);
+                			foundwarehouse.showQuantity();
+                		}
+                	}
+                	case 3 -> showMainUI();
+                	
+                	}
+                }
+                
                 case 4 -> {sop("Products");
                     sop("1. Show all products\n" +
-                            "2. Show products that have 5 or fewer in the warehouse\n" +
-                            "3. Return to main menu"
+                            "2. Show products that have n or fewer in the warehouse\n" +
+                    		"3. Replenish Stock\n" +
+                            "4. Return to main menu"
                     );
                     int choice2 = input.nextInt();
                     switch (choice2){
                         case 1 -> {
-                            sop("showing all products");
-                            //Call showAllProducts method here;
-                            //break;
+                            sop("Enter name of the warehouse: ");
+                            Scanner scanner=new Scanner(System.in);
+                    		String warehouse = scanner.nextLine();
+                    		if(warehouses.containsKey(warehouse)) {
+                    			sop(" Unavailable warehouse ");
+                    		}
+                    		else {
+                    			Warehouse foundwarehouse=(Warehouse)warehouses.get(warehouse);
+                    			foundwarehouse.displayAllProducts();
+                            
+                    		}
                         }
                         case 2 ->{
-                            sop("showing products less then 5");
-                            //Call showProductsLessThan5 method here;
-                            //break;
+                        	Scanner scanner=new Scanner(System.in);
+                        	sop("Enter name of the warehouse: ");
+                        	String warehouse = scanner.nextLine();
+                            sop("Enter quantity: ");
+                    		String quantity = scanner.nextLine();
+                    		if(warehouses.containsKey(warehouse)) {
+                    			sop(" Unavailable warehouse ");
+                    		}
+                    		else {
+                    			Warehouse foundwarehouse=(Warehouse)warehouses.get(warehouse);
+                    			foundwarehouse.showProductsUnder(Integer.parseInt(quantity));
+                    		
+                    		}
+                            
                         }
-                        case 3 -> showMainUI();
+                        case 3 -> {
+                        	Scanner scanner=new Scanner(System.in);
+                        	sop("Enter name of the warehouse: ");
+                        	String warehouse = scanner.nextLine();                     
+                        	sop("Enter product name: ");
+                        	String product = scanner.nextLine();
+                            sop("Enter quantity: ");
+                    		String quantity = scanner.nextLine();
+                    		if(warehouses.containsKey(warehouse)) {
+                    			sop(" Unavailable warehouse ");
+                    		}
+                    		else {
+                    			Warehouse foundwarehouse=(Warehouse)warehouses.get(warehouse);
+                    			foundwarehouse.replenishStock(product,Integer.parseInt(quantity));
+                    		}
+                        	
+                        }
+                        case 4 -> showMainUI();
                         default -> sop("Please select one of the options from 1 - 3");
                     }
                 } //products
@@ -180,4 +258,5 @@ public class Main {
 
     static Map<Customer, String> customers;
     static Map<Salesperson, String> salespeople;
+    static Map<String, Warehouse> warehouses;
 }
