@@ -280,7 +280,7 @@ public class Main {
         }
 
     }
-    static Map<Integer, Customer> customers = new HashMap<>();
+    static Map<Integer, Customer> customers;
 //    static Map<Customer, String> customers;
     static Map<Salesperson, String> salespeople;
     static Map<String, Warehouse> warehouses;

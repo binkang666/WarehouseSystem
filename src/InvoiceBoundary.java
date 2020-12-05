@@ -25,12 +25,11 @@ public class InvoiceBoundary {
         switch (input) {
             // Open Invoice
             case 1 -> {
-
                 if (Main.customers != null) {
-                    ArrayList<Customer> names = new ArrayList<>(Main.customers.values());
+                    System.out.println(Main.customers.size());
                     System.out.println("Select a customer to open an invoice for:");
-                    for (Customer customer : names) {
-                        System.out.println(customer.getCustomerID() + ". " + customer.getName());
+                    for (int i = 1; i < Main.customers.size() + 1; i++) {
+                        System.out.println(Main.customers.get(i).getName());
                     }
                     String key = sc.next();
 //                    Customer customer = Main.getCustomers().get(key);

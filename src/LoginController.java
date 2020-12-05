@@ -18,7 +18,7 @@ public class LoginController {
 
     // Checks if the argument password matches the password in the text file
     public Boolean login(String password) throws IOException, ClassNotFoundException {
-        FileInputStream fi = new FileInputStream(new File("User.txt"));
+        FileInputStream fi = new FileInputStream("User.txt");
         ObjectInputStream oi = new ObjectInputStream(fi);
 
         user = (User) oi.readObject();

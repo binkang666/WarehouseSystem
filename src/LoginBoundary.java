@@ -17,6 +17,14 @@ public class LoginBoundary {
         if (!new File("User.txt").exists()) {
             System.out.println("Create a password: ");
             String password = sc.nextLine();
+            System.out.println("Re-enter password: ");
+            String verify = sc.next();
+            while (!password.equals(verify)) {
+                System.out.println("The passwords do not match. Recreate password: ");
+                password = sc.next();
+                System.out.println("Re-enter password: ");
+                verify = sc.next();
+            }
             loginController.createPassword(password);
         }
         // It's not the first time the app is running
@@ -40,7 +48,7 @@ public class LoginBoundary {
                     valid = loginController.login(password);
 
                     if (!valid) {
-                        System.out.println("Invalid Password\n");
+                        System.out.println("Invalid Password\n*********************************************");
                     }
                 }
                 // Change password
@@ -52,13 +60,20 @@ public class LoginBoundary {
                     if (valid) {
                         System.out.println("Enter new password: ");
                         password = sc.next();
+                        System.out.println("Re-enter password: ");
+                        String verify = sc.next();
+                        while (!password.equals(verify)) {
+                            System.out.println("The passwords do not match. Recreate password: ");
+                            password = sc.next();
+                            System.out.println("Re-enter password: ");
+                            verify = sc.next();
+                        }
                         loginController.createPassword(password);
-                        System.out.println("Your password has been updated.\n");
-                        // Set valid to false so user has to re-enter password.
+                        System.out.println("Your password has been updated. \n*********************************************");
                         valid = false;
                     }
                     else {
-                        System.out.println("Invalid Password.\n");
+                        System.out.println("Invalid Password.\n*********************************************");
                     }
                 }
                 // Exit

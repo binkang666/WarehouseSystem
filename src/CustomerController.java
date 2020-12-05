@@ -20,5 +20,4 @@ public class CustomerController {
         assert last != null;
         return Integer.parseInt(last.substring(0, last.indexOf(" "))) + 1;
     }
-
 }
