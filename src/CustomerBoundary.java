@@ -80,7 +80,7 @@ public class CustomerBoundary {
 
 
             case 2 -> {sop("showing all customers");
-                Main.displayAllCustomers();
+                Main.displayAll("Customer.txt");
             }  //OK
 
 
