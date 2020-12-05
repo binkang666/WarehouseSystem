@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,13 +12,13 @@ public class CustomerBoundary {
         this.customerController = customerController;
     }
 
-    void showCustomerUI(){
+    void showCustomerUI() throws IOException {
 
         Scanner input = new Scanner(System.in);
         sop("""
                             1. add customers
                             2. Show all customers
-                            3. Change customer status
+                            3. Search for Specific customer
                             4. Return to main menu"""
         );
         int choice_customer = input.nextInt();
@@ -82,9 +84,9 @@ public class CustomerBoundary {
             }  //OK
 
 
-            case 3 -> {sop("Enter the customer ID for the customer who you want change status");
+            case 3 -> {sop("Enter the customer ID for searching specific customer");
                 String id = input.nextLine();
-
+                Main.searchCustomerId(id);
             }  //Need implementation
 
 
