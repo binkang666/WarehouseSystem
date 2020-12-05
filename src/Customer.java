@@ -74,7 +74,7 @@ public class Customer extends Person implements Comparable<Customer> {
     @Override
     public String toString()
     {
-        return "Type: "+ getType() + ", Customer ID: " + getCustomerID() + ", " + super.toString() +
+        return ", Type: "+ getType() + ", " + super.toString() +
                 ", Status: " + isActive()  + ", Sales Tax: " + getSalesTax();
     }
 
