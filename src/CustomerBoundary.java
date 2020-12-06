@@ -131,7 +131,7 @@ public class CustomerBoundary {
                     customerController.displayCustomers();
                 }
                 else {
-                    System.out.println("No customers exist!");
+                    sop("No customers exist!");
                 }
             }  //OK
 
@@ -144,7 +144,7 @@ public class CustomerBoundary {
                     customerController.searchCustomerID(id);
                 }
                 else {
-                    System.out.println("No customers exist!");
+                    sop("No customers exist!");
                 }
             }  //Need implementation
 

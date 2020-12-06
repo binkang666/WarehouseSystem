@@ -9,7 +9,7 @@ public class InvoiceController {
 
     // Look at the ID value in the last line Invoice.txt and add 1 to it.
     public int findNextInvoiceNumber() {
-        // If the file doesn't exist, that implies it's the first customer
+        // If the file doesn't exist, that implies it's the first invoice
         if (!new File("Invoice.txt").exists()) {
             return 1;
         }
@@ -32,7 +32,7 @@ public class InvoiceController {
         FileOutputStream f = new FileOutputStream("Invoice.txt");
         ObjectOutputStream o = new ObjectOutputStream(f);
 
-        o.writeObject(Main.customers);
+        o.writeObject(Main.invoices);
         o.flush();
         f.close();
         o.close();
@@ -47,7 +47,8 @@ public class InvoiceController {
         fi.close();
     }
 
-    public void closeInvoice() {
+    public void closeInvoice(Invoice invoice) {
+        invoice.setStatus(!invoice.getStatus());
     }
 
     public void showOpenInvoices() throws IOException, ClassNotFoundException {
@@ -64,6 +65,10 @@ public class InvoiceController {
 
     public void markShipped() {
         // mark shipped and remove items from warehouse
+    }
+
+    public void payInvoice() {
+
     }
 
     public void displayInvoices() {

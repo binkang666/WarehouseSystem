@@ -1,16 +1,20 @@
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Invoice implements Serializable {
+    private Calendar cal = Calendar.getInstance();
+    private final DecimalFormat df = new DecimalFormat("#.##");
     private String cName;
     private ArrayList<Product> products;
     private int invoiceNumber;
-    private int status; // 1 if active, 0 otherwise
+    private boolean status; // 1 if active, 0 otherwise
     private String shippingAddress;
     private char deliveryMethod; // D if delivery, T otherwise
     private final double financeCharge = .2; // 2% finance charge if customer is late in paying
-    private LocalDate orderDate;
+    private Date orderDate;
     private double deliverCharge;
     private double totalCharge;
     private double finalTotal;
@@ -23,7 +27,7 @@ public class Invoice implements Serializable {
         this.cName = cName;
         this.shippingAddress = shippingAddress;
         this.deliveryMethod = deliveryMethod;
-        orderDate = LocalDate.now();
+        orderDate = cal.getTime();
         this.salesTax = salesTax;
         for (Product p : products) {
             totalCharge += p.getSellingPrice();
@@ -31,7 +35,6 @@ public class Invoice implements Serializable {
         // maybe create methods to apply tax and delivery charge since salespersons don't get payed based on tax
         this.deliverCharge = deliverCharge;
         finalTotal = totalCharge + ((salesTax * .01) * totalCharge) + deliverCharge;
-
     }
 
     @Override
@@ -46,10 +49,10 @@ public class Invoice implements Serializable {
                 }
                 sb.append("\nShipping address: " + getShippingAddress() + "\n" +
                         "Delivery method: " + getDeliveryMethod() + "\n" +
-                        "Delivery Charge: $" + getDeliverCharge() + "\n" +
+                        "Delivery Charge: $" + df.format(getDeliverCharge()) + "\n" +
+                        "Total: $" + df.format(getTotalCharge()) + "\n" +
                         "Sales tax: " + getSalesTax() + "%\n" +
-                        "Total: $" + getTotalCharge() + "\n" +
-                        "Final Total: $" + getFinalTotal() + "\n");
+                        "Final Total: $" + df.format(getFinalTotal()) + "\n");
         return sb.toString();
     }
 
@@ -85,11 +88,19 @@ public class Invoice implements Serializable {
         return finalTotal;
     }
 
-    public LocalDate getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
     public ArrayList<Product> getProducts() {
         return products;
+    }
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

@@ -37,7 +37,16 @@ public class InvoiceBoundary {
                     // TODO: MAKE SURE CUSTOMER DOESN'T HAVE AN ACTIVE INVOICE
                     System.out.println("Enter the customer ID you would like to open an invoice for: ");
                     int key = sc.nextInt();
-                    Customer customer = Main.customers.get(key);
+                    Customer customer;
+
+                    // Check to see of customer exists return to main menu if they don't.
+                    if (!Main.customers.containsKey(key)) {
+                        System.out.println("Customer doesn't exist!");
+                        break;
+                    }
+
+                    customer = Main.customers.get(key);
+
 
                     //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
                     ArrayList<Product> products = new ArrayList<>();
@@ -45,18 +54,13 @@ public class InvoiceBoundary {
                     products.add(new Product("Apple", 2, 3, 0, 0));
                     products.add(new Product("Banana", 1, 5, 0, 0));
 
-                    // Selling price: 7
-                    //
-
-
                     System.out.println("Enter the customer's shipping address: ");
                     String address = sc.next();
 
                     System.out.println("""
                         Enter the delivery method:
                         D. Delivery
-                        T. Take-out
-                        """);
+                        T. Take-out""");
                     char delivery = sc.next().toLowerCase().charAt(0);
 
                     double deliveryCharge = 0; // Will be 0 if the delivery method is T
@@ -69,6 +73,7 @@ public class InvoiceBoundary {
                     if (new File("Invoice.txt").exists()) {
                         invoiceController.getInvoices();
                     }
+
                     int invoiceNumber = invoiceController.findNextInvoiceNumber();
 
                     invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products);
@@ -79,7 +84,23 @@ public class InvoiceBoundary {
                     System.out.println("No customers exist!");
                 }
             }
-            case 2 -> invoiceController.closeInvoice();
+            case 2 -> {
+                if (!new File("Invoice.txt").exists()) {
+                    System.out.println("No open invoices exist!");
+                    break;
+                }
+
+                System.out.println("Select an invoice: ");
+                invoiceController.displayInvoices();
+
+                if (new File("Customer.txt").exists()) {
+                    customerController.getCustomers();
+                    customerController.displayCustomers();
+                }
+
+                System.out.println("Select an invoice to pay: ");
+
+            }
             case 3 -> invoiceController.showOpenInvoices();
             case 4 -> invoiceController.showClosedInvoices();
             case 5 -> invoiceController.markShipped();
