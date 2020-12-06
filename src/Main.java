@@ -169,23 +169,23 @@ public class Main {
 
 
 
-    static void writeCustomer(Map<Integer, Customer> data){
-        final File file = new File("Customer.txt");
-
-        try{
-            FileOutputStream fos = new FileOutputStream(file, true);
-            PrintStream pw = new PrintStream(fos);
-
-            for(Map.Entry<Integer, Customer> m: data.entrySet()){
-                pw.println(String.valueOf(m.getKey()) + m.getValue());
-            }
-            pw.flush();
-            pw.close();
-            fos.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
+//    static void writeCustomer(Map<Integer, Customer> data){
+//        final File file = new File("Customer.txt");
+//
+//        try{
+//            FileOutputStream fos = new FileOutputStream(file, true);
+//            PrintStream pw = new PrintStream(fos);
+//
+//            for(Map.Entry<Integer, Customer> m: data.entrySet()){
+//                pw.println(String.valueOf(m.getKey()) + m.getValue());
+//            }
+//            pw.flush();
+//            pw.close();
+//            fos.close();
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
+//    }
 
 
     private static void modify(){
@@ -257,17 +257,17 @@ public class Main {
         catch(Exception e){	e.printStackTrace();}
     }
 
-    static void searchCustomerId(String id) throws IOException {
-        Scanner input = new Scanner(System.in);
-        id = input.nextLine();
-        List<String> lines = Files.readAllLines(Paths.get("Customer.txt"));
-        for (String line : lines) {
-            if (line.contains(id + " (")) {
-                sop(line);
-            }
-        }
-
-    }
+//    static void searchCustomerId(String id) throws IOException {
+//        Scanner input = new Scanner(System.in);
+//        id = input.nextLine();
+//        List<String> lines = Files.readAllLines(Paths.get("Customer.txt"));
+//        for (String line : lines) {
+//            if (line.contains(id + " (")) {
+//                sop(line);
+//            }
+//        }
+//
+//    }
 
     static void searchSalespersonId(String id) throws IOException {
         Scanner input = new Scanner(System.in);
@@ -280,7 +280,7 @@ public class Main {
         }
 
     }
-    static Map<Integer, Customer> customers;
+    static Map<Integer, Customer> customers = new HashMap<>();
 //    static Map<Customer, String> customers;
     static Map<Salesperson, String> salespeople;
     static Map<String, Warehouse> warehouses;

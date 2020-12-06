@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
@@ -12,7 +13,7 @@ public class CustomerBoundary {
         this.customerController = customerController;
     }
 
-    void showCustomerUI() throws IOException {
+    void showCustomerUI() throws IOException, ClassNotFoundException {
 
         Scanner input = new Scanner(System.in);
         sop("""
@@ -24,11 +25,13 @@ public class CustomerBoundary {
         int choice_customer = input.nextInt();
         switch (choice_customer){
             case 1 -> {
+                // Retrieve the existing customers from the text file
+                if (new File("Customer.txt").exists()) {
+                    customerController.getCustomers();
+                }
 
                 sop("\n*********************************************");
                 sop("adding customers");
-                Main.customers = new HashMap<Integer, Customer>();
-                Customer c= new Customer();
 
                 sop("Enter first name for new customer");
                 String fn = input.nextLine();
@@ -47,23 +50,24 @@ public class CustomerBoundary {
                         sop("Invalid, please enter a valid last name again");}
                 }
 
-
                 sop("Enter phone for new customer");
                 String phone = input.nextLine();
 
                 sop("Enter address for new customer");
                 String add = input.nextLine();
 
-
                 sop("Enter salesTax for new customer");
                 double tax = input.nextDouble();
 
                 int id = customerController.findNextCustomerID();
 
-                c = new Customer(fn, ln, phone, add, tax, id);
-                Main.customers.put(id, c);
+                // It's not the first time we're adding a customer, so retrieve the existing ones from the txt file
+                if (new File("Customer.txt").exists()) {
+                    customerController.getCustomers();
+                }
+                customerController.writeCustomer(fn, ln, phone, add, tax, id);
 
-                Main.writeCustomer(Main.customers);
+//                Main.writeCustomer(Main.customers);
                 sop("New Customers added");
 
                 //TODO: Possibly Uncomment
@@ -121,17 +125,23 @@ public class CustomerBoundary {
 
             }  //OK
 
-
-            case 2 -> {sop("showing all customers");
-                Main.displayAll("Customer.txt");
+            // Now in controller vs. main because the file is serialized.
+            // TODO: Verify customers exist, maybe make separate print method in controller
+            case 2 -> {sop("Showing all customers");
+                customerController.getCustomers();
+                for (Customer c : Main.customers.values()) {
+                    System.out.println(c.toString());
+                }
+//                Main.displayAll("Customer.txt");
             }  //OK
 
 
             case 3 -> {sop("Enter the customer ID for searching specific customer");
-                String id = input.nextLine();
-                Main.searchCustomerId(id);
+                int id = input.nextInt();
+                customerController.searchCustomerID(id);
+//                String id = input.nextLine();
+//                Main.searchCustomerId(id);
             }  //Need implementation
-
 
             case 4 -> {Main.showMainUI();} //OK
             default -> sop("Please choose number from 1 - 3");

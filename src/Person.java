@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public abstract class Person {
+public abstract class Person implements Serializable {
     private String first_name;
     private String last_name;
     private String phone;

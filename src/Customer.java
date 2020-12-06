@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer extends Person implements Comparable<Customer> {
+public class Customer extends Person implements Comparable<Customer>, Serializable {
 
     private int customerID;
     private boolean status;
@@ -73,7 +74,7 @@ public class Customer extends Person implements Comparable<Customer> {
     @Override
     public String toString()
     {
-        return " (Customer ID), Type: "+ getType() + ", " + super.toString() +
+        return "Customer ID: " + getCustomerID() + ", Type: "+ getType() + ", " + super.toString() +
                 ", Status: " + isActive()  + ", Sales Tax: " + getSalesTax();
     }
 
