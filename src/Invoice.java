@@ -41,14 +41,14 @@ public class Invoice implements Serializable {
                 "Customer: " + getCName() + "\n" +
                 "Products: ");
                 for (Product product : getProducts()) {
-                    sb.append(product.getProductName());
+                    sb.append(product.getProductName() + ", ");
                 }
                 sb.append("\nShipping address: " + getShippingAddress() + "\n" +
                         "Delivery method: " + getDeliveryMethod() + "\n" +
-                        "Delivery Charge: " + getDeliverCharge() + "\n" +
-                        "Sales tax: " + getSalesTax() + "\n" +
-                        "Total: " + getTotalCharge() + "\n" +
-                        "Final Total" + getFinalTotal() + "\n");
+                        "Delivery Charge: $" + getDeliverCharge() + "\n" +
+                        "Sales tax: " + getSalesTax() + "%\n" +
+                        "Total: $" + getTotalCharge() + "\n" +
+                        "Final Total: $" + getFinalTotal() + "\n");
         return sb.toString();
     }
 

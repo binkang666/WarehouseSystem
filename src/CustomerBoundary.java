@@ -24,8 +24,9 @@ public class CustomerBoundary {
         );
         int choice_customer = input.nextInt();
         switch (choice_customer){
+            // Add customer
             case 1 -> {
-                // Retrieve the existing customers from the text file
+                // Retrieve customers from file
                 if (new File("Customer.txt").exists()) {
                     customerController.getCustomers();
                 }
@@ -122,9 +123,10 @@ public class CustomerBoundary {
 //                sop("New Customers added");
 
             }  //OK
-
+            // Show all customers
             case 2 -> {sop("Showing all customers:");
                 if (new File("Customer.txt").exists()) {
+                    // Retrieve customers from file
                     customerController.getCustomers();
                     customerController.displayCustomers();
                 }
@@ -133,9 +135,11 @@ public class CustomerBoundary {
                 }
             }  //OK
 
-
+            // Search for a customer
             case 3 -> {sop("Enter the customers ID: ");
                 if (new File("Customer.txt").exists()) {
+                    // Retrieve customers from file
+                    customerController.getCustomers();
                     int id = input.nextInt();
                     customerController.searchCustomerID(id);
                 }
