@@ -33,7 +33,7 @@ public class CustomerBoundary {
                 sop("\n*********************************************");
                 sop("adding customers");
 
-                sop("Enter first name for new customer");
+                sop("Enter first name for the new customer");
                 String fn = input.nextLine();
                 while(!isValidName(fn)){
                     fn = input.nextLine();
@@ -42,7 +42,7 @@ public class CustomerBoundary {
                 }
 
 
-                sop("Enter last name for new customer");
+                sop("Enter last name for the new customer");
                 String ln = input.nextLine();
                 while(!isValidName(ln)){
                     ln = input.nextLine();
@@ -50,13 +50,13 @@ public class CustomerBoundary {
                         sop("Invalid, please enter a valid last name again");}
                 }
 
-                sop("Enter phone for new customer");
+                sop("Enter phone for new the customer");
                 String phone = input.nextLine();
 
-                sop("Enter address for new customer");
+                sop("Enter address for new the customer");
                 String add = input.nextLine();
 
-                sop("Enter salesTax for new customer");
+                sop("Enter sales tax for the new customer");
                 double tax = input.nextDouble();
 
                 int id = customerController.findNextCustomerID();
@@ -66,8 +66,6 @@ public class CustomerBoundary {
                     customerController.getCustomers();
                 }
                 customerController.writeCustomer(fn, ln, phone, add, tax, id);
-
-//                Main.writeCustomer(Main.customers);
                 sop("New Customers added");
 
                 //TODO: Possibly Uncomment
@@ -125,22 +123,25 @@ public class CustomerBoundary {
 
             }  //OK
 
-            // Now in controller vs. main because the file is serialized.
-            // TODO: Verify customers exist, maybe make separate print method in controller
-            case 2 -> {sop("Showing all customers");
-                customerController.getCustomers();
-                for (Customer c : Main.customers.values()) {
-                    System.out.println(c.toString());
+            case 2 -> {sop("Showing all customers:");
+                if (new File("Customer.txt").exists()) {
+                    customerController.getCustomers();
+                    customerController.displayCustomers();
                 }
-//                Main.displayAll("Customer.txt");
+                else {
+                    System.out.println("No customers exist!");
+                }
             }  //OK
 
 
-            case 3 -> {sop("Enter the customer ID for searching specific customer");
-                int id = input.nextInt();
-                customerController.searchCustomerID(id);
-//                String id = input.nextLine();
-//                Main.searchCustomerId(id);
+            case 3 -> {sop("Enter the customers ID: ");
+                if (new File("Customer.txt").exists()) {
+                    int id = input.nextInt();
+                    customerController.searchCustomerID(id);
+                }
+                else {
+                    System.out.println("No customers exist!");
+                }
             }  //Need implementation
 
             case 4 -> {Main.showMainUI();} //OK

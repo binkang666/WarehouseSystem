@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Invoice {
+public class Invoice implements Serializable {
     private ArrayList<Product> products;
     private static Integer invoiceNumber = 0; // invoice increments by 1 each time one is created
     private int status; // 1 if active, 0 otherwise

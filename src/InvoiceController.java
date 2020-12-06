@@ -1,6 +1,7 @@
 public class InvoiceController {
 
     InvoiceBoundary invoiceBoundary = new InvoiceBoundary(this);
+    CustomerController customerController = new CustomerController();
 
     public void openInvoice(Customer c, String address, char delivery, double deliveryCharge) {
         Invoice invoice = new Invoice(c, address, delivery, deliveryCharge);

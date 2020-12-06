@@ -1,15 +1,17 @@
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class InvoiceBoundary {
 
     InvoiceController invoiceController;
+    CustomerController customerController;
 
     public InvoiceBoundary(InvoiceController invoiceController) {
         this.invoiceController = invoiceController;
     }
 
-    void showInvoiceUI() {
+    void showInvoiceUI() throws IOException, ClassNotFoundException {
         Scanner sc = new Scanner(System.in);
         System.out.println(""" 
                 Select an option:
@@ -25,37 +27,61 @@ public class InvoiceBoundary {
         switch (input) {
             // Open Invoice
             case 1 -> {
-                if (Main.customers != null) {
-                    System.out.println(Main.customers.size());
-                    System.out.println("Select a customer to open an invoice for:");
-                    for (int i = 1; i < Main.customers.size() + 1; i++) {
-                        System.out.println(Main.customers.get(i).getName());
-                    }
-                    String key = sc.next();
-//                    Customer customer = Main.getCustomers().get(key);
-//                    System.out.println(customer.toString());
-                    System.out.println("Enter the customer's shipping address: ");
-                    String address = sc.next();
+                customerController = new CustomerController();
+                if (new File("Customer.txt").exists()) {
+                    customerController.getCustomers();
+                    customerController.displayCustomers();
+                }
+                System.out.println("Enter the customer ID you would like to open an invoice for: ");
+                int key = sc.nextInt();
+                Customer customer = Main.customers.get(key);
+                System.out.println("Enter the customer's shipping address: ");
+                String address = sc.next();
 
-                    //TODO: ADD PRODUCTS TO INVOICE
-
-
-                    System.out.println("""
+                System.out.println("""
                         Enter the delivery method:
                         D. Delivery
                         T. Take-out
                         """);
-                    char delivery = sc.next().toLowerCase().charAt(0);
-                    double deliveryCharge = 0;
-                    if (delivery == 'd') {
-                        System.out.println("Enter the delivery charge: ");
-                        deliveryCharge = sc.nextDouble();
-                    }
+                char delivery = sc.next().toLowerCase().charAt(0);
+                double deliveryCharge = 0; // Will be 0 if the delivery method is T
+                if (delivery == 'd') {
+                    System.out.println("Enter the delivery charge: ");
+                    deliveryCharge = sc.nextDouble();
+                }
+                invoiceController.openInvoice(customer, address, delivery, deliveryCharge);
+
+//                if (Main.customers != null) {
+//                    System.out.println(Main.customers.size());
+//                    System.out.println("Select a customer to open an invoice for:");
+//                    for (int i = 1; i < Main.customers.size() + 1; i++) {
+//                        System.out.println(Main.customers.get(i).getName());
+//                    }
+//                    String key = sc.next();
+//                    Customer customer = Main.getCustomers().get(key);
+//                    System.out.println(customer.toString());
+//                    System.out.println("Enter the customer's shipping address: ");
+//                    String address = sc.next();
+//
+//                    //TODO: ADD PRODUCTS TO INVOICE
+//
+//
+//                    System.out.println("""
+//                        Enter the delivery method:
+//                        D. Delivery
+//                        T. Take-out
+//                        """);
+//                    char delivery = sc.next().toLowerCase().charAt(0);
+//                    double deliveryCharge = 0;
+//                    if (delivery == 'd') {
+//                        System.out.println("Enter the delivery charge: ");
+//                        deliveryCharge = sc.nextDouble();
+//                    }
 //                    invoiceController.openInvoice(customer, address, delivery, deliveryCharge);
-                }
-                else {
-                    System.out.println("No customers are in the system.");
-                }
+//                }
+//                else {
+//                    System.out.println("No customers are in the system.");
+//                }
             }
             case 2 -> invoiceController.closeInvoice();
             case 3 -> invoiceController.showOpenInvoices();

@@ -14,6 +14,7 @@ public class Main {
         loginController.loginBoundary.showLoginUI();
 
 
+
         //need to try login first, if correct, then proceed the following
         showMainUI();
         int choice;
@@ -243,9 +244,9 @@ public class Main {
         sop("How can I help you today? (Enter one of the above numbers to proceed)");
     }
 
-    public static Map<String, Customer> getCustomers() {
-        return null;
-    }
+//    public static Map<String, Customer> getCustomers() {
+//        return null;
+//    }
 
     public static <K, V> Map<K,V> getInvoices() {
         return null;

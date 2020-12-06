@@ -53,6 +53,12 @@ public class CustomerController {
         oi.close();
         fi.close();
     }
+
+    public void displayCustomers() {
+        for (Customer c : Main.customers.values()) {
+            System.out.println(c.toString());
+        }
+    }
     // TODO: Verify customers exist
     public void searchCustomerID(int id) {
         System.out.println(Main.customers.get(id).toString());
