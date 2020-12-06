@@ -1,4 +1,6 @@
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
     private String productName;
     private double costPrice, sellingPrice;
     private int quantitySold;
@@ -16,7 +18,7 @@ public class Product {
     public double getSellingPrice() {
         return sellingPrice;
     }
-    public double getcostPrice() {
+    public double getCostPrice() {
         return costPrice;
     }
     public String getProductName() {

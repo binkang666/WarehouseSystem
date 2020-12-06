@@ -45,6 +45,18 @@ public class CustomerController {
         o.close();
     }
 
+    // Check
+    public void modifyCustomer(Customer customer) throws IOException {
+        Main.customers.put(customer.getCustomerID(), customer);
+        FileOutputStream f = new FileOutputStream("Customer.txt");
+        ObjectOutputStream o = new ObjectOutputStream(f);
+
+        o.writeObject(Main.customers);
+        o.flush();
+        f.close();
+        o.close();
+    }
+
     public void getCustomers() throws IOException, ClassNotFoundException {
         FileInputStream fi = new FileInputStream("Customer.txt");
         ObjectInputStream oi = new ObjectInputStream(fi);
@@ -59,7 +71,7 @@ public class CustomerController {
             System.out.println(c.toString());
         }
     }
-    // TODO: Verify customers exist
+
     public void searchCustomerID(int id) {
         System.out.println(Main.customers.get(id).toString());
     }

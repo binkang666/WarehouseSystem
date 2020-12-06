@@ -66,7 +66,7 @@ public class CustomerBoundary {
                     customerController.getCustomers();
                 }
                 customerController.writeCustomer(fn, ln, phone, add, tax, id);
-                sop("New Customers added");
+                sop("New Customers added.");
 
                 //TODO: Possibly Uncomment
 //                sop("\n*********************************************");

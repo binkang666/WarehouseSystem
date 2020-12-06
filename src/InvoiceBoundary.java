@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InvoiceBoundary {
@@ -32,9 +33,16 @@ public class InvoiceBoundary {
                     customerController.getCustomers();
                     customerController.displayCustomers();
                 }
+                // TODO: MAKE SURE CUSTOMER DOESN'T HAVE AN ACTIVE INVOICE
                 System.out.println("Enter the customer ID you would like to open an invoice for: ");
                 int key = sc.nextInt();
                 Customer customer = Main.customers.get(key);
+
+                //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
+                ArrayList<Product> products = new ArrayList<>();
+                System.out.println("Adding generic item...");
+                products.add(new Product("Apple", 2, 3, 0, 0));
+
                 System.out.println("Enter the customer's shipping address: ");
                 String address = sc.next();
 
@@ -44,44 +52,21 @@ public class InvoiceBoundary {
                         T. Take-out
                         """);
                 char delivery = sc.next().toLowerCase().charAt(0);
+
                 double deliveryCharge = 0; // Will be 0 if the delivery method is T
                 if (delivery == 'd') {
                     System.out.println("Enter the delivery charge: ");
                     deliveryCharge = sc.nextDouble();
                 }
-                invoiceController.openInvoice(customer, address, delivery, deliveryCharge);
 
-//                if (Main.customers != null) {
-//                    System.out.println(Main.customers.size());
-//                    System.out.println("Select a customer to open an invoice for:");
-//                    for (int i = 1; i < Main.customers.size() + 1; i++) {
-//                        System.out.println(Main.customers.get(i).getName());
-//                    }
-//                    String key = sc.next();
-//                    Customer customer = Main.getCustomers().get(key);
-//                    System.out.println(customer.toString());
-//                    System.out.println("Enter the customer's shipping address: ");
-//                    String address = sc.next();
-//
-//                    //TODO: ADD PRODUCTS TO INVOICE
-//
-//
-//                    System.out.println("""
-//                        Enter the delivery method:
-//                        D. Delivery
-//                        T. Take-out
-//                        """);
-//                    char delivery = sc.next().toLowerCase().charAt(0);
-//                    double deliveryCharge = 0;
-//                    if (delivery == 'd') {
-//                        System.out.println("Enter the delivery charge: ");
-//                        deliveryCharge = sc.nextDouble();
-//                    }
-//                    invoiceController.openInvoice(customer, address, delivery, deliveryCharge);
-//                }
-//                else {
-//                    System.out.println("No customers are in the system.");
-//                }
+                int invoiceNumber = invoiceController.findNextInvoiceNumber();
+
+                if (new File("Invoice.txt").exists()) {
+                    invoiceController.getInvoices();
+                }
+                invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products);
+                System.out.println("New invoice added.");
+
             }
             case 2 -> invoiceController.closeInvoice();
             case 3 -> invoiceController.showOpenInvoices();

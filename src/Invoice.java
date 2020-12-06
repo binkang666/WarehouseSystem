@@ -3,8 +3,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Invoice implements Serializable {
+    private String cName;
     private ArrayList<Product> products;
-    private static Integer invoiceNumber = 0; // invoice increments by 1 each time one is created
+    private int invoiceNumber;
     private int status; // 1 if active, 0 otherwise
     private String shippingAddress;
     private char deliveryMethod; // D if delivery, T otherwise
@@ -13,17 +14,17 @@ public class Invoice implements Serializable {
     private double deliverCharge;
     private double totalCharge;
     private double finalTotal;
-    private Customer customer;
     private double salesTax;
 
     // If we're not delivering, deliver charge will be 0
-    public Invoice(Customer customer, String shippingAddress, char deliveryMethod, double deliverCharge) {
-        invoiceNumber++;
-        this.customer = customer;
+    public Invoice(String cName, String shippingAddress, char deliveryMethod, double deliverCharge, double salesTax, int invoiceNumber, ArrayList<Product> products) {
+        this.products = products;
+        this.invoiceNumber = invoiceNumber;
+        this.cName = cName;
         this.shippingAddress = shippingAddress;
         this.deliveryMethod = deliveryMethod;
         orderDate = LocalDate.now();
-        salesTax = customer.getSalesTax();
+        this.salesTax = salesTax;
         for (Product p : products) {
             totalCharge += p.getSellingPrice();
         }
@@ -34,17 +35,60 @@ public class Invoice implements Serializable {
 
     @Override
     public String toString() {
-        return  "Invoice Number: " + invoiceNumber + "\n" +
-                "Customer: " + customer.getName() + "\n" +
-                "Shipping address: " + shippingAddress + "\n" +
-                "Delivery method: " + deliveryMethod + "\n" +
-                "Delivery Charge: " + deliverCharge + "\n" +
-                "Sales tax: " + customer.getSalesTax() + "\n" +
-                "Total: " + totalCharge + "\n" +
-                "Final Total" + finalTotal + "\n";
+
+        StringBuilder sb = new StringBuilder("Invoice Number: " + getInvoiceNumber() + "\n" +
+                "Order Date: " + getOrderDate() + "\n" +
+                "Customer: " + getCName() + "\n" +
+                "Products: ");
+                for (Product product : getProducts()) {
+                    sb.append(product.getProductName());
+                }
+                sb.append("\nShipping address: " + getShippingAddress() + "\n" +
+                        "Delivery method: " + getDeliveryMethod() + "\n" +
+                        "Delivery Charge: " + getDeliverCharge() + "\n" +
+                        "Sales tax: " + getSalesTax() + "\n" +
+                        "Total: " + getTotalCharge() + "\n" +
+                        "Final Total" + getFinalTotal() + "\n");
+        return sb.toString();
     }
 
     public Integer getInvoiceNumber() {
         return invoiceNumber;
+    }
+
+    public String getCName() {
+        return cName;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public char getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public double getDeliverCharge() {
+        return deliverCharge;
+    }
+
+    public double getSalesTax() {
+        return salesTax;
+    }
+
+    public double getTotalCharge() {
+        return totalCharge;
+    }
+
+    public double getFinalTotal() {
+        return finalTotal;
+    }
+
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
+
+    public ArrayList<Product> getProducts() {
+        return products;
     }
 }

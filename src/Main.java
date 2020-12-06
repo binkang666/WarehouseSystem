@@ -32,6 +32,8 @@ public class Main {
                 case 2 -> {
                     InvoiceController invoiceController = new InvoiceController();
                     invoiceController.invoiceBoundary.showInvoiceUI();
+                    EnterToContinue();
+                    showMainUI();
                 }
              
                 case 3 -> {sop("Warehouse");

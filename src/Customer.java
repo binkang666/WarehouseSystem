@@ -1,12 +1,9 @@
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Customer extends Person implements Comparable<Customer>, Serializable {
-
     private int customerID;
     private boolean status;
     private ArrayList<Invoice> InvoiceAssociated;
@@ -26,20 +23,25 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
         status = true;
         this.salesTax = salesTax;
         lastOrderDate = null;
+        InvoiceAssociated = new ArrayList<>();
     }
 
     public void addInvoiceAssociated(Invoice ia){
         InvoiceAssociated.add(ia);
     }
 
-    public void getInvoiceAssociated(){
+    public ArrayList<Invoice> getInvoiceAssociated(){
+        return InvoiceAssociated;
+    }
+
+    public void displayInvoiceAssociated() {
         for(Invoice invoice: InvoiceAssociated){
             System.out.println(invoice);
         }
     }
 
     public boolean isActive(){
-        if(lastOrderDate ==null){
+        if(lastOrderDate == null){
             return status = true; //active
         }
         else {
