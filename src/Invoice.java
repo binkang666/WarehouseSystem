@@ -30,18 +30,19 @@ public class Invoice implements Serializable {
         }
         // maybe create methods to apply tax and delivery charge since salespersons don't get payed based on tax
         this.deliverCharge = deliverCharge;
-        finalTotal = (salesTax * totalCharge) + deliverCharge;
+        finalTotal = totalCharge + ((salesTax * .01) * totalCharge) + deliverCharge;
+
     }
 
     @Override
     public String toString() {
-
         StringBuilder sb = new StringBuilder("Invoice Number: " + getInvoiceNumber() + "\n" +
                 "Order Date: " + getOrderDate() + "\n" +
                 "Customer: " + getCName() + "\n" +
                 "Products: ");
-                for (Product product : getProducts()) {
-                    sb.append(product.getProductName() + ", ");
+                sb.append(getProducts().get(0).getProductName());
+                for (int i =  1; i < getProducts().size(); i++) {
+                    sb.append(", ").append(getProducts().get(i).getProductName());
                 }
                 sb.append("\nShipping address: " + getShippingAddress() + "\n" +
                         "Delivery method: " + getDeliveryMethod() + "\n" +

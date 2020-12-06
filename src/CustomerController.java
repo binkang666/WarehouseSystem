@@ -45,7 +45,7 @@ public class CustomerController {
         o.close();
     }
 
-    // Check
+    // Modifies a customer's existing fields
     public void modifyCustomer(Customer customer) throws IOException {
         Main.customers.put(customer.getCustomerID(), customer);
         FileOutputStream f = new FileOutputStream("Customer.txt");
@@ -57,6 +57,7 @@ public class CustomerController {
         o.close();
     }
 
+    // Loads the hashmap in Customer.txt and places it in the hashtable in the Main
     public void getCustomers() throws IOException, ClassNotFoundException {
         FileInputStream fi = new FileInputStream("Customer.txt");
         ObjectInputStream oi = new ObjectInputStream(fi);

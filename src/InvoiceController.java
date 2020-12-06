@@ -14,7 +14,7 @@ public class InvoiceController {
             return 1;
         }
         int max = 0;
-        for (Integer i : Main.customers.keySet()) {
+        for (Integer i : Main.invoices.keySet()) {
             if (i > max) {
                 max = i;
             }
@@ -39,7 +39,7 @@ public class InvoiceController {
     }
 
     public void getInvoices() throws IOException, ClassNotFoundException {
-        FileInputStream fi = new FileInputStream("Customer.txt");
+        FileInputStream fi = new FileInputStream("Invoice.txt");
         ObjectInputStream oi = new ObjectInputStream(fi);
 
         Main.invoices = (HashMap<Integer, Invoice>) oi.readObject();
@@ -63,7 +63,7 @@ public class InvoiceController {
     }
 
     public void markShipped() {
-
+        // mark shipped and remove items from warehouse
     }
 
     public void displayInvoices() {

@@ -28,47 +28,56 @@ public class InvoiceBoundary {
         switch (input) {
             // Open Invoice
             case 1 -> {
+                // Load in existing customers
                 customerController = new CustomerController();
                 if (new File("Customer.txt").exists()) {
                     customerController.getCustomers();
                     customerController.displayCustomers();
-                }
-                // TODO: MAKE SURE CUSTOMER DOESN'T HAVE AN ACTIVE INVOICE
-                System.out.println("Enter the customer ID you would like to open an invoice for: ");
-                int key = sc.nextInt();
-                Customer customer = Main.customers.get(key);
 
-                //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
-                ArrayList<Product> products = new ArrayList<>();
-                System.out.println("Adding generic items...");
-                products.add(new Product("Apple", 2, 3, 0, 0));
-                products.add(new Product("Banana", 1, 5, 0, 0));
+                    // TODO: MAKE SURE CUSTOMER DOESN'T HAVE AN ACTIVE INVOICE
+                    System.out.println("Enter the customer ID you would like to open an invoice for: ");
+                    int key = sc.nextInt();
+                    Customer customer = Main.customers.get(key);
+
+                    //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
+                    ArrayList<Product> products = new ArrayList<>();
+                    System.out.println("Adding generic items...");
+                    products.add(new Product("Apple", 2, 3, 0, 0));
+                    products.add(new Product("Banana", 1, 5, 0, 0));
+
+                    // Selling price: 7
+                    //
 
 
-                System.out.println("Enter the customer's shipping address: ");
-                String address = sc.next();
+                    System.out.println("Enter the customer's shipping address: ");
+                    String address = sc.next();
 
-                System.out.println("""
+                    System.out.println("""
                         Enter the delivery method:
                         D. Delivery
                         T. Take-out
                         """);
-                char delivery = sc.next().toLowerCase().charAt(0);
+                    char delivery = sc.next().toLowerCase().charAt(0);
 
-                double deliveryCharge = 0; // Will be 0 if the delivery method is T
-                if (delivery == 'd') {
-                    System.out.println("Enter the delivery charge: ");
-                    deliveryCharge = sc.nextDouble();
+                    double deliveryCharge = 0; // Will be 0 if the delivery method is T
+                    if (delivery == 'd') {
+                        System.out.println("Enter the delivery charge: ");
+                        deliveryCharge = sc.nextDouble();
+                    }
+
+                    // Load in invoices to find next invoice id and to add a new invoice
+                    if (new File("Invoice.txt").exists()) {
+                        invoiceController.getInvoices();
+                    }
+                    int invoiceNumber = invoiceController.findNextInvoiceNumber();
+
+                    invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products);
+                    System.out.println("New invoice added.");
                 }
 
-                int invoiceNumber = invoiceController.findNextInvoiceNumber();
-
-                if (new File("Invoice.txt").exists()) {
-                    invoiceController.getInvoices();
+                else {
+                    System.out.println("No customers exist!");
                 }
-                invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products);
-                System.out.println("New invoice added.");
-
             }
             case 2 -> invoiceController.closeInvoice();
             case 3 -> invoiceController.showOpenInvoices();

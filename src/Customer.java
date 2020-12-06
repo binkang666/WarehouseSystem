@@ -71,13 +71,13 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
 
     @Override
     public String getType() {
-        return "customer";
+        return "Customer";
     }
     @Override
     public String toString()
     {
         return "Customer ID: " + getCustomerID() + ", Type: "+ getType() + ", " + super.toString() +
-                ", Status: " + isActive()  + ", Sales Tax: " + getSalesTax();
+                ", Status: " + isActive()  + ", Sales Tax: " + getSalesTax() + "%";
     }
 
     @Override

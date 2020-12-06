@@ -57,7 +57,7 @@ public class CustomerBoundary {
                 sop("Enter address for new the customer");
                 String add = input.nextLine();
 
-                sop("Enter sales tax for the new customer");
+                sop("Enter sales tax for the new customer (e.g. 2.5 for 2.5%)");
                 double tax = input.nextDouble();
 
                 int id = customerController.findNextCustomerID();
