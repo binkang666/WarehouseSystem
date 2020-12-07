@@ -151,82 +151,7 @@ public class Main {
 
 
     }
-    //TODO: Possibly Uncomment
-//    static void writeCustomer(Map<Customer, String> data){
-//        final File file = new File("Customer.txt");
-//
-//        try{
-//            FileOutputStream fos = new FileOutputStream(file, true);
-//            PrintStream pw = new PrintStream(fos);
-//
-//            for(Map.Entry<Customer, String> m: data.entrySet()){
-//                pw.println(m.getValue() + m.getKey());
-//            }
-//            pw.flush();
-//            pw.close();
-//            fos.close();
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }
-//    }
 
-
-
-//    static void writeCustomer(Map<Integer, Customer> data){
-//        final File file = new File("Customer.txt");
-//
-//        try{
-//            FileOutputStream fos = new FileOutputStream(file, true);
-//            PrintStream pw = new PrintStream(fos);
-//
-//            for(Map.Entry<Integer, Customer> m: data.entrySet()){
-//                pw.println(String.valueOf(m.getKey()) + m.getValue());
-//            }
-//            pw.flush();
-//            pw.close();
-//            fos.close();
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }
-//    }
-
-
-    private static void modify(){
-
-    }
-
-    static void writeSalesperson(Map<Salesperson, String> data){
-        final File file = new File("Salesperson.txt");
-
-        try{
-            FileOutputStream fos = new FileOutputStream(file, true);
-            PrintStream pw = new PrintStream(fos);
-
-            for(Map.Entry<Salesperson, String> m: data.entrySet()){
-                pw.println(m.getValue() + m.getKey());
-            }
-            pw.flush();
-            pw.close();
-            fos.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-
-
-    static void displayAll(String pathname)
-    {
-        try (FileReader reader =  new FileReader(pathname);
-             BufferedReader br =  new BufferedReader(reader)){
-            String line;
-            while((line = br.readLine())!=null){
-                sop(line);
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
 
     private static void sop(String s){
         System.out.println(s);
@@ -246,13 +171,6 @@ public class Main {
         sop("How can I help you today? (Enter one of the above numbers to proceed)");
     }
 
-//    public static Map<String, Customer> getCustomers() {
-//        return null;
-//    }
-
-    public static <K, V> Map<K,V> getInvoices() {
-        return null;
-    }
 
     public static void EnterToContinue(){
         System.out.println("Press any key to return to main menu...");
@@ -260,32 +178,10 @@ public class Main {
         catch(Exception e){	e.printStackTrace();}
     }
 
-//    static void searchCustomerId(String id) throws IOException {
-//        Scanner input = new Scanner(System.in);
-//        id = input.nextLine();
-//        List<String> lines = Files.readAllLines(Paths.get("Customer.txt"));
-//        for (String line : lines) {
-//            if (line.contains(id + " (")) {
-//                sop(line);
-//            }
-//        }
-//
-//    }
 
-    static void searchSalespersonId(String id) throws IOException {
-        Scanner input = new Scanner(System.in);
-        id = input.nextLine();
-        List<String> lines = Files.readAllLines(Paths.get("Salesperson.txt"));
-        for (String line : lines) {
-            if (line.contains(id + " (")) {
-                sop(line);
-            }
-        }
 
-    }
     static Map<Integer, Customer> customers = new HashMap<>();
-//    static Map<Customer, String> customers;
-    static Map<Salesperson, String> salespeople;
+    static Map<Integer, Salesperson> salespeople =  new HashMap<>();
     static Map<String, Warehouse> warehouses;
 //    static Map<Integer, Invoice> invoices = new HashMap<>();
 }
