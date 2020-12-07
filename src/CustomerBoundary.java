@@ -51,14 +51,20 @@ public class CustomerBoundary {
                         sop("Invalid, please enter a valid last name again");}
                 }
 
-                sop("Enter phone for new the customer");
+                sop("Enter phone for new the customer (e.g. 666-666-6666)");
                 String phone = input.nextLine();
 
                 sop("Enter address for new the customer");
                 String add = input.nextLine();
 
                 sop("Enter sales tax for the new customer (e.g. 2.5 for 2.5%)");
-                double tax = input.nextDouble();
+                double tax = 0;
+                try{
+                    tax = input.nextDouble();}
+                catch (Exception e){
+                    sop("Failed adding Salesperson, please enter only arabic numeric numbers for tax!");
+                    return;
+                }
 
                 int id = customerController.findNextCustomerID();
 
@@ -69,58 +75,6 @@ public class CustomerBoundary {
                 customerController.writeCustomer(fn, ln, phone, add, tax, id);
                 sop("New Customers added.");
 
-                //TODO: Possibly Uncomment
-//                sop("\n*********************************************");
-//                sop("adding customers");
-//                Main.customers = new HashMap<Customer, String>();
-//                Customer c= new Customer();
-//
-//                sop("Enter first name for new customer");
-//                String fn = input.nextLine();
-//                while(!isValidName(fn)){
-//                    fn = input.nextLine();
-//                    if(!isValidName(fn)){
-//                    sop("Invalid, please enter a valid first name again");}
-//                }
-//                c.setFirst_name(fn);
-//                Main.customers.put(c,fn);;
-//
-//
-//                sop("Enter last name for new customer");
-//                String ln = input.nextLine();
-//                while(!isValidName(ln)){
-//                    ln = input.nextLine();
-//                    if(!isValidName(ln)){
-//                    sop("Invalid, please enter a valid last name again");}
-//                }
-//                c.setLast_name(ln);
-//                Main.customers.put(c,ln);
-//
-//
-//                sop("Enter phone for new customer");
-//                String phone = input.nextLine();
-//                c.setPhone(phone);
-//                Main.customers.put(c,phone);
-//
-//
-//                sop("Enter address for new customer");
-//                String add = input.nextLine();
-//                c.setAddress(add);
-//                Main.customers.put(c, add);;
-//
-//
-//                sop("Enter salesTax for new customer");
-//                double tax = input.nextDouble();
-//                c.setSalesTax(tax);
-//                Main.customers.put(c, String.valueOf(tax));
-//
-//                String id = String.valueOf(c.getCustomerID());
-//                Main.customers.put(c, id);
-//
-//
-//
-//                Main.writeCustomer(Main.customers);
-//                sop("New Customers added");
 
             }  //OK
             // Show all customers
@@ -143,10 +97,7 @@ public class CustomerBoundary {
                     int id = input.nextInt();
                     customerController.searchCustomerID(id);
                 }
-                else {
-                    sop("No customers exist!");
-                }
-            }  //Need implementation
+            }
 
             case 4 -> {Main.showMainUI();} //OK
             default -> sop("Please choose number from 1 - 3");
@@ -161,9 +112,6 @@ public class CustomerBoundary {
     public static boolean isValidName(String input){
         return Pattern.matches("[a-zA-Z]+", input);
     }
-
-    /*public static boolean isValidNumber(Double input){
-        return Pattern.matches("[0-9]+[.[0-9]+]?", String.valueOf(input));
-    }*/
+    
 
 }
