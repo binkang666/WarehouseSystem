@@ -11,6 +11,7 @@ public class Invoice implements Serializable {
     private ArrayList<Product> products;
     private int invoiceNumber;
     private boolean status; // 1 if active, 0 otherwise
+    private boolean shipped;
     private String shippingAddress;
     private char deliveryMethod; // D if delivery, T otherwise
     private final double financeCharge = .2; // 2% finance charge if customer is late in paying
@@ -21,7 +22,7 @@ public class Invoice implements Serializable {
     private double salesTax;
 
     // If we're not delivering, deliver charge will be 0
-    public Invoice(String cName, String shippingAddress, char deliveryMethod, double deliverCharge, double salesTax, int invoiceNumber, ArrayList<Product> products) {
+    public Invoice(String cName, String shippingAddress, char deliveryMethod, double deliverCharge, double salesTax, int invoiceNumber, ArrayList<Product> products, boolean shipped) {
         this.products = products;
         this.invoiceNumber = invoiceNumber;
         this.cName = cName;
@@ -35,7 +36,9 @@ public class Invoice implements Serializable {
         status = true; // All invoices start as open
         // maybe create methods to apply tax and delivery charge since salespersons don't get payed based on tax
         this.deliverCharge = deliverCharge;
-        finalTotal = totalCharge + ((salesTax * .01) * totalCharge) + deliverCharge;
+        // rounded 2 decimal places
+        finalTotal = ((double)((int)((totalCharge + ((salesTax * .01) * totalCharge) + deliverCharge) * 100)))/100.0;
+        this.shipped = shipped;
     }
 
     @Override
@@ -110,5 +113,13 @@ public class Invoice implements Serializable {
 
     public void setFinalTotal(double finalTotal) {
         this.finalTotal = finalTotal;
+    }
+
+    public boolean isShipped() {
+        return shipped;
+    }
+
+    public void setShipped(boolean shipped) {
+        this.shipped = shipped;
     }
 }

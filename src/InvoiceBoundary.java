@@ -20,8 +20,9 @@ public class InvoiceBoundary {
                 2. Pay off an invoice
                 3. Show open invoices
                 4. Show closed invoices
-                5. Mark an invoice shipped
-                6. Go back
+                5. Show all invoices
+                6. Mark an invoice shipped
+                7. Go back
                 """);
         int input = sc.nextInt();
         switch (input) {
@@ -33,7 +34,6 @@ public class InvoiceBoundary {
                     customerController.getCustomers();
                     customerController.displayCustomers();
 
-                    // TODO: MAKE SURE CUSTOMER DOESN'T HAVE AN ACTIVE INVOICE
                     System.out.println("Enter the customer ID you would like to open an invoice for: ");
                     int key = sc.nextInt();
                     Customer customer;
@@ -46,6 +46,11 @@ public class InvoiceBoundary {
 
                     customer = Main.customers.get(key);
 
+                    // Check if the customer has an open invoice
+                    if (invoiceController.hasOpenInvoice(customer)) {
+                        System.out.println("Customer already has an open invoice!");
+                        break;
+                    }
 
                     //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
                     ArrayList<Product> products = new ArrayList<>();
@@ -63,14 +68,16 @@ public class InvoiceBoundary {
                     char delivery = sc.next().toLowerCase().charAt(0);
 
                     double deliveryCharge = 0; // Will be 0 if the delivery method is T
+                    boolean shipped = true;
                     if (delivery == 'd') {
+                        shipped = false;
                         System.out.println("Enter the delivery charge: ");
                         deliveryCharge = sc.nextDouble();
                     }
 
                     int invoiceNumber = invoiceController.findNextInvoiceNumber();
 
-                    invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products);
+                    invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products, shipped);
                     System.out.println("New invoice added.");
                 }
 
@@ -83,13 +90,12 @@ public class InvoiceBoundary {
                     customerController = new CustomerController();
                     customerController.getCustomers();
 
-                    System.out.println("Enter the invoice ID: ");
+                    System.out.println("Enter the invoice number you want to pay off: ");
                     invoiceController.showOpenInvoices();
                     int key = sc.nextInt();
                     Invoice invoice = null;
                     Customer customer = null;
 
-                   // what happens if the customer doesn't have the key?
                     try {
                         for (Customer c: Main.customers.values()) {
                             if (c.getInvoiceAssociated().containsKey(key)) {
@@ -129,9 +135,47 @@ public class InvoiceBoundary {
                 }
 
             }
-            case 3 -> invoiceController.showAllInvoices();
-            case 4 -> invoiceController.showClosedInvoices();
-            case 5 -> invoiceController.markShipped();
+            case 3 -> {
+                if (new File("Customer.txt").exists()) {
+                    customerController = new CustomerController();
+                    customerController.getCustomers();
+                    invoiceController.showOpenInvoices();
+                }
+            }
+            case 4 -> {
+                if (new File("Customer.txt").exists()) {
+                    customerController = new CustomerController();
+                    customerController.getCustomers();
+                    invoiceController.showClosedInvoices();
+                }
+            }
+            case 5 -> {
+                if (new File("Customer.txt").exists()) {
+                    customerController = new CustomerController();
+                    customerController.getCustomers();
+                    invoiceController.showAllInvoices();
+                }
+            }
+
+            case 6 -> {
+                if (new File("Customer.txt").exists()) {
+                    customerController = new CustomerController();
+                    customerController.getCustomers();
+
+                    invoiceController.showUnshippedInvoices();
+                    System.out.println("Enter the invoice number you want to mark shipped: ");
+                    int key = sc.nextInt();
+
+                    for (Customer c: Main.customers.values()) {
+                        if (c.getInvoiceAssociated().containsKey(key)) {
+                            Invoice i = c.getInvoiceAssociated().get(key);
+                            invoiceController.markShipped(c, i);
+                        }
+                    }
+
+                    System.out.println("Invoice marked shipped.");
+                }
+            }
             default -> System.out.println("Going back");
         }
     }

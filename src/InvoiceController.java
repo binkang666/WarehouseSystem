@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class InvoiceController {
 
@@ -21,11 +20,18 @@ public class InvoiceController {
     }
 
     // To open an invoice, place the invoices in the customers hashmap and save them
-    public void openInvoice(Customer c, String address, char delivery, double deliveryCharge, int invoiceNumber, ArrayList<Product> products) throws IOException {
-        Invoice invoice = new Invoice(c.getName() , address, delivery, deliveryCharge, c.getSalesTax(), invoiceNumber, products);
+    public void openInvoice(Customer c, String address, char delivery, double deliveryCharge, int invoiceNumber, ArrayList<Product> products, boolean shipped) throws IOException {
+        Invoice invoice = new Invoice(c.getName(), address, delivery, deliveryCharge, c.getSalesTax(), invoiceNumber, products, shipped);
         c.getInvoiceAssociated().put(invoiceNumber, invoice);
         customerController.modifyCustomer(c);
     }
+
+    // To modify an invoice, just replace it in the customers hashmap and save them
+    public void modifyInvoice(Invoice invoice, Customer c) throws IOException {
+        c.getInvoiceAssociated().put(invoice.getInvoiceNumber(), invoice);
+        customerController.modifyCustomer(c);
+    }
+
 
 //    public void getInvoices() throws IOException, ClassNotFoundException {
 //        FileInputStream fi = new FileInputStream("Invoice.txt");
@@ -41,45 +47,77 @@ public class InvoiceController {
     }
 
     public void showOpenInvoices() {
+        boolean flag = false;
         for (Customer c: Main.customers.values()) {
             for (Invoice i : c.getInvoiceAssociated().values()) {
                 if (i.getStatus()) {
                     System.out.println(i.toString());
+                    flag = true;
                     break; // break because only 1 invoice should should be open
                 }
             }
         }
-    }
-    // To modify an invoice, just replace it in the customers hashmap and save them
-    public void modifyInvoice(Invoice invoice, Customer c) throws IOException {
-        c.getInvoiceAssociated().put(invoice.getInvoiceNumber(), invoice);
-        customerController.modifyCustomer(c);
+        if (!flag) {
+            System.out.println("No open invoices exist!");
+        }
     }
 
     public void showClosedInvoices() {
+        boolean flag = false;
         for (Customer c: Main.customers.values()) {
             for (Invoice i : c.getInvoiceAssociated().values()) {
                 if (!i.getStatus()) {
+                    flag = true;
                     System.out.println(i.toString());
                 }
             }
         }
-    }
-
-    public void markShipped() {
-        // mark shipped and remove items from warehouse
-    }
-
-    public void payInvoice() {
-
-
+        if (!flag) {
+            System.out.println("No closed invoices exist!");
+        }
     }
 
     public void showAllInvoices() {
-        for (Customer c: Main.customers.values()) {
+        boolean flag = false;
+        for (Customer c : Main.customers.values()) {
             for (Invoice i : c.getInvoiceAssociated().values()) {
                 System.out.println(i.toString());
+                flag = true;
             }
         }
+        if (!flag) {
+            System.out.println("No open/closed invoices exist!");
+        }
+    }
+
+    public void showUnshippedInvoices() {
+        boolean flag = false;
+        for (Customer c: Main.customers.values()) {
+            for (Invoice i : c.getInvoiceAssociated().values()) {
+                if(!i.isShipped()) {
+                    System.out.println(i.toString());
+                    flag = true;
+                }
+            }
+        }
+        if (!flag) {
+            System.out.println("No unshipped invoices exist!");
+        }
+    }
+
+    public void markShipped(Customer c, Invoice i) throws IOException {
+        i.setShipped(true);
+        c.getInvoiceAssociated().put(i.getInvoiceNumber(), i);
+        customerController.modifyCustomer(c);
+    }
+    // mark shipped and remove items from warehouse
+
+    public Boolean hasOpenInvoice(Customer c) {
+        for (Invoice i : c.getInvoiceAssociated().values()) {
+            if (i.getStatus()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
