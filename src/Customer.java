@@ -1,12 +1,12 @@
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Customer extends Person implements Comparable<Customer>, Serializable {
     private int customerID;
     private boolean status;
-    private ArrayList<Invoice> InvoiceAssociated;
+    private HashMap<Integer, Invoice> InvoiceAssociated;
     private double salesTax;
     private LocalDate lastOrderDate;
 
@@ -23,19 +23,19 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
         status = true;
         this.salesTax = salesTax;
         lastOrderDate = null;
-        InvoiceAssociated = new ArrayList<>();
+        InvoiceAssociated = new HashMap<>();
     }
 
     public void addInvoiceAssociated(Invoice ia){
-        InvoiceAssociated.add(ia);
+        InvoiceAssociated.put(ia.getInvoiceNumber(), ia);
     }
 
-    public ArrayList<Invoice> getInvoiceAssociated(){
+    public HashMap<Integer, Invoice> getInvoiceAssociated(){
         return InvoiceAssociated;
     }
 
     public void displayInvoiceAssociated() {
-        for(Invoice invoice: InvoiceAssociated){
+        for(Invoice invoice: InvoiceAssociated.values()){
             System.out.println(invoice);
         }
     }

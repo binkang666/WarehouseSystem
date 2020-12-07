@@ -17,20 +17,19 @@ public class InvoiceBoundary {
         System.out.println(""" 
                 Select an option:
                 1. Open an invoice
-                2. Close an invoice
+                2. Pay off an invoice
                 3. Show open invoices
                 4. Show closed invoices
                 5. Mark an invoice shipped
-                6. Pay off an invoice?
-                7. Go back
+                6. Go back
                 """);
         int input = sc.nextInt();
         switch (input) {
             // Open Invoice
             case 1 -> {
                 // Load in existing customers
-                customerController = new CustomerController();
                 if (new File("Customer.txt").exists()) {
+                    customerController = new CustomerController();
                     customerController.getCustomers();
                     customerController.displayCustomers();
 
@@ -69,11 +68,6 @@ public class InvoiceBoundary {
                         deliveryCharge = sc.nextDouble();
                     }
 
-                    // Load in invoices to find next invoice id and to add a new invoice
-                    if (new File("Invoice.txt").exists()) {
-                        invoiceController.getInvoices();
-                    }
-
                     int invoiceNumber = invoiceController.findNextInvoiceNumber();
 
                     invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products);
@@ -85,23 +79,57 @@ public class InvoiceBoundary {
                 }
             }
             case 2 -> {
-                if (!new File("Invoice.txt").exists()) {
-                    System.out.println("No open invoices exist!");
-                    break;
-                }
-
-                System.out.println("Select an invoice: ");
-                invoiceController.displayInvoices();
-
                 if (new File("Customer.txt").exists()) {
+                    customerController = new CustomerController();
                     customerController.getCustomers();
-                    customerController.displayCustomers();
-                }
 
-                System.out.println("Select an invoice to pay: ");
+                    System.out.println("Enter the invoice ID: ");
+                    invoiceController.showOpenInvoices();
+                    int key = sc.nextInt();
+                    Invoice invoice = null;
+                    Customer customer = null;
+
+                   // what happens if the customer doesn't have the key?
+                    try {
+                        for (Customer c: Main.customers.values()) {
+                            if (c.getInvoiceAssociated().containsKey(key)) {
+                                customer = c;
+                                invoice = c.getInvoiceAssociated().get(key);
+
+                            }
+                        }
+                    }
+                    catch (NullPointerException n) {
+                        System.out.println("Invoice doesn't exist!");
+                        break;
+                    }
+
+
+                    System.out.println("Enter amount to pay off: ");
+                    double amount = sc.nextDouble();
+                    while (amount > invoice.getFinalTotal()) {
+                        System.out.println("Payment cannot be greater than amount owed. Re-enter: ");
+                        amount = sc.nextDouble();
+                    }
+                    invoice.setFinalTotal(invoice.getFinalTotal() - amount);
+
+                    // Check if the invoice has been fully payed off
+                    if (invoice.getFinalTotal() == 0) {
+                        System.out.println("Invoice has been closed.");
+                        invoiceController.closeInvoice(invoice);
+                    }
+
+                    // Overwrite the existing invoice int the customers hashmap
+                    invoiceController.modifyInvoice(invoice, customer);
+
+                    // Ive modified an invoice. I need to write it back into the invoice file AND i need to modify the customers arraylist
+                }
+                else {
+                    System.out.println("Either no open invoices or customers exist!");
+                }
 
             }
-            case 3 -> invoiceController.showOpenInvoices();
+            case 3 -> invoiceController.showAllInvoices();
             case 4 -> invoiceController.showClosedInvoices();
             case 5 -> invoiceController.markShipped();
             default -> System.out.println("Going back");

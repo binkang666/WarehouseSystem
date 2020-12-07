@@ -287,5 +287,5 @@ public class Main {
 //    static Map<Customer, String> customers;
     static Map<Salesperson, String> salespeople;
     static Map<String, Warehouse> warehouses;
-    static Map<Integer, Invoice> invoices = new HashMap<>();
+//    static Map<Integer, Invoice> invoices = new HashMap<>();
 }

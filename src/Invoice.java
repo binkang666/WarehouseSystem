@@ -32,6 +32,7 @@ public class Invoice implements Serializable {
         for (Product p : products) {
             totalCharge += p.getSellingPrice();
         }
+        status = true; // All invoices start as open
         // maybe create methods to apply tax and delivery charge since salespersons don't get payed based on tax
         this.deliverCharge = deliverCharge;
         finalTotal = totalCharge + ((salesTax * .01) * totalCharge) + deliverCharge;
@@ -42,6 +43,7 @@ public class Invoice implements Serializable {
         StringBuilder sb = new StringBuilder("Invoice Number: " + getInvoiceNumber() + "\n" +
                 "Order Date: " + getOrderDate() + "\n" +
                 "Customer: " + getCName() + "\n" +
+                "Status: " + getStatus() + "\n" +
                 "Products: ");
                 sb.append(getProducts().get(0).getProductName());
                 for (int i =  1; i < getProducts().size(); i++) {
@@ -102,5 +104,11 @@ public class Invoice implements Serializable {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    //apply finance charge?
+
+    public void setFinalTotal(double finalTotal) {
+        this.finalTotal = finalTotal;
     }
 }

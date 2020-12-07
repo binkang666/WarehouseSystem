@@ -9,58 +9,61 @@ public class InvoiceController {
 
     // Look at the ID value in the last line Invoice.txt and add 1 to it.
     public int findNextInvoiceNumber() {
-        // If the file doesn't exist, that implies it's the first invoice
-        if (!new File("Invoice.txt").exists()) {
-            return 1;
-        }
-        int max = 0;
-        for (Integer i : Main.invoices.keySet()) {
-            if (i > max) {
-                max = i;
+        int max = 1;
+        for (Customer c: Main.customers.values()) {
+            for (Integer i: c.getInvoiceAssociated().keySet()) {
+                if (i > max) {
+                    max = i;
+                }
             }
         }
-        return max + 1;
+        return max;
     }
 
+    // To open an invoice, place the invoices in the customers hashmap and save them
     public void openInvoice(Customer c, String address, char delivery, double deliveryCharge, int invoiceNumber, ArrayList<Product> products) throws IOException {
-        Invoice invoice = new Invoice(c.getName(), address, delivery, deliveryCharge, c.getSalesTax(), invoiceNumber, products);
-        // need to figure out if modifying a customer in Customer.txt overwrites the val associated with the key
-        c.getInvoiceAssociated().add(invoice);
+        Invoice invoice = new Invoice(c.getName() , address, delivery, deliveryCharge, c.getSalesTax(), invoiceNumber, products);
+        c.getInvoiceAssociated().put(invoiceNumber, invoice);
         customerController.modifyCustomer(c);
-        Main.invoices.put(invoice.getInvoiceNumber(), invoice);
-
-        FileOutputStream f = new FileOutputStream("Invoice.txt");
-        ObjectOutputStream o = new ObjectOutputStream(f);
-
-        o.writeObject(Main.invoices);
-        o.flush();
-        f.close();
-        o.close();
     }
 
-    public void getInvoices() throws IOException, ClassNotFoundException {
-        FileInputStream fi = new FileInputStream("Invoice.txt");
-        ObjectInputStream oi = new ObjectInputStream(fi);
-
-        Main.invoices = (HashMap<Integer, Invoice>) oi.readObject();
-        oi.close();
-        fi.close();
-    }
+//    public void getInvoices() throws IOException, ClassNotFoundException {
+//        FileInputStream fi = new FileInputStream("Invoice.txt");
+//        ObjectInputStream oi = new ObjectInputStream(fi);
+//
+//        Main.invoices = (HashMap<Integer, Invoice>) oi.readObject();
+//        oi.close();
+//        fi.close();
+//    }
 
     public void closeInvoice(Invoice invoice) {
         invoice.setStatus(!invoice.getStatus());
     }
 
-    public void showOpenInvoices() throws IOException, ClassNotFoundException {
-        customerController.getCustomers();
+    public void showOpenInvoices() {
         for (Customer c: Main.customers.values()) {
-            c.displayInvoiceAssociated();
+            for (Invoice i : c.getInvoiceAssociated().values()) {
+                if (i.getStatus()) {
+                    System.out.println(i.toString());
+                    break; // break because only 1 invoice should should be open
+                }
+            }
         }
-
+    }
+    // To modify an invoice, just replace it in the customers hashmap and save them
+    public void modifyInvoice(Invoice invoice, Customer c) throws IOException {
+        c.getInvoiceAssociated().put(invoice.getInvoiceNumber(), invoice);
+        customerController.modifyCustomer(c);
     }
 
     public void showClosedInvoices() {
-
+        for (Customer c: Main.customers.values()) {
+            for (Invoice i : c.getInvoiceAssociated().values()) {
+                if (!i.getStatus()) {
+                    System.out.println(i.toString());
+                }
+            }
+        }
     }
 
     public void markShipped() {
@@ -69,11 +72,14 @@ public class InvoiceController {
 
     public void payInvoice() {
 
+
     }
 
-    public void displayInvoices() {
-        for (Invoice i : Main.invoices.values()) {
-            System.out.println(i.toString());
+    public void showAllInvoices() {
+        for (Customer c: Main.customers.values()) {
+            for (Invoice i : c.getInvoiceAssociated().values()) {
+                System.out.println(i.toString());
+            }
         }
     }
 }
