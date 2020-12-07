@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 public class Product implements Serializable {
     private String productName;
@@ -25,7 +26,7 @@ public class Product implements Serializable {
         return productName;
     }
     public int getQuantity() {
-    	return quantity;
+    	return quantity-quantitySold;
     }
     public double getTotalProfitPercent() {
     	return (getTotalProfit() / (sellingPrice * quantitySold)) * 100;
@@ -47,9 +48,16 @@ public class Product implements Serializable {
     }
     
     public void display() {
-    	String formatting = String.format("%s %lf %lf %d %d %lf %lf %lf %lf", productName, costPrice, 
-    			sellingPrice, quantity, quantitySold, getTotalSales(), getTotalCost(), getTotalProfit(), getTotalProfitPercent());
-    	System.out.println(formatting);
+    	DecimalFormat ft = new DecimalFormat("#.##");
+    	System.out.printf("\n\nProduct name: "+ productName +
+    			"\nCost price: "+costPrice + 
+    			"\nSelling price: "+sellingPrice+
+    			"\nQuantity: "+ quantity+
+    			"\nQuantity Sold: "+quantitySold+
+    			"\nTotal sales: "+getTotalSales()+
+    			"\nTotal cost: "+getTotalCost()+
+    			"\nTotal profit: "+ft.format(getTotalProfit())+
+    			"\nTotal Profit Percent: "+ft.format(getTotalProfitPercent())+"\n");
    
     }
 }
