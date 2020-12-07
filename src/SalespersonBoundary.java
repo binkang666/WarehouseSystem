@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ public class SalespersonBoundary {
         this.salespersonController = salespersonController;
     }
 
-    void showSalespersonUI() throws IOException {
+    void showSalespersonUI() throws IOException, ClassNotFoundException {
         Scanner input = new Scanner(System.in);
         sop("Salesperson");
         sop("""
@@ -21,20 +22,23 @@ public class SalespersonBoundary {
                             4. return to main menu""");
         int sp_choice = input.nextInt();
         switch (sp_choice){
-            case 1 -> {sop("adding new salesperson");
-                Salesperson sp = new Salesperson();
+            case 1 -> {
+                // Retrieve salespeople from file
+                if(new File("Salesperson.txt").exists()){
+                    salespersonController.getSalesperson();
+                }
+
+                sop("\n*********************************************");
+                sop("adding new salesperson");
+
                 sop("Enter first name for new salesperson");
-                Main.salespeople = new HashMap<Salesperson, String>();
-
-
                 String fn = input.nextLine();
                 while(!isValidName(fn)){
                     fn = input.nextLine();
                     if(!isValidName(fn)){
                         sop("Invalid, please enter a valid last name again");}
                 }
-                sp.setFirst_name(fn);
-                Main.salespeople.put(sp, fn);
+
 
                 sop("Enter last name for new salesperson");
                 String ln = input.nextLine();
@@ -43,56 +47,95 @@ public class SalespersonBoundary {
                     if(!isValidName(ln)){
                         sop("Invalid, please enter a valid last name again");}
                 }
-                sp.setLast_name(ln);
-                Main.salespeople.put(sp, ln);
+
 
                 sop("Enter phone for new salesperson");
                 String phone = input.nextLine();
-                sp.setPhone(phone);
-                Main.salespeople.put(sp, phone);
+
 
                 sop("Enter address for new salesperson");
                 String address = input.nextLine();
-                sp.setAddress(address);
-                Main.salespeople.put(sp, address);
 
+                sop("Enter Total commission Earned by salesperson");
+                double commission = 0;
+                try{
+                    commission = input.nextDouble();}
+                catch (Exception e){
+                    sop("Failed adding Salesperson, please enter only arabic numeric numbers for commission earned!");
+                    return;
+                }
+
+                sop("Enter Total sales Earned by salesperson");
+                double sales = 0;
+                try{
+                    sales = input.nextDouble();}
+                catch (Exception e){
+                    sop("Failed adding Salesperson, please enter only arabic numeric numbers for total sales!");
+                    return;
+                }
+
+                LocalDate date = LocalDate.now();
+                try{
                 sop("Enter start year for new salesperson");
                 int yy  = input.nextInt();
                 sop("Enter start month for new salesperson");
                 int mm  = input.nextInt();
                 sop("Enter start day for new salesperson");
                 int dd  = input.nextInt();
-                sp.setStartDate(yy,mm,dd);
-                LocalDate temp = sp.getStartDate();
-                Main.salespeople.put(sp, String.valueOf(temp));
+                date = LocalDate.of(yy, mm, dd);}
+                catch (Exception e){
+                    sop("Failed adding Salesperson, please enter correct dates");
+                    return;
+                }
+
 
                 sop("Enter commission rate for new salesperson");
-                double rate = input.nextDouble();
-                sp.setCommissionRate(rate);
-                Main.salespeople.put(sp, String.valueOf(rate));
+                double rate = 0;
+                try{
+                    rate = input.nextDouble();}
+                catch (Exception e){
+                    sop("Failed adding Salesperson, please enter only arabic numeric numbers for commission rate!");
+                    return;
+                }
 
-                String id = String.valueOf(sp.getSalespersonID());
-                Main.salespeople.put(sp, id);
+                int id = salespersonController.findNextSalespersonID();
 
-                Main.writeSalesperson(Main.salespeople);
+                // It's not the first time we're adding a salesperson, so retrieve the existing ones from the txt file
+                if (new File("Salesperson.txt").exists()) {
+                    salespersonController.getSalesperson();
+                }
+
+                salespersonController.writeSalesperson(fn, ln, phone, address, commission, sales, date, rate, id);
                 sop("salesperson added");
 
             }
 
             case 2 -> {
                 sop("display all salesperson performance");
-                Main.displayAll("Salesperson.txt");
+                if (new File("Salesperson.txt").exists()) {
+                    // Retrieve salespeople from file
+                    salespersonController.getSalesperson();
+                    salespersonController.displaySalesperson();
+                }
+                else {
+                    sop("No salesperson exist!");
+                }
             }
 
             case 3 -> {
-                sop("display salesperson information");
-                String id = input.nextLine();
-                Main.searchSalespersonId(id);
+                sop("Enter the salesperson ID");
+                if (new File("salesperson.txt").exists()) {
+                    // Retrieve salespeople from file
+                    salespersonController.getSalesperson();
+                    int id = input.nextInt();
+                    salespersonController.searchSalespersonID(id);
+                }
 
             }
             case 4 -> {
                 Main.showMainUI();
             }
+            default -> sop("Please choose number from 1 - 4");
         }
     }
     private static void sop(String s){
@@ -102,7 +145,5 @@ public class SalespersonBoundary {
         return Pattern.matches("[a-zA-Z]+", input);
     }
 
- /*  public static boolean isValidTime(int input){
-        return Pattern.matches("[+-]?[0-9]+", String.valueOf(input));
-    }*/
+
 }
