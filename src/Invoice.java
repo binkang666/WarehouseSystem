@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+//TODO: apply finance charges for 10/30 days, apply the customer sales tax to their invoice, sort invoices
 public class Invoice implements Serializable {
     private Calendar cal = Calendar.getInstance();
     private final DecimalFormat df = new DecimalFormat("#.##");

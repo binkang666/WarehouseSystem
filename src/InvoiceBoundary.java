@@ -22,8 +22,7 @@ public class InvoiceBoundary {
                 4. Show closed invoices
                 5. Show all invoices
                 6. Mark an invoice shipped
-                7. Go back
-                """);
+                7. Go back""");
         int input = sc.nextInt();
         switch (input) {
             // Open Invoice
@@ -32,9 +31,9 @@ public class InvoiceBoundary {
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
                     customerController.getCustomers();
+                    System.out.println("*********************************************");
                     customerController.displayCustomers();
-
-                    System.out.println("Enter the customer ID you would like to open an invoice for: ");
+                    System.out.println("\nEnter the customer ID you would like to open an invoice for: ");
                     int key = sc.nextInt();
                     Customer customer;
 
@@ -51,21 +50,24 @@ public class InvoiceBoundary {
                         System.out.println("Customer already has an open invoice!");
                         break;
                     }
-
+                    System.out.println("""
+                            Add a product:
+                            Adding generic items...
+                            """);
                     //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
                     ArrayList<Product> products = new ArrayList<>();
-                    System.out.println("Adding generic items...");
                     products.add(new Product("Apple", 2, 3, 0, 0));
                     products.add(new Product("Banana", 1, 5, 0, 0));
 
-                    System.out.println("Enter the customer's shipping address: ");
+                    System.out.println("Enter the customer's shipping address:");
                     String address = sc.next();
+                    sc.nextLine();
 
                     System.out.println("""
                         Enter the delivery method:
                         D. Delivery
                         T. Take-out""");
-                    char delivery = sc.next().toLowerCase().charAt(0);
+                    char delivery = sc.nextLine().toLowerCase().charAt(0);
 
                     double deliveryCharge = 0; // Will be 0 if the delivery method is T
                     boolean shipped = true;
@@ -89,7 +91,7 @@ public class InvoiceBoundary {
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
                     customerController.getCustomers();
-
+                    System.out.println("*********************************************");
                     System.out.println("Enter the invoice number you want to pay off: ");
                     invoiceController.showOpenInvoices();
                     int key = sc.nextInt();
@@ -135,7 +137,9 @@ public class InvoiceBoundary {
                 }
 
             }
+            //TODO, if file doesn't exist, do these say anything?
             case 3 -> {
+                System.out.println("**********************Open Invoices*********************");
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
                     customerController.getCustomers();
@@ -143,6 +147,7 @@ public class InvoiceBoundary {
                 }
             }
             case 4 -> {
+                System.out.println("**********************Closed Invoices*********************");
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
                     customerController.getCustomers();
@@ -150,6 +155,7 @@ public class InvoiceBoundary {
                 }
             }
             case 5 -> {
+                System.out.println("**********************All Invoices*********************");
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
                     customerController.getCustomers();

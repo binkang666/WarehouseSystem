@@ -8,15 +8,18 @@ public class InvoiceController {
 
     // Look at the ID value in the last line Invoice.txt and add 1 to it.
     public int findNextInvoiceNumber() {
-        int max = 1;
+        int max = 0;
         for (Customer c: Main.customers.values()) {
             for (Integer i: c.getInvoiceAssociated().keySet()) {
-                if (i > max) {
+                if (i >= max) {
                     max = i;
                 }
             }
         }
-        return max;
+        if (max == 0) {
+            return 1;
+        }
+        return max + 1;
     }
 
     // To open an invoice, place the invoices in the customers hashmap and save them
