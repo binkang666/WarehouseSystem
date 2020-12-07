@@ -65,7 +65,7 @@ public class CustomerController {
 
     public void searchCustomerID(int id) {
         try{
-            System.out.println(Main.salespeople.get(id).toString());}
+            System.out.println(Main.customers.get(id).toString());}
         catch (Exception e){
             System.out.println("No customer with given ID was found");
         }
