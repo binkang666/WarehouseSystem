@@ -62,7 +62,7 @@ public class CustomerBoundary {
                 try{
                     tax = input.nextDouble();}
                 catch (Exception e){
-                    sop("Failed adding Salesperson, please enter only arabic numeric numbers for tax!");
+                    sop("Failed adding Customer, please enter only arabic numeric numbers for tax!");
                     return;
                 }
 
