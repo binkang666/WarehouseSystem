@@ -11,7 +11,7 @@ public class Warehouse {
 	private String zip;
 	private String phoneNumber;
 
-	private List<Product> productList;
+	private List<Product> productList=new ArrayList<>();
 
 	public Warehouse(String name, String address, String city, String state, String zip, String phoneNumber) {
 		this.name = name;
