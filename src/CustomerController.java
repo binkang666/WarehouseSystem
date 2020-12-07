@@ -20,16 +20,6 @@ public class CustomerController {
             }
         }
         return max + 1;
-//
-//        BufferedReader input = new BufferedReader(new FileReader("Customer.txt"));
-//        String last = null, thisLine;
-//
-//        while ((thisLine = input.readLine()) != null) {
-//            last = thisLine;
-//        }
-//
-//        assert last != null;
-//        return Integer.parseInt(last.substring(0, last.indexOf(" "))) + 1;
     }
 
     public void writeCustomer(String fn, String ln, String phone, String add, double tax, int id) throws IOException {
@@ -74,8 +64,10 @@ public class CustomerController {
     }
 
     public void searchCustomerID(int id) {
-        System.out.println(Main.customers.get(id).toString());
+        try{
+            System.out.println(Main.salespeople.get(id).toString());}
+        catch (Exception e){
+            System.out.println("No customer with given ID was found");
+        }
     }
 }
-
-
