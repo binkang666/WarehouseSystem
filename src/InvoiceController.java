@@ -2,7 +2,6 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -88,27 +87,6 @@ public class InvoiceController {
         }
     }
 
-    public void showUnshippedInvoices() {
-        boolean flag = false;
-        for (Customer c: Main.customers.values()) {
-            for (Invoice i : c.getInvoiceAssociated().values()) {
-                if(!i.isShipped()) {
-                    System.out.println(i.toString());
-                    flag = true;
-                }
-            }
-        }
-        if (!flag) {
-            System.out.println("No unshipped invoices exist!");
-        }
-    }
-
-    public void markShipped(Customer c, Invoice i) throws IOException {
-        i.setShipped(true);
-        c.getInvoiceAssociated().put(i.getInvoiceNumber(), i);
-        customerController.modifyCustomer(c);
-    }
-    // mark shipped and remove items from warehouse
 
     public Boolean hasOpenInvoice(Customer c) {
         for (Invoice i : c.getInvoiceAssociated().values()) {
@@ -118,11 +96,22 @@ public class InvoiceController {
         }
         return false;
     }
+    // Applies a 10% invoice reduction if the invoice is paid within 10 days
+    public void applyEarlyFinance(Invoice i) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date()); // sets time to now
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(i.getOrderDate());
+        cal2.add(Calendar.DAY_OF_MONTH, 10);
+        // if order date + 10 days is before current time.
+        if (cal.getTime().before(cal2.getTime())) {
+            i.setFinanceEarlyCharge(.1);
+            i.setFinalTotal(i.getFinalTotal().subtract((i.getFinalTotal()).multiply(BigDecimal.valueOf(i.getFinanceEarlyCharge()))).setScale(2, RoundingMode.HALF_UP));
 
-//    public void applyEarlyFinance() {
-//
-//    }
+        }
 
+    }
+    // Applies a 2% late fee every time a product is 30 days late
     public void applyLateFinance() throws IOException {
         for (Customer c : Main.customers.values()) {
             for (Invoice i : c.getInvoiceAssociated().values()) {

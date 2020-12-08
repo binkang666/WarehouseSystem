@@ -24,8 +24,7 @@ public class InvoiceBoundary {
                 3. Show open invoices
                 4. Show closed invoices
                 5. Show all invoices
-                6. Mark an invoice shipped
-                7. Go back""");
+                6. Go back""");
         int input = sc.nextInt();
 
         // Apply 30 day late fees to any applicable invoices
@@ -143,6 +142,7 @@ public class InvoiceBoundary {
                     if (invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0) {
                         System.out.println("Invoice has been closed.");
                         invoiceController.closeInvoice(invoice);
+                        invoiceController.applyEarlyFinance(invoice);
                     }
 
                     // Overwrite the existing invoice in the customers hashmap
@@ -154,7 +154,7 @@ public class InvoiceBoundary {
                 }
 
             }
-            //TODO, if file doesn't exist, do these say anything?
+
             case 3 -> {
                 System.out.println("**********************Open Invoices*********************");
                 if (new File("Customer.txt").exists()) {
@@ -181,26 +181,6 @@ public class InvoiceBoundary {
                     invoiceController.showAllInvoices();
                 }
                 else System.out.println("No customers exist!");
-            }
-
-            case 6 -> {
-                if (new File("Customer.txt").exists()) {
-                    customerController = new CustomerController();
-                    customerController.getCustomers();
-
-                    invoiceController.showUnshippedInvoices();
-                    System.out.println("Enter the invoice number you want to mark shipped: ");
-                    int key = sc.nextInt();
-
-                    for (Customer c: Main.customers.values()) {
-                        if (c.getInvoiceAssociated().containsKey(key)) {
-                            Invoice i = c.getInvoiceAssociated().get(key);
-                            invoiceController.markShipped(c, i);
-                        }
-                    }
-
-                    System.out.println("Invoice marked shipped.");
-                }
             }
             default -> System.out.println("Going back");
         }

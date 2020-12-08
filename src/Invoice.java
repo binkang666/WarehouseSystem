@@ -8,7 +8,7 @@ import java.util.Date;
 
 
 
-//TODO: apply finance charges for 10/30 days, apply the customer sales tax to their invoice, sort invoices
+//TODO: sort invoices, add products, move 'enter shipping address' to when cust picks
 public class Invoice implements Serializable {
     private Calendar cal1 = Calendar.getInstance();
     private Calendar cal2 = Calendar.getInstance();
@@ -21,7 +21,7 @@ public class Invoice implements Serializable {
     private String shippingAddress;
     private char deliveryMethod; // D if delivery, T otherwise
     private double financeLateCharge = 0; // 2% finance charge if customer is late in paying. Increments by .2 every 30 days
-    private final double financeEarlyCharge = .1; // always .1
+    private double financeEarlyCharge = 0; // always .1
     private Date orderDate;
 
     private BigDecimal remainingTotal;
@@ -77,7 +77,8 @@ public class Invoice implements Serializable {
                         "Delivery method: " + getDeliveryMethod() + "\n" +
                         "Delivery Charge: $" + df.format(getDeliverCharge()) + "\n" +
                         "Total: $" + df.format(getTotalCharge()) + "\n" +
-                        "Current Finance Charge Percentage " + df.format((getFinanceLateCharge() * 100)) + "%\n" +
+                        "Late Interest " + df.format((getFinanceLateCharge() * 100)) + "%\n" +
+                        "Early Deduction " + df.format((getFinanceEarlyCharge() * 100)) + "%\n" +
                         "Sales tax: " + getSalesTax() + "%\n" +
                         "Final Total: $" + getFinalTotal() + "\n" +
                         "Remaining Total: $" + getRemainingTotal() + "\n");
@@ -166,5 +167,18 @@ public class Invoice implements Serializable {
 
     public void setRemainingTotal(BigDecimal remainingTotal) {
         this.remainingTotal = remainingTotal;
+    }
+
+    public void setFinalTotal(BigDecimal finalTotal) {
+        this.finalTotal = finalTotal;
+    }
+
+    public double getFinanceEarlyCharge() {
+        return financeEarlyCharge;
+    }
+
+
+    public void setFinanceEarlyCharge(double financeEarlyCharge) {
+        this.financeEarlyCharge = financeEarlyCharge;
     }
 }
