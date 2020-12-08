@@ -10,6 +10,7 @@ public class InvoiceBoundary {
     InvoiceController invoiceController;
     CustomerController customerController;
 
+
     public InvoiceBoundary(InvoiceController invoiceController) {
         this.invoiceController = invoiceController;
     }
@@ -67,12 +68,13 @@ public class InvoiceBoundary {
                             Adding generic items...
                             """);
                     //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
+
+
+
                     ArrayList<Product> products = new ArrayList<>();
                     products.add(new Product("Apple", 2, 3));
                     products.add(new Product("Banana", 1, 5));
 
-                    System.out.println("Enter the customer's shipping address:");
-                    String address = sc.next();
                     sc.nextLine();
 
                     System.out.println("""
@@ -81,17 +83,20 @@ public class InvoiceBoundary {
                         T. Take-out""");
                     char delivery = sc.nextLine().toLowerCase().charAt(0);
 
-                    double deliveryCharge = 0; // Will be 0 if the delivery method is T
-                    boolean shipped = true;
+                    BigDecimal deliveryCharge = BigDecimal.ZERO; // Will be 0 if the delivery method is T
+                    String address = "N/A"; // will be N/A if the delivery method is T
                     if (delivery == 'd') {
-                        shipped = false;
+                        System.out.println("Enter the customer's shipping address:");
+                        address = sc.next();
+
                         System.out.println("Enter the delivery charge: ");
-                        deliveryCharge = sc.nextDouble();
+
+                        deliveryCharge = sc.nextBigDecimal();
                     }
 
                     int invoiceNumber = invoiceController.findNextInvoiceNumber();
 
-                    invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products, shipped);
+                    invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products);
                     System.out.println("New invoice added.");
                 }
 
@@ -105,7 +110,10 @@ public class InvoiceBoundary {
                     customerController.getCustomers();
                     System.out.println("*********************************************");
                     System.out.println("Enter the invoice number you want to pay off: ");
-                    invoiceController.showOpenInvoices();
+
+                    ArrayList<Invoice> open = invoiceController.getOpenInvoices();
+                    invoiceController.showOpenInvoices(open);
+
                     int key = sc.nextInt();
                     Invoice invoice = null;
                     Customer customer = null;
@@ -126,7 +134,7 @@ public class InvoiceBoundary {
 
 
                     System.out.println("Enter amount to pay off: ");
-                    double amount = sc.nextDouble(); // big decimal
+                    double amount = sc.nextDouble();
 
                     while ((BigDecimal.valueOf(amount).compareTo(invoice.getRemainingTotal().setScale(2, RoundingMode.HALF_UP)) > 0)
                             && !(invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0)) { // 1 if true...
@@ -160,19 +168,33 @@ public class InvoiceBoundary {
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
                     customerController.getCustomers();
-                    invoiceController.showOpenInvoices();
+                    ArrayList<Invoice> open = invoiceController.getOpenInvoices();
+                    if (open.size() == 0) {
+                        System.out.println("No open invoices exist!");
+                    }
+                    else {
+                        invoiceController.showOpenInvoices(open);
+                    }
                 }
                 else System.out.println("No customers exist!");
             }
+
             case 4 -> {
                 System.out.println("**********************Closed Invoices*********************");
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
                     customerController.getCustomers();
-                    invoiceController.showClosedInvoices();
+                    ArrayList<Invoice> closed = invoiceController.getClosedInvoices();
+                    if (closed.size() == 0) {
+                        System.out.println("No closed invoices exist!");
+                    }
+                    else {
+                        invoiceController.showClosedInvoices(closed);
+                    }
                 }
                 else System.out.println("No customers exist!");
             }
+
             case 5 -> {
                 System.out.println("**********************All Invoices*********************");
                 if (new File("Customer.txt").exists()) {

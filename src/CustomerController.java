@@ -1,4 +1,5 @@
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class CustomerController {
         return max + 1;
     }
 
-    public void writeCustomer(String fn, String ln, String phone, String add, double tax, int id) throws IOException {
+    public void writeCustomer(String fn, String ln, String phone, String add, BigDecimal tax, int id) throws IOException {
         customer = new Customer(fn, ln, phone, add, tax, id);
         Main.customers.put(id, customer);
 

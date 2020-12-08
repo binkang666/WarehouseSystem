@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,9 +59,9 @@ public class CustomerBoundary {
                 String add = input.nextLine();
 
                 sop("Enter sales tax for the new customer (e.g. 2.5 for 2.5%)");
-                double tax = 0;
+                BigDecimal tax = BigDecimal.ZERO;
                 try{
-                    tax = input.nextDouble();}
+                    tax = input.nextBigDecimal();}
                 catch (Exception e){
                     sop("Failed adding Customer, please enter only arabic numeric numbers for tax!");
                     return;

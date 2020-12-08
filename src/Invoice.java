@@ -8,7 +8,7 @@ import java.util.Date;
 
 
 
-//TODO: sort invoices, add products, move 'enter shipping address' to when cust picks
+//TODO: add products
 public class Invoice implements Serializable {
     private Calendar cal1 = Calendar.getInstance();
     private Calendar cal2 = Calendar.getInstance();
@@ -17,25 +17,24 @@ public class Invoice implements Serializable {
     private ArrayList<Product> products;
     private int invoiceNumber;
     private boolean status; // 1 if active, 0 otherwise
-    private boolean shipped;
     private String shippingAddress;
     private char deliveryMethod; // D if delivery, T otherwise
     private double financeLateCharge = 0; // 2% finance charge if customer is late in paying. Increments by .2 every 30 days
-    private double financeEarlyCharge = 0; // always .1
+    private double financeEarlyCharge = 0; // always 0 or 1%
     private Date orderDate;
 
     private BigDecimal remainingTotal;
 
     private Date currentLateDate; // holds a value that is 30*n days after orderDate
 
-    private double deliverCharge;
+    private BigDecimal deliverCharge;
     private BigDecimal totalCharge = new BigDecimal("0");
 //    private double finalTotal;
     private BigDecimal finalTotal;
-    private double salesTax;
+    private BigDecimal salesTax;
 
     // If we're not delivering, deliver charge will be 0
-    public Invoice(String cName, String shippingAddress, char deliveryMethod, double deliverCharge, double salesTax, int invoiceNumber, ArrayList<Product> products, boolean shipped) {
+    public Invoice(String cName, String shippingAddress, char deliveryMethod, BigDecimal deliverCharge, BigDecimal salesTax, int invoiceNumber, ArrayList<Product> products) {
         this.products = products;
         this.invoiceNumber = invoiceNumber;
         this.cName = cName;
@@ -55,11 +54,9 @@ public class Invoice implements Serializable {
         status = true; // All invoices start as open
         // maybe create methods to apply tax and delivery charge since salespersons don't get payed based on tax
         this.deliverCharge = deliverCharge;
-        // rounded 2 decimal places
         // (totalCharge + ((salesTax * .01) * totalCharge)) + deliverCharge
-        finalTotal = totalCharge.add(((BigDecimal.valueOf(salesTax).multiply(BigDecimal.valueOf(.01))).multiply(totalCharge))).add(BigDecimal.valueOf(deliverCharge)).setScale(2, RoundingMode.HALF_UP);
-        remainingTotal = finalTotal; // copy of final total thats modified
-        this.shipped = shipped;
+        finalTotal = totalCharge.add((salesTax.multiply(BigDecimal.valueOf(.01))).multiply(totalCharge)).add(deliverCharge).setScale(2, RoundingMode.HALF_UP);
+        remainingTotal = finalTotal; // Amount that's modified as user pays off the invoice
     }
 
     @Override
@@ -102,11 +99,11 @@ public class Invoice implements Serializable {
         return deliveryMethod;
     }
 
-    public double getDeliverCharge() {
+    public BigDecimal getDeliverCharge() {
         return deliverCharge;
     }
 
-    public double getSalesTax() {
+    public BigDecimal getSalesTax() {
         return salesTax;
     }
 
@@ -132,16 +129,6 @@ public class Invoice implements Serializable {
 
     public void setStatus(boolean status) {
         this.status = status;
-    }
-
-    //apply finance charge?
-
-    public boolean isShipped() {
-        return shipped;
-    }
-
-    public void setShipped(boolean shipped) {
-        this.shipped = shipped;
     }
 
 

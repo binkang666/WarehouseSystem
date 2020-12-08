@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -7,7 +8,7 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
     private int customerID;
     private boolean status;
     private HashMap<Integer, Invoice> InvoiceAssociated;
-    private double salesTax;
+    private BigDecimal salesTax;
     private LocalDate lastOrderDate;
 
     public Customer(){
@@ -17,7 +18,7 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
     }
 
 
-    public Customer(String firstName, String lastName, String phone, String address, double salesTax, int customerID) {
+    public Customer(String firstName, String lastName, String phone, String address, BigDecimal salesTax, int customerID) {
         super(firstName, lastName, phone, address);
         this.customerID = customerID;
         status = true;
@@ -65,8 +66,8 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
     }
     public int getCustomerID() { return customerID; }
     public boolean getStatus() { return status; }
-    public double getSalesTax() { return salesTax; }
-    public void setSalesTax(double salesTax) { this.salesTax = salesTax; }
+    public BigDecimal getSalesTax() { return salesTax; }
+    public void setSalesTax(BigDecimal salesTax) { this.salesTax = salesTax; }
 
 
     @Override

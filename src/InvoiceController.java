@@ -1,9 +1,7 @@
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 public class InvoiceController {
 
@@ -27,8 +25,8 @@ public class InvoiceController {
     }
 
     // To open an invoice, place the invoices in the customers hashmap and save them
-    public void openInvoice(Customer c, String address, char delivery, double deliveryCharge, int invoiceNumber, ArrayList<Product> products, boolean shipped) throws IOException {
-        Invoice invoice = new Invoice(c.getName(), address, delivery, deliveryCharge, c.getSalesTax(), invoiceNumber, products, shipped);
+    public void openInvoice(Customer c, String address, char delivery, BigDecimal deliveryCharge, int invoiceNumber, ArrayList<Product> products) throws IOException {
+        Invoice invoice = new Invoice(c.getName(), address, delivery, deliveryCharge, c.getSalesTax(), invoiceNumber, products);
         c.getInvoiceAssociated().put(invoiceNumber, invoice);
         customerController.modifyCustomer(c);
     }
@@ -43,34 +41,45 @@ public class InvoiceController {
         invoice.setStatus(!invoice.getStatus());
     }
 
-    public void showOpenInvoices() {
-        boolean flag = false;
+    public ArrayList<Invoice> getOpenInvoices() {
+        ArrayList<Invoice> open = new ArrayList<>();
         for (Customer c: Main.customers.values()) {
             for (Invoice i : c.getInvoiceAssociated().values()) {
                 if (i.getStatus()) {
-                    System.out.println(i.toString());
-                    flag = true;
+                    open.add(i);
                     break; // break because only 1 invoice should should be open
                 }
             }
         }
-        if (!flag) {
-            System.out.println("No open invoices exist!");
+        // Lambda expression to sort invoices by ascending date
+        open.sort((o1, o2) -> o1.getOrderDate().compareTo(o2.getOrderDate()));
+        return open;
+    }
+
+    public void showOpenInvoices(ArrayList<Invoice> open) {
+        for (Invoice i : open) {
+            System.out.println(i.toString());
         }
     }
 
-    public void showClosedInvoices() {
-        boolean flag = false;
+    public ArrayList<Invoice> getClosedInvoices() {
+        ArrayList<Invoice> closed = new ArrayList<>();
         for (Customer c: Main.customers.values()) {
             for (Invoice i : c.getInvoiceAssociated().values()) {
                 if (!i.getStatus()) {
-                    flag = true;
-                    System.out.println(i.toString());
+                    closed.add(i);
                 }
             }
         }
-        if (!flag) {
-            System.out.println("No closed invoices exist!");
+        // Lambda expression to sort invoices by descending price
+        closed.sort((o1, o2) -> o2.getFinalTotal().compareTo(o1.getFinalTotal()));
+        return closed;
+    }
+
+    // sort by descending amount paid
+    public void showClosedInvoices(ArrayList<Invoice> closed) {
+        for (Invoice i : closed) {
+            System.out.println(i.toString());
         }
     }
 
@@ -87,7 +96,7 @@ public class InvoiceController {
         }
     }
 
-
+    // sort by ascending date
     public Boolean hasOpenInvoice(Customer c) {
         for (Invoice i : c.getInvoiceAssociated().values()) {
             if (i.getStatus()) {
@@ -126,7 +135,6 @@ public class InvoiceController {
                     i.setCurrentLateDate(cal2.getTime()); // sets late date to +30 days its previous date
                     i.setFinanceLateCharge(i.getFinanceLateCharge() + .02); // financial charge increments by 2%
                     i.setRemainingTotal((i.getFinalTotal().multiply(BigDecimal.valueOf(i.getFinanceLateCharge())).add(i.getRemainingTotal())).setScale(2, RoundingMode.HALF_UP));
-                    System.out.println("new late" + i.getCurrentLateDate());
                     modifyInvoice(i, c);
                 }
             }
