@@ -78,7 +78,9 @@ public class CustomerBoundary {
 
             }  //OK
             // Show all customers
-            case 2 -> {sop("Showing all customers:");
+            case 2 -> {
+                sop("\n*********************************************");
+                sop("Showing all customers:");
                 if (new File("Customer.txt").exists()) {
                     // Retrieve customers from file
                     customerController.getCustomers();
@@ -90,7 +92,9 @@ public class CustomerBoundary {
             }  //OK
 
             // Search for a customer
-            case 3 -> {sop("Enter the customers ID: ");
+            case 3 -> {
+                sop("\n*********************************************");
+                sop("Enter the customers ID: ");
                 if (new File("Customer.txt").exists()) {
                     // Retrieve customers from file
                     customerController.getCustomers();
@@ -112,6 +116,6 @@ public class CustomerBoundary {
     public static boolean isValidName(String input){
         return Pattern.matches("[a-zA-Z]+", input);
     }
-    
+
 
 }
