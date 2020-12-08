@@ -69,6 +69,7 @@ public class CustomerBoundary {
                 int id = customerController.findNextCustomerID();
 
                 // It's not the first time we're adding a customer, so retrieve the existing ones from the txt file
+                //TODO: might not be needed since its loaded at the start of this case?
                 if (new File("Customer.txt").exists()) {
                     customerController.getCustomers();
                 }

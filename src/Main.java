@@ -37,6 +37,16 @@ public class Main {
 				}
 
 				case 3 -> {
+					//TODO: delete, was used to see if the warehouse and its products are persistent.
+					if (new File("Warehouse.txt").exists()) {
+						getWarehouse();
+					}
+					for (Warehouse w: warehouses.values()) {
+						System.out.println(w.toString());
+					}
+
+
+
 					sop("Warehouse");
 					sop("1. Add warehouse\n" +
 							"2. Show quantity for each product\n" +
@@ -44,9 +54,14 @@ public class Main {
 					int choice2 = input.nextInt();
 					switch (choice2) {
 						case 1 -> {
+							// load up warehouses, since were adding a new one
+							if (new File("Warehouse.txt").exists()) {
+								getWarehouse();
+							}
+
 							Scanner scanner = new Scanner(System.in);
 							sop("Adding warehouse\n");
-							Warehouse wh = new Warehouse(null, null, null, null, null, null);
+							Warehouse wh;
 							sop("name: ");
 							String name = scanner.nextLine();
 							sop("address: ");
@@ -60,7 +75,8 @@ public class Main {
 							sop("Phone number: ");
 							String phoneNumber = scanner.nextLine();
 
-							warehouses.put(name, new Warehouse(name, address, city, state, zip, phoneNumber));
+							writeWarehouse(name, address, city, state, zip, phoneNumber);
+
 							sop("New warehouse added..");
 							EnterToContinue();
 							showMainUI();
@@ -95,6 +111,10 @@ public class Main {
 					int choice2 = input.nextInt();
 					switch (choice2) {
 						case 1 -> {
+							// load up warehouses
+							if (new File("Warehouse.txt").exists()) {
+								getWarehouse();
+							}
 							sop("Adding Product\n");
 							Scanner scanner = new Scanner(System.in);
 							sop("Enter name of the warehouse: ");
@@ -106,13 +126,8 @@ public class Main {
 								String cprice = scanner.nextLine();
 								sop("Enter sellingPrice: ");
 								String sprice = scanner.nextLine();
-								sop("Enter quantity: ");
-								String quantity = scanner.nextLine();
-								sop("Enter quantity sold: ");
-								String quansold = scanner.nextLine();
-								Warehouse foundwarehouse = (Warehouse) warehouses.get(warehouse);
-								foundwarehouse.addProduct(product, Double.parseDouble(cprice), Double.parseDouble(sprice),
-										Integer.parseInt(quantity), Integer.parseInt(quansold));
+								Warehouse foundWarehouse = warehouses.get(warehouse);
+								addProduct(foundWarehouse, product, Double.parseDouble(cprice), Double.parseDouble(sprice));
 								sop("New prodduct added..");
 							} else {
 								sop("Unavailable warehouse: ");
@@ -127,8 +142,8 @@ public class Main {
 							Scanner scanner = new Scanner(System.in);
 							String warehouse = scanner.nextLine();
 							if (warehouses.containsKey(warehouse)) {
-								Warehouse foundwarehouse = (Warehouse) warehouses.get(warehouse);
-								foundwarehouse.displayAllProducts();
+								Warehouse foundWarehouse = warehouses.get(warehouse);
+								foundWarehouse.displayAllProducts();
 							} else {
 								sop("Unavailable warehouse: ");
 
@@ -144,8 +159,8 @@ public class Main {
 							sop("Enter quantity: ");
 							String quantity = scanner.nextLine();
 							if (warehouses.containsKey(warehouse)) {
-								Warehouse foundwarehouse = (Warehouse) warehouses.get(warehouse);
-								foundwarehouse.showProductsUnder(Integer.parseInt(quantity));
+								Warehouse foundWarehouse = warehouses.get(warehouse);
+								foundWarehouse.showProductsUnder(Integer.parseInt(quantity));
 							} else {
 								sop("Unavailable warehouse");
 
@@ -165,8 +180,8 @@ public class Main {
 								sop("Enter quantity: ");
 								String quantity = scanner.nextLine();
 
-								Warehouse foundwarehouse = (Warehouse) warehouses.get(warehouse);
-								foundwarehouse.replenishStock(product, Integer.parseInt(quantity));
+								Warehouse foundWarehouse = warehouses.get(warehouse);
+								foundWarehouse.replenishStock(product, Integer.parseInt(quantity));
 
 								sop("stock replenished..");
 
@@ -215,7 +230,7 @@ public class Main {
 				sop("How can I help you today? (Enter one of the above numbers to proceed)");
 			}
 				    
-			public void writeWarehouse(String name, String address, String city, String state, String zip, String phoneNumber)throws IOException {
+			public static void writeWarehouse(String name, String address, String city, String state, String zip, String phoneNumber)throws IOException {
     				warehouses.put(name, new Warehouse(name, address, city, state,zip,phoneNumber));
 
         			FileOutputStream f = new FileOutputStream("Warehouse.txt");
@@ -225,15 +240,39 @@ public class Main {
         			o.flush();
         			f.close();
         			o.close();
-    			}
-    			public void getWarehouse() throws IOException, ClassNotFoundException {
-        			FileInputStream fi = new FileInputStream("Warehouse.txt");
-        			ObjectInputStream oi = new ObjectInputStream(fi);
 
-        			warehouses = (HashMap<String, Warehouse>) oi.readObject();
-        			oi.close();
-        			fi.close();
-    			}
+			}
+
+			public static void getWarehouse() throws IOException, ClassNotFoundException {
+				FileInputStream fi = new FileInputStream("Warehouse.txt");
+				ObjectInputStream oi = new ObjectInputStream(fi);
+
+				warehouses = (HashMap<String, Warehouse>) oi.readObject();
+				oi.close();
+				fi.close();
+			}
+
+			// If a warehouses productList is modified, this is called to update the warehouses map
+			public static void modifyWarehouse(Warehouse warehouse) throws IOException {
+				Main.warehouses.put(warehouse.getName(), warehouse);
+				FileOutputStream f = new FileOutputStream("Warehouse.txt");
+				ObjectOutputStream o = new ObjectOutputStream(f);
+
+				o.writeObject(warehouses);
+				o.flush();
+				f.close();
+				o.close();
+			}
+			// Before you add a product, make sure to load up the Warehouses.txt with getWarehouse
+			public static void addProduct(Warehouse w, String productName, double costPrice, double sellingPrice) throws IOException {
+				Product product = new Product(productName, costPrice, sellingPrice);
+				// Make sure product isn't in list already?!
+				w.getProductList().add(product);
+				modifyWarehouse(w);
+
+			}
+
+
 
 
 			public static void EnterToContinue(){

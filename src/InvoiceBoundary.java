@@ -69,8 +69,8 @@ public class InvoiceBoundary {
                             """);
                     //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
                     ArrayList<Product> products = new ArrayList<>();
-                    products.add(new Product("Apple", 2, 3, 0, 0));
-                    products.add(new Product("Banana", 1, 5, 0, 0));
+                    products.add(new Product("Apple", 2, 3));
+                    products.add(new Product("Banana", 1, 5));
 
                     System.out.println("Enter the customer's shipping address:");
                     String address = sc.next();

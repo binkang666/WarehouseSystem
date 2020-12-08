@@ -6,13 +6,16 @@ public class Product implements Serializable {
     private double costPrice, sellingPrice;
     private int quantitySold;
     private int quantity;
-    
-    public Product(String productName, double costPrice, double sellingPrice, int quantitySold, int quantity) {
+    // Remove quantity and quantitySold from constructor because a product should have 0 quantity and should have been
+    // sold 0 times when created
+    public Product(String productName, double costPrice, double sellingPrice) {
     	this.productName = productName;
     	this.costPrice = costPrice;
     	this.sellingPrice = sellingPrice;
     	this.quantitySold = quantitySold;
     	this.quantity = quantity;
+    	quantity = 0;
+    	quantitySold = 0;
     }
     
     //getter
@@ -46,19 +49,31 @@ public class Product implements Serializable {
     public void setQuantity(int q) {
     	quantity = q;
     }
-    
-    public void display() {
-    	DecimalFormat ft = new DecimalFormat("#.##");
-    	System.out.printf("\n\nProduct name: "+ productName +
-    			"\nCost price: "+costPrice + 
-    			"\nSelling price: "+sellingPrice+
-    			"\nQuantity: "+ quantity+
-    			"\nQuantity Sold: "+quantitySold+
-    			"\nTotal sales: "+getTotalSales()+
-    			"\nTotal cost: "+getTotalCost()+
-    			"\nTotal profit: "+ft.format(getTotalProfit())+
-    			"\nTotal Profit Percent: "+ft.format(getTotalProfitPercent())+"\n");
-   
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productName='" + productName + '\'' +
+                ", costPrice=" + costPrice +
+                ", sellingPrice=" + sellingPrice +
+                ", quantitySold=" + quantitySold +
+                ", quantity=" + quantity +
+                '}';
     }
+
+    //TODO: have toString replace this method
+//    public void display() {
+//    	DecimalFormat ft = new DecimalFormat("#.##");
+//    	System.out.printf("\n\nProduct name: "+ productName +
+//    			"\nCost price: "+costPrice +
+//    			"\nSelling price: "+sellingPrice+
+//    			"\nQuantity: "+ quantity+
+//    			"\nQuantity Sold: "+quantitySold+
+//    			"\nTotal sales: "+getTotalSales()+
+//    			"\nTotal cost: "+getTotalCost()+
+//    			"\nTotal profit: "+ft.format(getTotalProfit())+
+//    			"\nTotal Profit Percent: "+ft.format(getTotalProfitPercent())+"\n");
+//
+//    }
 }
 

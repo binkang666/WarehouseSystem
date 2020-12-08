@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Warehouse {
+public class Warehouse implements Serializable {
 	private String name;
 	private String address;
 	private String city;
@@ -36,7 +37,7 @@ public class Warehouse {
 			}
 		});
 		for (int i=0; i<products.size(); i++) {
-			products.get(i).display();
+			System.out.println(products.get(i).toString());;
 		}
 	}
 	
@@ -62,12 +63,34 @@ public class Warehouse {
 			}
 		});
 		for(int i=0; i<productList.size(); i++) {
-			productList.get(i).display();
+			System.out.println(productList.get(i).toString());;
 		}
 	}
-	
-	public void addProduct(String productName, double costPrice, double sellingPrice, int quantitySold, int quantity) {
-		productList.add(new Product(productName, costPrice, sellingPrice, quantitySold, quantity));
+
+	@Override
+	// TODO: just have productList print out the stuff needed in the RFP like name and quantity.
+	public String toString() {
+		return "Warehouse{" +
+				"name='" + name + '\'' +
+				", address='" + address + '\'' +
+				", city='" + city + '\'' +
+				", state='" + state + '\'' +
+				", zip='" + zip + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", productList=" + productList +
+				'}';
 	}
 
+	//	public void addProduct(String productName, double costPrice, double sellingPrice) {
+//		productList.add(new Product(productName, costPrice, sellingPrice));
+//	}
+
+
+	public String getName() {
+		return name;
+	}
+
+	public List<Product> getProductList() {
+		return productList;
+	}
 }
