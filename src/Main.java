@@ -214,6 +214,26 @@ public class Main {
 				sop("*********************************************\n");
 				sop("How can I help you today? (Enter one of the above numbers to proceed)");
 			}
+				    
+			public void writeWarehouse(String name, String address, String city, String state, String zip, String phoneNumber)throws IOException {
+    				warehouses.put(name, new Warehouse(name, address, city, state,zip,phoneNumber));
+
+        			FileOutputStream f = new FileOutputStream("Warehouse.txt");
+        			ObjectOutputStream o = new ObjectOutputStream(f);
+
+       				o.writeObject(warehouses);
+        			o.flush();
+        			f.close();
+        			o.close();
+    			}
+    			public void getWarehouse() throws IOException, ClassNotFoundException {
+        			FileInputStream fi = new FileInputStream("Warehouse.txt");
+        			ObjectInputStream oi = new ObjectInputStream(fi);
+
+        			warehouses = (HashMap<String, Warehouse>) oi.readObject();
+        			oi.close();
+        			fi.close();
+    			}
 
 
 			public static void EnterToContinue(){
