@@ -1,5 +1,10 @@
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 public class InvoiceController {
 
@@ -34,16 +39,6 @@ public class InvoiceController {
         c.getInvoiceAssociated().put(invoice.getInvoiceNumber(), invoice);
         customerController.modifyCustomer(c);
     }
-
-
-//    public void getInvoices() throws IOException, ClassNotFoundException {
-//        FileInputStream fi = new FileInputStream("Invoice.txt");
-//        ObjectInputStream oi = new ObjectInputStream(fi);
-//
-//        Main.invoices = (HashMap<Integer, Invoice>) oi.readObject();
-//        oi.close();
-//        fi.close();
-//    }
 
     public void closeInvoice(Invoice invoice) {
         invoice.setStatus(!invoice.getStatus());
@@ -122,5 +117,30 @@ public class InvoiceController {
             }
         }
         return false;
+    }
+
+//    public void applyEarlyFinance() {
+//
+//    }
+
+    public void applyLateFinance() throws IOException {
+        for (Customer c : Main.customers.values()) {
+            for (Invoice i : c.getInvoiceAssociated().values()) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(new Date()); // sets time to now
+
+//                cal.add(Calendar.DAY_OF_MONTH, 200); //test late invoice
+                if (cal.getTime().after(i.getCurrentLateDate())) {
+                    Calendar cal2 = Calendar.getInstance();
+                    cal2.setTime(i.getCurrentLateDate());
+                    cal2.add(Calendar.DAY_OF_MONTH, 30);
+                    i.setCurrentLateDate(cal2.getTime()); // sets late date to +30 days its previous date
+                    i.setFinanceLateCharge(i.getFinanceLateCharge() + .02); // financial charge increments by 2%
+                    i.setRemainingTotal((i.getFinalTotal().multiply(BigDecimal.valueOf(i.getFinanceLateCharge())).add(i.getRemainingTotal())).setScale(2, RoundingMode.HALF_UP));
+                    System.out.println("new late" + i.getCurrentLateDate());
+                    modifyInvoice(i, c);
+                }
+            }
+        }
     }
 }

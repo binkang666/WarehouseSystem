@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,6 +15,7 @@ public class InvoiceBoundary {
     }
 
     void showInvoiceUI() throws IOException, ClassNotFoundException {
+
         Scanner sc = new Scanner(System.in);
         System.out.println(""" 
                 Select an option:
@@ -24,6 +27,16 @@ public class InvoiceBoundary {
                 6. Mark an invoice shipped
                 7. Go back""");
         int input = sc.nextInt();
+
+        // Apply 30 day late fees to any applicable invoices
+        // Can i leave this here and remove every other getCustomers call?
+        if (new File("Customer.txt").exists()) {
+            customerController = new CustomerController();
+            customerController.getCustomers();
+        }
+        invoiceController.applyLateFinance();
+
+
         switch (input) {
             // Open Invoice
             case 1 -> {
@@ -114,23 +127,27 @@ public class InvoiceBoundary {
 
 
                     System.out.println("Enter amount to pay off: ");
-                    double amount = sc.nextDouble();
-                    while (amount > invoice.getFinalTotal()) {
+                    double amount = sc.nextDouble(); // big decimal
+
+                    while ((BigDecimal.valueOf(amount).compareTo(invoice.getRemainingTotal().setScale(2, RoundingMode.HALF_UP)) > 0)
+                            && !(invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0)) { // 1 if true...
                         System.out.println("Payment cannot be greater than amount owed. Re-enter: ");
                         amount = sc.nextDouble();
                     }
-                    invoice.setFinalTotal(invoice.getFinalTotal() - amount);
+
+                    //TODO: move to controller?
+                    invoice.setRemainingTotal(invoice.getRemainingTotal().subtract(BigDecimal.valueOf(amount)));
 
                     // Check if the invoice has been fully payed off
-                    if (invoice.getFinalTotal() == 0) {
+                    // if remaining total is less than .01, assume its closed
+                    if (invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0) {
                         System.out.println("Invoice has been closed.");
                         invoiceController.closeInvoice(invoice);
                     }
 
-                    // Overwrite the existing invoice int the customers hashmap
+                    // Overwrite the existing invoice in the customers hashmap
                     invoiceController.modifyInvoice(invoice, customer);
 
-                    // Ive modified an invoice. I need to write it back into the invoice file AND i need to modify the customers arraylist
                 }
                 else {
                     System.out.println("Either no open invoices or customers exist!");
@@ -145,6 +162,7 @@ public class InvoiceBoundary {
                     customerController.getCustomers();
                     invoiceController.showOpenInvoices();
                 }
+                else System.out.println("No customers exist!");
             }
             case 4 -> {
                 System.out.println("**********************Closed Invoices*********************");
@@ -153,6 +171,7 @@ public class InvoiceBoundary {
                     customerController.getCustomers();
                     invoiceController.showClosedInvoices();
                 }
+                else System.out.println("No customers exist!");
             }
             case 5 -> {
                 System.out.println("**********************All Invoices*********************");
@@ -161,6 +180,7 @@ public class InvoiceBoundary {
                     customerController.getCustomers();
                     invoiceController.showAllInvoices();
                 }
+                else System.out.println("No customers exist!");
             }
 
             case 6 -> {

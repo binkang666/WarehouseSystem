@@ -1,12 +1,17 @@
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+
+
 //TODO: apply finance charges for 10/30 days, apply the customer sales tax to their invoice, sort invoices
 public class Invoice implements Serializable {
-    private Calendar cal = Calendar.getInstance();
+    private Calendar cal1 = Calendar.getInstance();
+    private Calendar cal2 = Calendar.getInstance();
     private final DecimalFormat df = new DecimalFormat("#.##");
     private String cName;
     private ArrayList<Product> products;
@@ -15,11 +20,18 @@ public class Invoice implements Serializable {
     private boolean shipped;
     private String shippingAddress;
     private char deliveryMethod; // D if delivery, T otherwise
-    private final double financeCharge = .2; // 2% finance charge if customer is late in paying
+    private double financeLateCharge = 0; // 2% finance charge if customer is late in paying. Increments by .2 every 30 days
+    private final double financeEarlyCharge = .1; // always .1
     private Date orderDate;
+
+    private BigDecimal remainingTotal;
+
+    private Date currentLateDate; // holds a value that is 30*n days after orderDate
+
     private double deliverCharge;
-    private double totalCharge;
-    private double finalTotal;
+    private BigDecimal totalCharge = new BigDecimal("0");
+//    private double finalTotal;
+    private BigDecimal finalTotal;
     private double salesTax;
 
     // If we're not delivering, deliver charge will be 0
@@ -29,16 +41,24 @@ public class Invoice implements Serializable {
         this.cName = cName;
         this.shippingAddress = shippingAddress;
         this.deliveryMethod = deliveryMethod;
-        orderDate = cal.getTime();
+
+        orderDate = cal1.getTime();
+        cal2.setTime(orderDate);
+        cal2.add(Calendar.DAY_OF_MONTH, 30);
+        currentLateDate = cal2.getTime();
+
+        df.setRoundingMode(RoundingMode.DOWN);
         this.salesTax = salesTax;
         for (Product p : products) {
-            totalCharge += p.getSellingPrice();
+            totalCharge = totalCharge.add(BigDecimal.valueOf(p.getSellingPrice()));
         }
         status = true; // All invoices start as open
         // maybe create methods to apply tax and delivery charge since salespersons don't get payed based on tax
         this.deliverCharge = deliverCharge;
         // rounded 2 decimal places
-        finalTotal = ((double)((int)((totalCharge + ((salesTax * .01) * totalCharge) + deliverCharge) * 100)))/100.0;
+        // (totalCharge + ((salesTax * .01) * totalCharge)) + deliverCharge
+        finalTotal = totalCharge.add(((BigDecimal.valueOf(salesTax).multiply(BigDecimal.valueOf(.01))).multiply(totalCharge))).add(BigDecimal.valueOf(deliverCharge)).setScale(2, RoundingMode.HALF_UP);
+        remainingTotal = finalTotal; // copy of final total thats modified
         this.shipped = shipped;
     }
 
@@ -57,8 +77,11 @@ public class Invoice implements Serializable {
                         "Delivery method: " + getDeliveryMethod() + "\n" +
                         "Delivery Charge: $" + df.format(getDeliverCharge()) + "\n" +
                         "Total: $" + df.format(getTotalCharge()) + "\n" +
+                        "Current Finance Charge Percentage " + df.format((getFinanceLateCharge() * 100)) + "%\n" +
                         "Sales tax: " + getSalesTax() + "%\n" +
-                        "Final Total: $" + df.format(getFinalTotal()) + "\n");
+                        "Final Total: $" + getFinalTotal() + "\n" +
+                        "Remaining Total: $" + getRemainingTotal() + "\n");
+
         return sb.toString();
     }
 
@@ -86,11 +109,11 @@ public class Invoice implements Serializable {
         return salesTax;
     }
 
-    public double getTotalCharge() {
+    public BigDecimal getTotalCharge() {
         return totalCharge;
     }
 
-    public double getFinalTotal() {
+    public BigDecimal getFinalTotal() {
         return finalTotal;
     }
 
@@ -112,15 +135,36 @@ public class Invoice implements Serializable {
 
     //apply finance charge?
 
-    public void setFinalTotal(double finalTotal) {
-        this.finalTotal = finalTotal;
-    }
-
     public boolean isShipped() {
         return shipped;
     }
 
     public void setShipped(boolean shipped) {
         this.shipped = shipped;
+    }
+
+
+    public Date getCurrentLateDate() {
+        return currentLateDate;
+    }
+
+    public void setCurrentLateDate(Date currentLateDate) {
+        this.currentLateDate = currentLateDate;
+    }
+
+    public void setFinanceLateCharge(double financeLateCharge) {
+        this.financeLateCharge = financeLateCharge;
+    }
+
+    public double getFinanceLateCharge() {
+        return financeLateCharge;
+    }
+
+    public BigDecimal getRemainingTotal() {
+        return remainingTotal;
+    }
+
+    public void setRemainingTotal(BigDecimal remainingTotal) {
+        this.remainingTotal = remainingTotal;
     }
 }
