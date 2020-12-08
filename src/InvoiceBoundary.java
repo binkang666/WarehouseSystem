@@ -10,7 +10,6 @@ public class InvoiceBoundary {
     InvoiceController invoiceController;
     CustomerController customerController;
 
-
     public InvoiceBoundary(InvoiceController invoiceController) {
         this.invoiceController = invoiceController;
     }
@@ -67,7 +66,10 @@ public class InvoiceBoundary {
                             Add a product:
                             Adding generic items...
                             """);
+
                     //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
+
+                    Main.getWarehouses();
 
 
 
@@ -91,7 +93,7 @@ public class InvoiceBoundary {
 
                         System.out.println("Enter the delivery charge: ");
 
-                        deliveryCharge = sc.nextBigDecimal();
+                        deliveryCharge = sc.nextBigDecimal().setScale(2, RoundingMode.HALF_UP);
                     }
 
                     int invoiceNumber = invoiceController.findNextInvoiceNumber();
@@ -142,7 +144,6 @@ public class InvoiceBoundary {
                         amount = sc.nextDouble();
                     }
 
-                    //TODO: move to controller?
                     invoice.setRemainingTotal(invoice.getRemainingTotal().subtract(BigDecimal.valueOf(amount)));
 
                     // Check if the invoice has been fully payed off

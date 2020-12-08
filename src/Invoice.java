@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-
-
-//TODO: add products
 public class Invoice implements Serializable {
     private Calendar cal1 = Calendar.getInstance();
     private Calendar cal2 = Calendar.getInstance();

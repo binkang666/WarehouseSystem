@@ -39,7 +39,7 @@ public class Main {
 				case 3 -> {
 					//TODO: delete, was used to see if the warehouse and its products are persistent.
 					if (new File("Warehouse.txt").exists()) {
-						getWarehouse();
+						getWarehouses();
 					}
 					for (Warehouse w: warehouses.values()) {
 						System.out.println(w.toString());
@@ -56,7 +56,7 @@ public class Main {
 						case 1 -> {
 							// load up warehouses, since were adding a new one
 							if (new File("Warehouse.txt").exists()) {
-								getWarehouse();
+								getWarehouses();
 							}
 
 							Scanner scanner = new Scanner(System.in);
@@ -113,7 +113,7 @@ public class Main {
 						case 1 -> {
 							// load up warehouses
 							if (new File("Warehouse.txt").exists()) {
-								getWarehouse();
+								getWarehouses();
 							}
 							sop("Adding Product\n");
 							Scanner scanner = new Scanner(System.in);
@@ -243,7 +243,7 @@ public class Main {
 
 			}
 
-			public static void getWarehouse() throws IOException, ClassNotFoundException {
+			public static void getWarehouses() throws IOException, ClassNotFoundException {
 				FileInputStream fi = new FileInputStream("Warehouse.txt");
 				ObjectInputStream oi = new ObjectInputStream(fi);
 
