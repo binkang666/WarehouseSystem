@@ -102,11 +102,12 @@ public class Main {
 
 				case 4 -> {
 					sop("Products");
-					sop("1. Add Product\n"
-							+ "2. Show all products\n" +
-							"3. Show products that have n or fewer in the warehouse\n" +
-							"4. Replenish Stock\n" +
-							"5. Return to main menu"
+					sop("""
+							1. Add Product
+							2. Show all products
+							3. Show products that have n or fewer in the warehouse
+							4. Replenish Stock
+							5. Return to main menu"""
 					);
 					int choice2 = input.nextInt();
 					switch (choice2) {
@@ -263,6 +264,7 @@ public class Main {
 				f.close();
 				o.close();
 			}
+
 			// Before you add a product, make sure to load up the Warehouses.txt with getWarehouse
 			public static void addProduct(Warehouse w, String productName, double costPrice, double sellingPrice) throws IOException {
 				Product product = new Product(productName, costPrice, sellingPrice);
@@ -271,8 +273,6 @@ public class Main {
 				modifyWarehouse(w);
 
 			}
-
-
 
 
 			public static void EnterToContinue(){
@@ -286,5 +286,4 @@ public class Main {
 			static Map<Integer, Customer> customers = new HashMap<>();
 			static Map<Integer, Salesperson> salespeople =  new HashMap<>();
 			static Map<String, Warehouse> warehouses = new HashMap<String, Warehouse>();
-//    static Map<Integer, Invoice> invoices = new HashMap<>();
 		}

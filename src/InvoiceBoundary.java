@@ -39,24 +39,28 @@ public class InvoiceBoundary {
         switch (input) {
             // Open Invoice
             case 1 -> {
-                // Load in existing customers
-                if (new File("Customer.txt").exists()) {
+                // Load in existing customers and warehouses
+                if (new File("Customer.txt").exists() && new File("Warehouse.txt").exists()) {
                     customerController = new CustomerController();
                     customerController.getCustomers();
+                    Main.getWarehouses();
+
                     System.out.println("*********************************************");
                     customerController.displayCustomers();
-                    System.out.println("\nEnter the customer ID you would like to open an invoice for: ");
+                    System.out.println("Enter the customer ID you want to open an invoice for customer ID");
+                    while (!sc.hasNextInt()) {
+                        System.out.println("Invalid, enter a valid number");
+                        sc.next();
+                    }
                     int key = sc.nextInt();
-                    Customer customer;
 
+                    Customer customer;
                     // Check to see of customer exists return to main menu if they don't.
                     if (!Main.customers.containsKey(key)) {
                         System.out.println("Customer doesn't exist!");
                         break;
                     }
-
                     customer = Main.customers.get(key);
-
                     // Check if the customer has an open invoice
                     if (invoiceController.hasOpenInvoice(customer)) {
                         System.out.println("Customer already has an open invoice!");
@@ -68,21 +72,24 @@ public class InvoiceBoundary {
                             """);
 
                     //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
-
-                    Main.getWarehouses();
-
-
-
                     ArrayList<Product> products = new ArrayList<>();
                     products.add(new Product("Apple", 2, 3));
                     products.add(new Product("Banana", 1, 5));
 
+                    // Buffer for now
                     sc.nextLine();
 
+//                    System.out.println("Enter the customer ID you want to open an invoice for customer ID");
+//                    while (!sc.hasNextInt()) {
+//                        System.out.println("Invalid, enter a number.");
+//                        sc.next();
+//                    }
+//                    int key = sc.nextInt();
                     System.out.println("""
                         Enter the delivery method:
                         D. Delivery
                         T. Take-out""");
+
                     char delivery = sc.nextLine().toLowerCase().charAt(0);
 
                     BigDecimal deliveryCharge = BigDecimal.ZERO; // Will be 0 if the delivery method is T
@@ -103,7 +110,7 @@ public class InvoiceBoundary {
                 }
 
                 else {
-                    System.out.println("No customers exist!");
+                    System.out.println("Either no customers or warehouses exist!");
                 }
             }
             case 2 -> {
@@ -144,7 +151,7 @@ public class InvoiceBoundary {
                         amount = sc.nextDouble();
                     }
 
-                    invoice.setRemainingTotal(invoice.getRemainingTotal().subtract(BigDecimal.valueOf(amount)));
+                    invoiceController.updateRemainingTotal(invoice, amount);
 
                     // Check if the invoice has been fully payed off
                     // if remaining total is less than .01, assume its closed

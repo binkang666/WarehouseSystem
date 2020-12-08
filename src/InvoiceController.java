@@ -37,6 +37,10 @@ public class InvoiceController {
         customerController.modifyCustomer(c);
     }
 
+    public void updateRemainingTotal(Invoice invoice, double amount) {
+        invoice.setRemainingTotal(invoice.getRemainingTotal().subtract(BigDecimal.valueOf(amount)));
+    }
+
     public void closeInvoice(Invoice invoice) {
         invoice.setStatus(!invoice.getStatus());
     }
@@ -56,6 +60,7 @@ public class InvoiceController {
         return open;
     }
 
+    // Sort by ascending date
     public void showOpenInvoices(ArrayList<Invoice> open) {
         for (Invoice i : open) {
             System.out.println(i.toString());
@@ -76,7 +81,7 @@ public class InvoiceController {
         return closed;
     }
 
-    // sort by descending amount paid
+    // Sort by descending amount paid
     public void showClosedInvoices(ArrayList<Invoice> closed) {
         for (Invoice i : closed) {
             System.out.println(i.toString());
@@ -96,7 +101,6 @@ public class InvoiceController {
         }
     }
 
-    // sort by ascending date
     public Boolean hasOpenInvoice(Customer c) {
         for (Invoice i : c.getInvoiceAssociated().values()) {
             if (i.getStatus()) {
@@ -105,6 +109,7 @@ public class InvoiceController {
         }
         return false;
     }
+
     // Applies a 10% invoice reduction if the invoice is paid within 10 days
     public void applyEarlyFinance(Invoice i) {
         Calendar cal = Calendar.getInstance();

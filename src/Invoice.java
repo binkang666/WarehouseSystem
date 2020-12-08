@@ -37,12 +37,10 @@ public class Invoice implements Serializable {
         this.cName = cName;
         this.shippingAddress = shippingAddress;
         this.deliveryMethod = deliveryMethod;
-
         orderDate = cal1.getTime();
         cal2.setTime(orderDate);
         cal2.add(Calendar.DAY_OF_MONTH, 30);
         currentLateDate = cal2.getTime();
-
         df.setRoundingMode(RoundingMode.DOWN);
         this.salesTax = salesTax;
         for (Product p : products) {
@@ -127,7 +125,6 @@ public class Invoice implements Serializable {
     public void setStatus(boolean status) {
         this.status = status;
     }
-
 
     public Date getCurrentLateDate() {
         return currentLateDate;
