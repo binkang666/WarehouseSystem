@@ -76,13 +76,13 @@ public class SalespersonBoundary {
 
                 LocalDate date = LocalDate.now();
                 try{
-                sop("Enter start year for new salesperson");
-                int yy  = input.nextInt();
-                sop("Enter start month for new salesperson");
-                int mm  = input.nextInt();
-                sop("Enter start day for new salesperson");
-                int dd  = input.nextInt();
-                date = LocalDate.of(yy, mm, dd);}
+                    sop("Enter start year for new salesperson");
+                    int yy  = input.nextInt();
+                    sop("Enter start month for new salesperson");
+                    int mm  = input.nextInt();
+                    sop("Enter start day for new salesperson");
+                    int dd  = input.nextInt();
+                    date = LocalDate.of(yy, mm, dd);}
                 catch (Exception e){
                     sop("Failed adding Salesperson, please enter correct dates");
                     return;
@@ -111,6 +111,7 @@ public class SalespersonBoundary {
             }
 
             case 2 -> {
+                sop("\n*********************************************");
                 sop("display all salesperson performance");
                 if (new File("Salesperson.txt").exists()) {
                     // Retrieve salespeople from file
@@ -123,6 +124,7 @@ public class SalespersonBoundary {
             }
 
             case 3 -> {
+                sop("\n*********************************************");
                 sop("Enter the salesperson ID");
                 if (new File("salesperson.txt").exists()) {
                     // Retrieve salespeople from file
