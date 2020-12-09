@@ -2,6 +2,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.regex.Matcher;
 
 public class InvoiceController {
 
@@ -37,8 +38,8 @@ public class InvoiceController {
         customerController.modifyCustomer(c);
     }
 
-    public void updateRemainingTotal(Invoice invoice, double amount) {
-        invoice.setRemainingTotal(invoice.getRemainingTotal().subtract(BigDecimal.valueOf(amount)));
+    public void updateRemainingTotal(Invoice invoice, BigDecimal amount) {
+        invoice.setRemainingTotal(invoice.getRemainingTotal().subtract(amount));
     }
 
     public void closeInvoice(Invoice invoice) {
@@ -145,4 +146,23 @@ public class InvoiceController {
             }
         }
     }
+
+
+    public int getValidInt(Scanner sc) {
+        while (!sc.hasNextInt()) {
+            System.out.println("Invalid, enter a number.");
+            sc.next();
+        }
+        return sc.nextInt();
+    }
+
+    public BigDecimal getBigDecimal(Scanner sc) {
+        while (!sc.hasNextBigDecimal()) {
+            System.out.println("Invalid, enter a number.");
+            sc.next();
+        }
+        return sc.nextBigDecimal().setScale(2, RoundingMode.HALF_UP);
+    }
+
+
 }

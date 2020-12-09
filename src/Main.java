@@ -22,30 +22,30 @@ public class Main {
 		menu:do {
 			choice = input.nextInt();
 			switch (choice) {
+				// CUSTOMER
 				case 1 -> {
 					CustomerController customerController = new CustomerController();
 					customerController.customerBoundary.showCustomerUI();
 					EnterToContinue();
 					showMainUI();
 
-				} //Customers
+				}
+				// INVOICES
 				case 2 -> {
 					InvoiceController invoiceController = new InvoiceController();
 					invoiceController.invoiceBoundary.showInvoiceUI();
 					EnterToContinue();
 					showMainUI();
 				}
-
+				// WAREHOUSES
 				case 3 -> {
 					//TODO: delete, was used to see if the warehouse and its products are persistent.
 					if (new File("Warehouse.txt").exists()) {
 						getWarehouses();
 					}
-					for (Warehouse w: warehouses.values()) {
+					for (Warehouse w : warehouses.values()) {
 						System.out.println(w.toString());
 					}
-
-
 
 					sop("Warehouse");
 					sop("1. Add warehouse\n" +
@@ -98,8 +98,7 @@ public class Main {
 
 					}
 				}
-
-
+				// PRODUCTS
 				case 4 -> {
 					sop("Products");
 					sop("""
@@ -206,84 +205,92 @@ public class Main {
 						default -> sop("Please select one of the options from 1 - 6");
 					}
 				}
+				// SALESPERSON
+				case 5 -> {
+					SalespersonController salespersonController = new SalespersonController();
+					salespersonController.salespersonBoundary.showSalespersonUI();
+					EnterToContinue();
+					showMainUI();
+				}
+
+				case 6 -> {
+					sop("Quitting now");
+					return;
+				}
 			}
-				}while(choice <7);
+		}while(choice <7);
+	}
 
 
-			}
+	private static void sop(String s){
+		System.out.println(s);
+	}
 
-
-			private static void sop(String s){
-				System.out.println(s);
-			}
-
-			static void showMainUI(){
-				sop("*********************************************");
-				sop( "** Welcome to Warehouse Management System  **" );
-				sop("""
+	static void showMainUI(){
+		sop("*********************************************");
+		sop( "** Welcome to Warehouse Management System  **" );
+		sop("""
                 **            1. Customer                  **
                 **            2. Invoice                   **
                 **            3. Warehouse                 **
                 **            4. Product                   **
                 **            5. Salesperson               **
                 **            6. Quit                      **""");
-				sop("*********************************************\n");
-				sop("How can I help you today? (Enter one of the above numbers to proceed)");
-			}
+		sop("*********************************************\n");
+		sop("How can I help you today? (Enter one of the above numbers to proceed)");
+	}
 				    
-			public static void writeWarehouse(String name, String address, String city, String state, String zip, String phoneNumber)throws IOException {
-    				warehouses.put(name, new Warehouse(name, address, city, state,zip,phoneNumber));
+	public static void writeWarehouse(String name, String address, String city, String state, String zip, String phoneNumber)throws IOException {
+		warehouses.put(name, new Warehouse(name, address, city, state,zip,phoneNumber));
 
-        			FileOutputStream f = new FileOutputStream("Warehouse.txt");
-        			ObjectOutputStream o = new ObjectOutputStream(f);
+		FileOutputStream f = new FileOutputStream("Warehouse.txt");
+		ObjectOutputStream o = new ObjectOutputStream(f);
 
-       				o.writeObject(warehouses);
-        			o.flush();
-        			f.close();
-        			o.close();
+		o.writeObject(warehouses);
+		o.flush();
+		f.close();
+		o.close();
+	}
 
-			}
+	public static void getWarehouses() throws IOException, ClassNotFoundException {
+		FileInputStream fi = new FileInputStream("Warehouse.txt");
+		ObjectInputStream oi = new ObjectInputStream(fi);
 
-			public static void getWarehouses() throws IOException, ClassNotFoundException {
-				FileInputStream fi = new FileInputStream("Warehouse.txt");
-				ObjectInputStream oi = new ObjectInputStream(fi);
+		warehouses = (HashMap<String, Warehouse>) oi.readObject();
+		oi.close();
+		fi.close();
+	}
 
-				warehouses = (HashMap<String, Warehouse>) oi.readObject();
-				oi.close();
-				fi.close();
-			}
+	// If a warehouses productList is modified, this is called to update the warehouses map
+	public static void modifyWarehouse(Warehouse warehouse) throws IOException {
+		Main.warehouses.put(warehouse.getName(), warehouse);
+		FileOutputStream f = new FileOutputStream("Warehouse.txt");
+		ObjectOutputStream o = new ObjectOutputStream(f);
 
-			// If a warehouses productList is modified, this is called to update the warehouses map
-			public static void modifyWarehouse(Warehouse warehouse) throws IOException {
-				Main.warehouses.put(warehouse.getName(), warehouse);
-				FileOutputStream f = new FileOutputStream("Warehouse.txt");
-				ObjectOutputStream o = new ObjectOutputStream(f);
+		o.writeObject(warehouses);
+		o.flush();
+		f.close();
+		o.close();
+	}
 
-				o.writeObject(warehouses);
-				o.flush();
-				f.close();
-				o.close();
-			}
-
-			// Before you add a product, make sure to load up the Warehouses.txt with getWarehouse
-			public static void addProduct(Warehouse w, String productName, double costPrice, double sellingPrice) throws IOException {
-				Product product = new Product(productName, costPrice, sellingPrice);
-				// Make sure product isn't in list already?!
-				w.getProductList().add(product);
-				modifyWarehouse(w);
-
-			}
+	// Before you add a product, make sure to load up the Warehouses.txt with getWarehouse
+	public static void addProduct(Warehouse w, String productName, double costPrice, double sellingPrice) throws IOException {
+		Product product = new Product(productName, costPrice, sellingPrice);
+		// Make sure product isn't in list already?!
+		w.getProductList().add(product);
+		modifyWarehouse(w);
+	}
 
 
-			public static void EnterToContinue(){
-				System.out.println("Press any key to return to main menu...");
-				try{System.in.read();}
-				catch(Exception e){	e.printStackTrace();}
-			}
+	public static void EnterToContinue(){
+		System.out.println("Press any key to return to main menu...");
+		try{System.in.read();}
+		catch(Exception e){	e.printStackTrace();}
+	}
 
 
 
-			static Map<Integer, Customer> customers = new HashMap<>();
-			static Map<Integer, Salesperson> salespeople =  new HashMap<>();
-			static Map<String, Warehouse> warehouses = new HashMap<String, Warehouse>();
-		}
+	static Map<Integer, Customer> customers = new HashMap<>();
+	static Map<Integer, Salesperson> salespeople =  new HashMap<>();
+	static Map<String, Warehouse> warehouses = new HashMap<String, Warehouse>();
+}

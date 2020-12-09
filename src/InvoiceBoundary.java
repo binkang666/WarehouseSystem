@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.util.regex.Pattern;
 public class InvoiceBoundary {
 
     InvoiceController invoiceController;
@@ -48,11 +48,8 @@ public class InvoiceBoundary {
                     System.out.println("*********************************************");
                     customerController.displayCustomers();
                     System.out.println("Enter the customer ID you want to open an invoice for customer ID");
-                    while (!sc.hasNextInt()) {
-                        System.out.println("Invalid, enter a valid number");
-                        sc.next();
-                    }
-                    int key = sc.nextInt();
+
+                    int key = invoiceController.getValidInt(sc);
 
                     Customer customer;
                     // Check to see of customer exists return to main menu if they don't.
@@ -66,6 +63,7 @@ public class InvoiceBoundary {
                         System.out.println("Customer already has an open invoice!");
                         break;
                     }
+
                     System.out.println("""
                             Add a product:
                             Adding generic items...
@@ -79,28 +77,24 @@ public class InvoiceBoundary {
                     // Buffer for now
                     sc.nextLine();
 
-//                    System.out.println("Enter the customer ID you want to open an invoice for customer ID");
-//                    while (!sc.hasNextInt()) {
-//                        System.out.println("Invalid, enter a number.");
-//                        sc.next();
-//                    }
-//                    int key = sc.nextInt();
                     System.out.println("""
                         Enter the delivery method:
                         D. Delivery
                         T. Take-out""");
-
+                    // Validate
                     char delivery = sc.nextLine().toLowerCase().charAt(0);
+                    while (!Character.toString(delivery).matches("^[dt]$")) {
+                        System.out.println("Invalid, enter either d or t.");
+                        delivery = sc.nextLine().toLowerCase().charAt(0);
+                    }
 
                     BigDecimal deliveryCharge = BigDecimal.ZERO; // Will be 0 if the delivery method is T
                     String address = "N/A"; // will be N/A if the delivery method is T
                     if (delivery == 'd') {
                         System.out.println("Enter the customer's shipping address:");
                         address = sc.next();
-
                         System.out.println("Enter the delivery charge: ");
-
-                        deliveryCharge = sc.nextBigDecimal().setScale(2, RoundingMode.HALF_UP);
+                        deliveryCharge = invoiceController.getBigDecimal(sc);
                     }
 
                     int invoiceNumber = invoiceController.findNextInvoiceNumber();
@@ -117,22 +111,24 @@ public class InvoiceBoundary {
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
                     customerController.getCustomers();
+
                     System.out.println("*********************************************");
                     System.out.println("Enter the invoice number you want to pay off: ");
-
                     ArrayList<Invoice> open = invoiceController.getOpenInvoices();
+                    if (open.size() == 0) {
+                        System.out.println("No open invoices exist!");
+                        break;
+                    }
                     invoiceController.showOpenInvoices(open);
 
-                    int key = sc.nextInt();
+                    int key = invoiceController.getValidInt(sc);
                     Invoice invoice = null;
                     Customer customer = null;
-
                     try {
                         for (Customer c: Main.customers.values()) {
                             if (c.getInvoiceAssociated().containsKey(key)) {
                                 customer = c;
                                 invoice = c.getInvoiceAssociated().get(key);
-
                             }
                         }
                     }
@@ -141,14 +137,14 @@ public class InvoiceBoundary {
                         break;
                     }
 
-
                     System.out.println("Enter amount to pay off: ");
-                    double amount = sc.nextDouble();
+                    BigDecimal amount = invoiceController.getBigDecimal(sc);
 
-                    while ((BigDecimal.valueOf(amount).compareTo(invoice.getRemainingTotal().setScale(2, RoundingMode.HALF_UP)) > 0)
-                            && !(invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0)) { // 1 if true...
+                    // removed set scale since amount and remaining total should always be setscale 2
+                    while ((amount.compareTo(invoice.getRemainingTotal()) > 0)
+                            && !(invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0)) {
                         System.out.println("Payment cannot be greater than amount owed. Re-enter: ");
-                        amount = sc.nextDouble();
+                        amount = invoiceController.getBigDecimal(sc);
                     }
 
                     invoiceController.updateRemainingTotal(invoice, amount);
