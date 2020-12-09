@@ -41,6 +41,7 @@ public class ProductBoundary {
                         String sprice = scanner.nextLine();
                         Warehouse foundWarehouse = Main.warehouses.get(warehouse);
                         productController.addProduct(foundWarehouse, product, Double.parseDouble(cprice), Double.parseDouble(sprice));
+                        warehouseController.modifyWarehouse(foundWarehouse);
                         sop("New product added..");
                     }
                     else {
@@ -54,14 +55,17 @@ public class ProductBoundary {
 
 
             case 2 -> {
+                // load up warehouses
                 if (new File("Warehouse.txt").exists()) {
+                    warehouseController = new WarehouseController();
+                    warehouseController.getWarehouses();
                     sop("Show all products\n");
                     sop("Enter name of the warehouse: ");
                     Scanner scanner = new Scanner(System.in);
                     String warehouse = scanner.nextLine();
                     if (Main.warehouses.containsKey(warehouse)) {
                         Warehouse foundWarehouse = Main.warehouses.get(warehouse);
-                        foundWarehouse.displayAllProducts();
+                        warehouseController.displayAllProducts(foundWarehouse);
                     }
                     else {
                         sop("Unavailable warehouse: ");
@@ -72,7 +76,10 @@ public class ProductBoundary {
                 }
             }
             case 3 -> {
+                // load up warehouses
                 if (new File("Warehouse.txt").exists()) {
+                    warehouseController = new WarehouseController();
+                    warehouseController.getWarehouses();
                     sop("Show products that have n or fewer in the warehouse\n");
                     Scanner scanner = new Scanner(System.in);
                     sop("Enter name of the warehouse: ");
@@ -81,7 +88,7 @@ public class ProductBoundary {
                     String quantity = scanner.nextLine();
                     if (Main.warehouses.containsKey(warehouse)) {
                         Warehouse foundWarehouse = Main.warehouses.get(warehouse);
-                        foundWarehouse.showProductsUnder(Integer.parseInt(quantity));
+                        warehouseController.showProductsUnder(foundWarehouse, Integer.parseInt(quantity));
                     }
                     else {
                         sop("Unavailable warehouse");
@@ -92,7 +99,10 @@ public class ProductBoundary {
                 }
             }
             case 4 -> {
+                // load up warehouses
                 if (new File("Warehouse.txt").exists()) {
+                    warehouseController = new WarehouseController();
+                    warehouseController.getWarehouses();
                     sop("Replenish Stock\n");
                     Scanner scanner = new Scanner(System.in);
                     sop("Enter name of the warehouse: ");
@@ -104,7 +114,8 @@ public class ProductBoundary {
                         String quantity = scanner.nextLine();
 
                         Warehouse foundWarehouse = Main.warehouses.get(warehouse);
-                        foundWarehouse.replenishStock(product, Integer.parseInt(quantity));
+                        warehouseController.replenishStock(foundWarehouse, product, Integer.parseInt(quantity));
+                        warehouseController.modifyWarehouse(foundWarehouse);
 
                         sop("stock replenished..");
 

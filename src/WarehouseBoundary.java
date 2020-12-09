@@ -62,7 +62,7 @@ public class WarehouseBoundary {
                     String warehouse = scanner.nextLine();
                     if (Main.warehouses.containsKey(warehouse)) {
                         Warehouse foundWareHouse = Main.warehouses.get(warehouse);
-                        foundWareHouse.showQuantity();
+                        warehouseController.showQuantity(foundWareHouse);
                     }
                     else {
                         sop("Warehouse not found");

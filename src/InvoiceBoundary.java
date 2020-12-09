@@ -73,10 +73,13 @@ public class InvoiceBoundary {
                             Adding generic items...
                             """);
 
+
                     //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
                     ArrayList<Product> products = new ArrayList<>();
                     products.add(new Product("Apple", 2, 3));
                     products.add(new Product("Banana", 1, 5));
+                    System.out.println("Type in the name of the item you want to add to the invoice or type -1 to finish adding items");
+                    warehouseController.displayInStockProducts();
 
                     System.out.println("Enter the ID of the salesperson who is making this transaction:");
                     salespersonController.displaySalespersons();

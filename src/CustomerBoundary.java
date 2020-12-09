@@ -17,7 +17,7 @@ public class CustomerBoundary {
 
         Scanner input = new Scanner(System.in);
         sop("""
-                            1. add customers
+                            1. Add customers
                             2. Show all customers
                             3. Search for Specific customer
                             4. Return to main menu"""
