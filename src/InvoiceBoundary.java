@@ -1,14 +1,13 @@
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 public class InvoiceBoundary {
 
     InvoiceController invoiceController;
     CustomerController customerController;
+    SalespersonController salespersonController;
 
     public InvoiceBoundary(InvoiceController invoiceController) {
         this.invoiceController = invoiceController;
@@ -37,13 +36,16 @@ public class InvoiceBoundary {
 
 
         switch (input) {
-            // Open Invoice
+            // OPEN INVOICE
             case 1 -> {
-                // Load in existing customers and warehouses
-                if (new File("Customer.txt").exists() && new File("Warehouse.txt").exists()) {
+                // Load in existing customers, warehouses, and salespersons
+                if (new File("Customer.txt").exists() && new File("Warehouse.txt").exists() && new File("Salesperson.txt").exists()) {
                     customerController = new CustomerController();
+                    salespersonController = new SalespersonController();
                     customerController.getCustomers();
                     Main.getWarehouses();
+                    salespersonController.getSalespersons();
+
 
                     System.out.println("*********************************************");
                     customerController.displayCustomers();
@@ -74,6 +76,18 @@ public class InvoiceBoundary {
                     products.add(new Product("Apple", 2, 3));
                     products.add(new Product("Banana", 1, 5));
 
+                    System.out.println("Enter the ID of the salesperson who is making this transaction:");
+                    salespersonController.displaySalespersons();
+                    key = invoiceController.getValidInt(sc);
+                    Salesperson salesperson;
+                    if (!Main.customers.containsKey(key)) {
+                        System.out.println("Salesperson doesn't exist!");
+                        break;
+                    }
+                    salesperson = Main.salespeople.get(key);
+
+
+
                     // Buffer for now
                     sc.nextLine();
 
@@ -99,7 +113,7 @@ public class InvoiceBoundary {
 
                     int invoiceNumber = invoiceController.findNextInvoiceNumber();
 
-                    invoiceController.openInvoice(customer, address, delivery, deliveryCharge, invoiceNumber, products);
+                    invoiceController.openInvoice(customer, salesperson, address, delivery, deliveryCharge, invoiceNumber, products);
                     System.out.println("New invoice added.");
                 }
 
@@ -107,6 +121,7 @@ public class InvoiceBoundary {
                     System.out.println("Either no customers or warehouses exist!");
                 }
             }
+            // PAYOFF INVOICE
             case 2 -> {
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
@@ -166,7 +181,7 @@ public class InvoiceBoundary {
                 }
 
             }
-
+            // SHOW OPEN INVOICES
             case 3 -> {
                 System.out.println("**********************Open Invoices*********************");
                 if (new File("Customer.txt").exists()) {
@@ -182,7 +197,7 @@ public class InvoiceBoundary {
                 }
                 else System.out.println("No customers exist!");
             }
-
+            // SHOW CLOSED INVOICES
             case 4 -> {
                 System.out.println("**********************Closed Invoices*********************");
                 if (new File("Customer.txt").exists()) {
@@ -198,7 +213,7 @@ public class InvoiceBoundary {
                 }
                 else System.out.println("No customers exist!");
             }
-
+            // SHOW ALL INVOICES
             case 5 -> {
                 System.out.println("**********************All Invoices*********************");
                 if (new File("Customer.txt").exists()) {

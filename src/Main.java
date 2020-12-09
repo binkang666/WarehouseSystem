@@ -292,5 +292,5 @@ public class Main {
 
 	static Map<Integer, Customer> customers = new HashMap<>();
 	static Map<Integer, Salesperson> salespeople =  new HashMap<>();
-	static Map<String, Warehouse> warehouses = new HashMap<String, Warehouse>();
+	static Map<String, Warehouse> warehouses = new HashMap<>();
 }

@@ -11,11 +11,11 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
     private BigDecimal salesTax;
     private LocalDate lastOrderDate;
 
-    public Customer(){
-        this.customerID = 0;
-        status= true;
-        lastOrderDate = null;
-    }
+//    public Customer(){
+//        this.customerID = 0;
+//        status= true;
+//        lastOrderDate = null;
+//    }
 
 
     public Customer(String firstName, String lastName, String phone, String address, BigDecimal salesTax, int customerID) {

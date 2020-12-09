@@ -1,28 +1,29 @@
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Salesperson extends Person implements Comparable<Salesperson> {
     private int salespersonID;
-    private double totalCommissionEarned;
-    private double totalSales;
+    private BigDecimal totalCommissionEarned;
+    private BigDecimal totalSales;
     private LocalDate startDate;
-    private double commissionRate;
+    private BigDecimal commissionRate;
 
-    public Salesperson(){
-        this.totalCommissionEarned = 0;
-        this.totalSales = 0;
-        this.startDate = LocalDate.now();
-        this.commissionRate = 0;
-        this.salespersonID = 0;
+//    public Salesperson(){
+//        this.totalCommissionEarned = 0;
+//        this.totalSales = 0;
+//        this.startDate = LocalDate.now();
+//        this.commissionRate = 0;
+//        this.salespersonID = 0;
+//
+//    }
 
-    }
 
-
-    public Salesperson(String firstName, String lastName, String phone, String address,
-                       double totalCommissionEarned, double totalSales, LocalDate startDate,
-                       double commissionRate, int salespersonID) {
+    public Salesperson(String firstName, String lastName, String phone, String address, LocalDate startDate,
+                       BigDecimal commissionRate, int salespersonID) {
         super(firstName, lastName, phone, address);
-        this.totalCommissionEarned =totalCommissionEarned;
-        this.totalSales = totalSales;
+        // Salespersons should start with no sales or commission earned
+        totalCommissionEarned = BigDecimal.ZERO;
+        totalSales = BigDecimal.ZERO;
         this.startDate = startDate;
         this.commissionRate = commissionRate;
         this.salespersonID = salespersonID;
@@ -34,23 +35,24 @@ public class Salesperson extends Person implements Comparable<Salesperson> {
     @Override
     public String toString()
     {
-        return "Salesperson ID: " +getSalespersonID() +", Type: " + getType() +", "+ super.toString() +  ", Start Date: " + getStartDate() +
-                ", Commission Rate: " + getCommissionRate() + "%" + ", Commission Earned: "+ getTotalCommissionEarned()
-                +", Total sales: " + getTotalSales();
+        return "Salesperson ID: " + getSalespersonID() +", Type: " + getType() +", "+ super.toString() +  ", Start Date: " + getStartDate() +
+                ", Commission Rate: " + getCommissionRate() + "%" + ", Commission Earned: $" + getTotalCommissionEarned()
+                + ", Total sales: $" + getTotalSales();
     }
 
     //getter - Boundary
-    public double getTotalCommissionEarned() { return totalCommissionEarned; }
-    public double getTotalSales() { return totalSales; }
+    public BigDecimal getTotalCommissionEarned() { return totalCommissionEarned; }
+    public BigDecimal getTotalSales() { return totalSales; }
     public LocalDate getStartDate() { return startDate; }
-    public double getCommissionRate() { return commissionRate; }
+    public BigDecimal getCommissionRate() { return commissionRate; }
     public int getSalespersonID(){return salespersonID;}
     //setter - Controller
-    public void setTotalCommissionEarned(double totalCommissionEarned) { this.totalCommissionEarned = totalCommissionEarned; }
-    public void setTotalSales(double totalSales) { this.totalSales = totalSales; }
+    public void setTotalCommissionEarned(BigDecimal totalCommissionEarned) { this.totalCommissionEarned = totalCommissionEarned; }
+    public void setTotalSales(BigDecimal totalSales) { this.totalSales = totalSales; }
     public void setStartDate(int yy, int mm, int dd) {
         this.startDate = LocalDate.of(yy,mm,dd); }
-    public void setCommissionRate(double commissionRate) { this.commissionRate = commissionRate; }
+    public void setCommissionRate(BigDecimal commissionRate) { this.commissionRate = commissionRate; }
+
 
 
     @Override
@@ -59,8 +61,7 @@ public class Salesperson extends Person implements Comparable<Salesperson> {
             return 0;
         else
         {
-            Salesperson s = (Salesperson)o;
-            return (getName().compareTo(s.getName()));
+            return (getName().compareTo(o.getName()));
         }
     }
 }

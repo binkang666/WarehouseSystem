@@ -2,12 +2,12 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.regex.Matcher;
 
 public class InvoiceController {
 
     InvoiceBoundary invoiceBoundary = new InvoiceBoundary(this);
     CustomerController customerController = new CustomerController();
+    SalespersonController salespersonController = new SalespersonController();
 
     // Look at the ID value in the last line Invoice.txt and add 1 to it.
     public int findNextInvoiceNumber() {
@@ -26,10 +26,13 @@ public class InvoiceController {
     }
 
     // To open an invoice, place the invoices in the customers hashmap and save them
-    public void openInvoice(Customer c, String address, char delivery, BigDecimal deliveryCharge, int invoiceNumber, ArrayList<Product> products) throws IOException {
-        Invoice invoice = new Invoice(c.getName(), address, delivery, deliveryCharge, c.getSalesTax(), invoiceNumber, products);
+    public void openInvoice(Customer c, Salesperson s, String address, char delivery, BigDecimal deliveryCharge, int invoiceNumber, ArrayList<Product> products) throws IOException {
+        Invoice invoice = new Invoice(c.getName(), s.getName(), address, delivery, deliveryCharge, c.getSalesTax(), invoiceNumber, products);
         c.getInvoiceAssociated().put(invoiceNumber, invoice);
+        // Pay commission ONLY based on the selling price of the invoices items
+        salespersonController.payCommission(s, invoice.getTotalCharge());
         customerController.modifyCustomer(c);
+        salespersonController.modifySalespersons(s);
     }
 
     // To modify an invoice, just replace it in the customers hashmap and save them
@@ -121,7 +124,7 @@ public class InvoiceController {
         // if order date + 10 days is before current time.
         if (cal.getTime().before(cal2.getTime())) {
             i.setFinanceEarlyCharge(.1);
-            i.setFinalTotal(i.getFinalTotal().subtract((i.getFinalTotal()).multiply(BigDecimal.valueOf(i.getFinanceEarlyCharge()))).setScale(2, RoundingMode.HALF_UP));
+            i.setFinalTotal(i.getFinalTotal().subtract((i.getTotalCharge()).multiply(BigDecimal.valueOf(i.getFinanceEarlyCharge()))).setScale(2, RoundingMode.HALF_UP));
 
         }
 

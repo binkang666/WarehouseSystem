@@ -1,4 +1,6 @@
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.HashMap;
 
@@ -20,10 +22,8 @@ public class SalespersonController {
         return max + 1;
     }
 
-    public void writeSalesperson(String fn, String ln, String phone, String add,
-                                 double commission, double sales,
-                                 LocalDate date, double rate, int id) throws IOException {
-        salesperson = new Salesperson(fn, ln, phone, add, commission, sales, date, rate, id);
+    public void writeSalespersons(String fn, String ln, String phone, String add, LocalDate date, BigDecimal rate, int id) throws IOException {
+        salesperson = new Salesperson(fn, ln, phone, add, date, rate, id);
         Main.salespeople.put(id, salesperson);
 
         FileOutputStream f = new FileOutputStream("Salesperson.txt");
@@ -36,7 +36,7 @@ public class SalespersonController {
     }
 
     // Modifies a salesperson's existing fields
-    public void modifySalesperson(Salesperson salesperson) throws IOException {
+    public void modifySalespersons(Salesperson salesperson) throws IOException {
         Main.salespeople.put(salesperson.getSalespersonID(), salesperson);
         FileOutputStream f = new FileOutputStream("Salesperson.txt");
         ObjectOutputStream o = new ObjectOutputStream(f);
@@ -48,7 +48,7 @@ public class SalespersonController {
     }
 
     // Loads the hashmap in salesperson.txt and places it in the hashtable in the Main
-    public void getSalesperson() throws IOException, ClassNotFoundException {
+    public void getSalespersons() throws IOException, ClassNotFoundException {
         FileInputStream fi = new FileInputStream("Salesperson.txt");
         ObjectInputStream oi = new ObjectInputStream(fi);
 
@@ -57,7 +57,7 @@ public class SalespersonController {
         fi.close();
     }
 
-    public void displaySalesperson() {
+    public void displaySalespersons() {
         for (Salesperson sp : Main.salespeople.values()) {
             System.out.println(sp.toString());
         }
@@ -70,5 +70,13 @@ public class SalespersonController {
             System.out.println("No salesperson with given ID was found");
         }
     }
+
+    public void payCommission(Salesperson salesperson, BigDecimal total) {
+        System.out.println("Paying commission to " + salesperson.getName());
+        salesperson.setTotalSales(salesperson.getTotalSales().add(total));
+        salesperson.setTotalCommissionEarned(salesperson.getTotalCommissionEarned().add
+                ((total.multiply((salesperson.getCommissionRate().multiply(BigDecimal.valueOf(.01)))))).setScale(2, RoundingMode.HALF_UP));
+    }
+
 
 }

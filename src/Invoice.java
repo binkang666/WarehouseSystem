@@ -11,6 +11,8 @@ public class Invoice implements Serializable {
     private Calendar cal2 = Calendar.getInstance();
     private final DecimalFormat df = new DecimalFormat("#.##");
     private String cName;
+    //TODO: ADD salesperson
+    private String sName;
     private ArrayList<Product> products;
     private int invoiceNumber;
     private boolean status; // 1 if active, 0 otherwise
@@ -31,10 +33,11 @@ public class Invoice implements Serializable {
     private BigDecimal salesTax;
 
     // If we're not delivering, deliver charge will be 0
-    public Invoice(String cName, String shippingAddress, char deliveryMethod, BigDecimal deliverCharge, BigDecimal salesTax, int invoiceNumber, ArrayList<Product> products) {
+    public Invoice(String cName, String sName, String shippingAddress, char deliveryMethod, BigDecimal deliverCharge, BigDecimal salesTax, int invoiceNumber, ArrayList<Product> products) {
         this.products = products;
         this.invoiceNumber = invoiceNumber;
         this.cName = cName;
+        this.sName = sName;
         this.shippingAddress = shippingAddress;
         this.deliveryMethod = deliveryMethod;
         orderDate = cal1.getTime();
@@ -59,6 +62,7 @@ public class Invoice implements Serializable {
         StringBuilder sb = new StringBuilder("Invoice Number: " + getInvoiceNumber() + "\n" +
                 "Order Date: " + getOrderDate() + "\n" +
                 "Customer: " + getCName() + "\n" +
+                "Salesperson: " + getsName() + "\n" +
                 "Status: " + getStatus() + "\n" +
                 "Products: ");
                 sb.append(getProducts().get(0).getProductName());
@@ -158,6 +162,9 @@ public class Invoice implements Serializable {
         return financeEarlyCharge;
     }
 
+    public String getsName() {
+        return sName;
+    }
 
     public void setFinanceEarlyCharge(double financeEarlyCharge) {
         this.financeEarlyCharge = financeEarlyCharge;

@@ -59,7 +59,7 @@ public class CustomerBoundary {
                 String add = input.nextLine();
 
                 sop("Enter sales tax for the new customer (e.g. 2.5 for 2.5%)");
-                BigDecimal tax = BigDecimal.ZERO;
+                BigDecimal tax;
                 try{
                     tax = input.nextBigDecimal();}
                 catch (Exception e){

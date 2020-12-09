@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public abstract class Person implements Serializable {
     private String first_name;

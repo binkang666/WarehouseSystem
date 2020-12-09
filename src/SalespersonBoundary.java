@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -25,7 +26,7 @@ public class SalespersonBoundary {
             case 1 -> {
                 // Retrieve salespeople from file
                 if(new File("Salesperson.txt").exists()){
-                    salespersonController.getSalesperson();
+                    salespersonController.getSalespersons();
                 }
 
                 sop("\n*********************************************");
@@ -56,23 +57,23 @@ public class SalespersonBoundary {
                 sop("Enter address for new salesperson");
                 String address = input.nextLine();
 
-                sop("Enter Total commission Earned by salesperson");
-                double commission = 0;
-                try{
-                    commission = input.nextDouble();}
-                catch (Exception e){
-                    sop("Failed adding Salesperson, please enter only arabic numeric numbers for commission earned!");
-                    return;
-                }
+//                sop("Enter Total commission Earned by salesperson");
+//                double commission = 0;
+//                try{
+//                    commission = input.nextDouble();}
+//                catch (Exception e){
+//                    sop("Failed adding Salesperson, please enter only arabic numeric numbers for commission earned!");
+//                    return;
+//                }
 
-                sop("Enter Total sales Earned by salesperson");
-                double sales = 0;
-                try{
-                    sales = input.nextDouble();}
-                catch (Exception e){
-                    sop("Failed adding Salesperson, please enter only arabic numeric numbers for total sales!");
-                    return;
-                }
+//                sop("Enter Total sales Earned by salesperson");
+//                double sales = 0;
+//                try{
+//                    sales = input.nextDouble();}
+//                catch (Exception e){
+//                    sop("Failed adding Salesperson, please enter only arabic numeric numbers for total sales!");
+//                    return;
+//                }
 
                 LocalDate date = LocalDate.now();
                 try{
@@ -90,9 +91,9 @@ public class SalespersonBoundary {
 
 
                 sop("Enter commission rate for new salesperson");
-                double rate = 0;
+                BigDecimal rate = BigDecimal.ZERO;
                 try{
-                    rate = input.nextDouble();}
+                    rate = input.nextBigDecimal();}
                 catch (Exception e){
                     sop("Failed adding Salesperson, please enter only arabic numeric numbers for commission rate!");
                     return;
@@ -102,10 +103,10 @@ public class SalespersonBoundary {
 
                 // It's not the first time we're adding a salesperson, so retrieve the existing ones from the txt file
                 if (new File("Salesperson.txt").exists()) {
-                    salespersonController.getSalesperson();
+                    salespersonController.getSalespersons();
                 }
 
-                salespersonController.writeSalesperson(fn, ln, phone, address, commission, sales, date, rate, id);
+                salespersonController.writeSalespersons(fn, ln, phone, address, date, rate, id);
                 sop("salesperson added");
 
             }
@@ -115,8 +116,8 @@ public class SalespersonBoundary {
                 sop("display all salesperson performance");
                 if (new File("Salesperson.txt").exists()) {
                     // Retrieve salespeople from file
-                    salespersonController.getSalesperson();
-                    salespersonController.displaySalesperson();
+                    salespersonController.getSalespersons();
+                    salespersonController.displaySalespersons();
                 }
                 else {
                     sop("No salesperson exist!");
@@ -128,7 +129,7 @@ public class SalespersonBoundary {
                 sop("Enter the salesperson ID");
                 if (new File("salesperson.txt").exists()) {
                     // Retrieve salespeople from file
-                    salespersonController.getSalesperson();
+                    salespersonController.getSalespersons();
                     int id = input.nextInt();
                     salespersonController.searchSalespersonID(id);
                 }
