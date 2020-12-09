@@ -44,12 +44,10 @@ public class ProductBoundary {
                         productController.addProduct(foundWarehouse, product, Double.parseDouble(cprice), Double.parseDouble(sprice));
                         warehouseController.modifyWarehouse(foundWarehouse);
                         sop("New product added..");
-                    }
-                    else {
+                    } else {
                         sop("Unavailable warehouse: ");
                     }
-                }
-                else {
+                } else {
                     sop("There are no warehouses!");
                 }
             }
@@ -67,12 +65,10 @@ public class ProductBoundary {
                     if (Main.warehouses.containsKey(warehouse)) {
                         Warehouse foundWarehouse = Main.warehouses.get(warehouse);
                         warehouseController.displayAllProducts(foundWarehouse);
-                    }
-                    else {
+                    } else {
                         sop("Unavailable warehouse: ");
                     }
-                }
-                else {
+                } else {
                     sop("No warehouses available!");
                 }
             }
@@ -90,12 +86,10 @@ public class ProductBoundary {
                     if (Main.warehouses.containsKey(warehouse)) {
                         Warehouse foundWarehouse = Main.warehouses.get(warehouse);
                         warehouseController.showProductsUnder(foundWarehouse, Integer.parseInt(quantity));
-                    }
-                    else {
+                    } else {
                         sop("Unavailable warehouse");
                     }
-                }
-                else {
+                } else {
                     sop("No warehouses available!");
                 }
             }
@@ -120,40 +114,39 @@ public class ProductBoundary {
 
                         sop("stock replenished..");
 
-                    }
-                    else {
+                    } else {
                         sop("Unavailable warehouse");
                     }
-                }
-                else {
+                } else {
                     sop("No warehouses available!");
                 }
             }
-            case 5 ->{
-            	//cannot enter quantity less than actual quantity that product has
-            	Scanner scanner = new Scanner(System.in);
-            	sop("What product you want to remove?: ");
-            	String product = scanner.nextLine();
-            	if(Warehouse.getProductList().contains(product)) {
-            		sop("How many quantity you want to remove?: ");
-            		int quantity = scanner.nextInt();
-            		for (Product p : Warehouse.getProductList()) {
-            			if(quantity > p.getQuantity()) {
-            				sop("Unavailable quantity");
-            			}
-            			else {
-            				warehouseController.removeProduct(product, quantity);
-                    		sop("removed..");
-            			}
-            		}
-            	}
-            	else {
-            		sop("Product not found");
-            	}
+//            case 5 ->{
+//            	//cannot enter quantity less than actual quantity that product has
+//            	Scanner scanner = new Scanner(System.in);
+//            	sop("What product you want to remove?: ");
+//            	String product = scanner.nextLine();
+//            	if(Warehouse.getProductList().contains(product)) {
+//            		sop("How many quantity you want to remove?: ");
+//            		int quantity = scanner.nextInt();
+//            		for (Product p : Warehouse.getProductList()) {
+//            			if(quantity > p.getQuantity()) {
+//            				sop("Unavailable quantity");
+//            			}
+//            			else {
+//            				warehouseController.removeProduct(product, quantity);
+//                    		sop("removed..");
+//            			}
+//            		}
+//            	}
+//            	else {
+//            		sop("Product not found");
+//            	}
+//            }
+            default -> {
+                sop("Going back");
             }
-            default ->{
-            	sop("Going back");
-            }
+        }
     }
         private static void sop (String s){
             System.out.println(s);

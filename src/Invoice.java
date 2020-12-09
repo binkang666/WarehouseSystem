@@ -47,7 +47,9 @@ public class Invoice implements Serializable {
         df.setRoundingMode(RoundingMode.DOWN);
         this.salesTax = salesTax;
         for (Product p : products) {
-            totalCharge = totalCharge.add(BigDecimal.valueOf(p.getSellingPrice())).setScale(2, RoundingMode.HALF_UP);
+            System.out.println(totalCharge);
+            // totalcharge += (p.sellingprice * p.quantity)
+            totalCharge = totalCharge.add((BigDecimal.valueOf(p.getSellingPrice()).multiply(BigDecimal.valueOf(p.getQuantity())))).setScale(2, RoundingMode.HALF_UP);
         }
         status = true; // All invoices start as open
         // maybe create methods to apply tax and delivery charge since salespersons don't get payed based on tax
@@ -65,9 +67,9 @@ public class Invoice implements Serializable {
                 "Salesperson: " + getsName() + "\n" +
                 "Status: " + getStatus() + "\n" +
                 "Products: ");
-                sb.append(getProducts().get(0).getProductName());
+                sb.append(getProducts().get(0).getProductName() + " Quantity: " + getProducts().get(0).getQuantity());
                 for (int i =  1; i < getProducts().size(); i++) {
-                    sb.append(", ").append(getProducts().get(i).getProductName());
+                    sb.append(", ").append(getProducts().get(i).getProductName() + " Quantity: " + getProducts().get(i).getQuantity());
                 }
                 sb.append("\nShipping address: " + getShippingAddress() + "\n" +
                         "Delivery method: " + getDeliveryMethod() + "\n" +

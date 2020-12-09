@@ -89,22 +89,52 @@ public class WarehouseController {
     }
     // TODO: make sure that you cant input a higher quantity of items that are available in all warehouses
     // TODO: i.e if all warehouses have 30 wire and the user wants 40, prevent this.
-    public void removeProduct(String name, int quantity) {
+    public Product removeProduct(String name, int quantity) throws IOException {
+        Product product = null;
         for (Warehouse w : Main.warehouses.values()) {
             for (Product p : w.getProductList()) {
                 if (p.getProductName().equals(name)) {
+                    product = p;
                     p.setQuantity(p.getQuantity() - quantity);
                     // If a warehouse's quantity of the product falls below 0, then that warehouse didn't have enough of it but you can still
                     // get more from other warehouses, so take the absolute value of how much the quantity fell below 0 and keep searching through other warehouses.
                     if (p.getQuantity() < 0) {
                         quantity = Math.abs(p.getQuantity());
+                        // Set the stock in this warehouse to 0
                         p.setQuantity(0);
                     }
+                    // modify the product list in the warehouse
+                    modifyWarehouse(w);
                 }
             }
         }
-
+        product.setQuantity(quantity);
+        return product;
     }
+
+    public Boolean productExists(String name) {
+        for (Warehouse w : Main.warehouses.values()) {
+            for (Product p : w.getProductList()) {
+                if (p.getProductName().equals(name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public int getQuantityForAllWarehouses(String name) {
+        int quantity = 0;
+        for (Warehouse w : Main.warehouses.values()) {
+            for (Product p : w.getProductList()) {
+                if (p.getProductName().equals(name)) {
+                    quantity += p.getQuantity();
+                }
+            }
+        }
+        return quantity;
+    }
+
 
     public void displayAllWarehouseProducts() {
         for (Warehouse w : Main.warehouses.values()) {

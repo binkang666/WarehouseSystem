@@ -67,19 +67,46 @@ public class InvoiceBoundary {
                         System.out.println("Customer already has an open invoice!");
                         break;
                     }
-
-                    System.out.println("""
-                            Add a product:
-                            Adding generic items...
-                            """);
-
+                    // Buffer flush
+                    sc.nextLine();
 
                     //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
                     ArrayList<Product> products = new ArrayList<>();
-                    products.add(new Product("Apple", 2, 3));
-                    products.add(new Product("Banana", 1, 5));
-                    System.out.println("Type in the name of the item you want to add to the invoice or type -1 to finish adding items");
+                    System.out.println("Type in the name of the item you want to add");
+                    // TODO: Exit if there are no products in stock...
                     warehouseController.displayInStockProducts();
+                    String productName = sc.next();
+                    // If user doesn't add products, don't allow them to continue
+                    while ((products.size() <= 0) || !productName.equals("-1")) {
+                        if (productName.equals("-1"))
+                            break;
+//
+//                        if (productName.equals("-1") && products.size() > 0) {
+//                            break;
+//                        }
+
+                        // search through warehouses to see if item exists in them
+                        if (warehouseController.productExists(productName)) {
+                            int quantity;
+                            do {
+                                System.out.println("Enter quantity");
+                                quantity = sc.nextInt();
+                            } while (quantity > warehouseController.getQuantityForAllWarehouses(productName));
+
+                            Product p = warehouseController.removeProduct(productName, quantity);
+                            p.setQuantity(quantity);
+                            products.add(p);
+                        }
+                        else {
+                            System.out.println("Product doesn't exist!");
+                        }
+                        warehouseController.displayInStockProducts();
+                        System.out.println("Product added, type in another product name or -1 to finish adding items");
+                        productName = sc.next();
+                    }
+
+
+
 
                     System.out.println("Enter the ID of the salesperson who is making this transaction:");
                     salespersonController.displaySalespersons();
@@ -90,16 +117,14 @@ public class InvoiceBoundary {
                         break;
                     }
                     salesperson = Main.salespeople.get(key);
-
-
-
+                    // if a warehouse shares items and and the first doesnt run out, it sets the second warehouse's quantity to quantity for some reason
                     // Buffer for now
                     sc.nextLine();
-
                     System.out.println("""
                         Enter the delivery method:
                         D. Delivery
                         T. Take-out""");
+
                     // Validate
                     char delivery = sc.nextLine().toLowerCase().charAt(0);
                     while (!Character.toString(delivery).matches("^[dt]$")) {
@@ -173,7 +198,9 @@ public class InvoiceBoundary {
                     // if remaining total is less than .01, assume its closed
                     if (invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0) {
                         System.out.println("Invoice has been closed.");
+                        invoiceController.updateRemainingTotal(invoice, BigDecimal.ZERO);
                         invoiceController.closeInvoice(invoice);
+                        // Apply early discount, if applicable
                         invoiceController.applyEarlyFinance(invoice);
                     }
 
