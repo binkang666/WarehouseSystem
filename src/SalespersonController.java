@@ -72,7 +72,6 @@ public class SalespersonController {
     }
 
     public void payCommission(Salesperson salesperson, BigDecimal total) {
-        System.out.println("Paying commission to " + salesperson.getName());
         salesperson.setTotalSales(salesperson.getTotalSales().add(total));
         salesperson.setTotalCommissionEarned(salesperson.getTotalCommissionEarned().add
                 ((total.multiply((salesperson.getCommissionRate().multiply(BigDecimal.valueOf(.01)))))).setScale(2, RoundingMode.HALF_UP));

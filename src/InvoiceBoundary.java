@@ -8,6 +8,7 @@ public class InvoiceBoundary {
     InvoiceController invoiceController;
     CustomerController customerController;
     SalespersonController salespersonController;
+    WarehouseController warehouseController;
 
     public InvoiceBoundary(InvoiceController invoiceController) {
         this.invoiceController = invoiceController;
@@ -42,8 +43,9 @@ public class InvoiceBoundary {
                 if (new File("Customer.txt").exists() && new File("Warehouse.txt").exists() && new File("Salesperson.txt").exists()) {
                     customerController = new CustomerController();
                     salespersonController = new SalespersonController();
+                    warehouseController = new WarehouseController();
                     customerController.getCustomers();
-                    Main.getWarehouses();
+                    warehouseController.getWarehouses();
                     salespersonController.getSalespersons();
 
 
@@ -118,7 +120,7 @@ public class InvoiceBoundary {
                 }
 
                 else {
-                    System.out.println("Either no customers or warehouses exist!");
+                    System.out.println("Either no customers, warehouses, or salespersons exist!");
                 }
             }
             // PAYOFF INVOICE

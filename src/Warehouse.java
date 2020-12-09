@@ -31,11 +31,8 @@ public class Warehouse implements Serializable {
 				products.add(productList.get(i));
 			}
 		}
-		Collections.sort(products, new Comparator<Product>() {
-			public int compare(Product a, Product b) {
-				return a.getQuantity() - b.getQuantity();
-			}
-		});
+		// Lambda function to sort by quantity
+		Collections.sort(products, (a, b) -> a.getQuantity() - b.getQuantity());
 		for (int i=0; i<products.size(); i++) {
 			System.out.println(products.get(i).toString());;
 		}
@@ -49,7 +46,7 @@ public class Warehouse implements Serializable {
 
 	public void replenishStock(String product, int quantity) {
 		for (int i=0; i<productList.size(); i++) {
-			if (product==productList.get(i).getProductName()) {
+			if (product.equals(productList.get(i).getProductName())) {
 				productList.get(i).setQuantity(quantity);
 				return;
 			}
@@ -57,11 +54,8 @@ public class Warehouse implements Serializable {
 	}
 
 	public void displayAllProducts() {
-		Collections.sort(productList, new Comparator<Product>(){
-			public int compare(Product a, Product b) {
-				return (int)(b.getTotalProfitPercent() - a.getTotalProfitPercent());
-			}
-		});
+		// Lambda function to sort by profit percent
+		productList.sort((a, b) -> (int) (b.getTotalProfitPercent() - a.getTotalProfitPercent()));
 		for(int i=0; i<productList.size(); i++) {
 			System.out.println(productList.get(i).toString());;
 		}

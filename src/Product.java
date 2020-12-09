@@ -1,5 +1,4 @@
 import java.io.Serializable;
-import java.text.DecimalFormat;
 
 public class Product implements Serializable {
     private String productName;
