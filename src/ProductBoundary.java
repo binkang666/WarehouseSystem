@@ -18,7 +18,8 @@ public class ProductBoundary {
                 2. Show all products
                 3. Show products that have n or fewer in the warehouse
                 4. Replenish Stock
-                5. Return to main menu"""
+                5. Remove Product
+                6. Return to main menu"""
         );
 
         int choice2 = input.nextInt();
@@ -128,7 +129,31 @@ public class ProductBoundary {
                     sop("No warehouses available!");
                 }
             }
-        }
+            case 5 ->{
+            	//cannot enter quantity less than actual quantity that product has
+            	Scanner scanner = new Scanner(System.in);
+            	sop("What product you want to remove?: ");
+            	String product = scanner.nextLine();
+            	if(Warehouse.getProductList().contains(product)) {
+            		sop("How many quantity you want to remove?: ");
+            		int quantity = scanner.nextInt();
+            		for (Product p : Warehouse.getProductList()) {
+            			if(quantity > p.getQuantity()) {
+            				sop("Unavailable quantity");
+            			}
+            			else {
+            				warehouseController.removeProduct(product, quantity);
+                    		sop("removed..");
+            			}
+            		}
+            	}
+            	else {
+            		sop("Product not found");
+            	}
+            }
+            default ->{
+            	sop("Going back");
+            }
     }
         private static void sop (String s){
             System.out.println(s);
