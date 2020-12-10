@@ -70,8 +70,8 @@ public class Product implements Serializable {
     			"\nSelling price: "+sellingPrice+
     			"\nQuantity: "+ quantity+
     			"\nQuantity Sold: "+quantitySold+
-    			"\nTotal sales: "+getTotalSales()+
-    			"\nTotal cost: "+getTotalCost()+
+    			"\nTotal sales: "+ft.format(getTotalSales())+
+    			"\nTotal cost: "+ft.format(getTotalCost())+
     			"\nTotal profit: "+ft.format(getTotalProfit())+
     			"\nTotal Profit Percent: "+ft.format(getTotalProfitPercent())+"\n";
     }
