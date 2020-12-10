@@ -20,7 +20,8 @@ public class CustomerBoundary {
                             1. Add customers
                             2. Show all customers
                             3. Search for Specific customer
-                            4. Return to main menu"""
+                            4. Change Status
+                            5. Return to main menu"""
         );
         int choice_customer = input.nextInt();
         switch (choice_customer){
@@ -102,9 +103,68 @@ public class CustomerBoundary {
                     int id = input.nextInt();
                     customerController.searchCustomerID(id);
                 }
+                else{
+                    sop("NO customer with given ID exist");
+                }
             }
 
-            case 4 -> {Main.showMainUI();} //OK
+            case 4 ->{
+                sop("changing status");
+                if (new File("Customer.txt").exists()) {
+                    customerController = new CustomerController();
+                    customerController.getCustomers();
+                    customerController.displayCustomers();
+                    sop("\n*********************************************");
+                    System.out.println("Enter the customer ID number you want to change status");
+                    int key;
+                    try{
+                        key = input.nextInt();}
+                    catch (Exception e){
+                        sop("Please enter an correct ID (numbers only) !");
+                        return;
+                    }
+                    Customer customer = null;
+                    try {
+                        for (Customer c: Main.customers.values()) {
+                            if (Main.customers.containsKey(key)) {
+                                customer = c;
+                                customer = Main.customers.get(key);
+                            }
+                        }
+                    }
+                    catch (NullPointerException n) {
+                        System.out.println("Customer doesn't exist!");
+                        break;
+                    }
+                    sop("Enter Y for changing status to active and N for changing status to inactive");
+                    input.nextLine();
+                    String check = input.nextLine().toUpperCase();
+                    switch (check){
+                        case "N" -> {
+                            assert customer != null;
+                            customer.setStatus(false);
+                            customerController.changeStatusToFalse(customer);
+                            sop("the customer is now set to inactive");
+                        }
+                        case "Y" -> {
+                            assert customer != null;
+                            customer.setStatus(true);
+                            customerController.changeStatusToTrue(customer);
+                            sop("the customer is now set to active");
+                        }
+                        default -> {
+                            sop("choose Y or N");
+                        }
+                    }
+
+                }
+                else{
+                    sop("currently the store do not have any customer");
+                }
+
+            }
+
+            case 5 -> {Main.showMainUI();} //OK
             default -> sop("Please choose number from 1 - 3");
         }
     }
