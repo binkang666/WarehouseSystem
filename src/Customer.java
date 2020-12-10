@@ -35,6 +35,7 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
         return InvoiceAssociated;
     }
 
+
     public void displayInvoiceAssociated() {
         for(Invoice invoice: InvoiceAssociated.values()){
             System.out.println(invoice);
@@ -70,6 +71,26 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
     public void setSalesTax(BigDecimal salesTax) { this.salesTax = salesTax; }
 
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public void setInvoiceAssociated(HashMap<Integer, Invoice> invoiceAssociated) {
+        InvoiceAssociated = invoiceAssociated;
+    }
+
+    public LocalDate getLastOrderDate() {
+        return lastOrderDate;
+    }
+
+    public void setLastOrderDate(LocalDate lastOrderDate) {
+        this.lastOrderDate = lastOrderDate;
+    }
+
     @Override
     public String getType() {
         return "Customer";
@@ -78,7 +99,7 @@ public class Customer extends Person implements Comparable<Customer>, Serializab
     public String toString()
     {
         return "Customer ID: " + getCustomerID() + ", Type: "+ getType() + ", " + super.toString() +
-                ", Status: " + isActive()  + ", Sales Tax: " + getSalesTax() + "%";
+                ", Status: " + getStatus()  + ", Sales Tax: " + getSalesTax() + "%";
     }
 
     @Override
