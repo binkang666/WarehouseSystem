@@ -73,9 +73,10 @@ public class InvoiceBoundary {
 
                     // Get products user wants
                     ArrayList<Product> products = new ArrayList<>();
-                    System.out.println("Type in the name of the item you want to add");
                     // TODO: Exit if there are no products in stock...
+                    System.out.println("**********************In-Stock Products*********************");
                     warehouseController.displayInStockProducts();
+                    System.out.println("Type in the name of the item you want to add");
                     String productName = sc.next();
                     // If user doesn't add products, don't allow them to continue
                     while ((products.size() <= 0) || !productName.equals("-1")) {
@@ -97,7 +98,9 @@ public class InvoiceBoundary {
                         else {
                             System.out.println("Product doesn't exist!");
                         }
+                        // Get warehouses again
                         warehouseController.getWarehouses();
+                        System.out.println("");
                         warehouseController.displayInStockProducts();
                         System.out.println("Product added, type in another product name or -1 to finish adding items");
                         productName = sc.next();
