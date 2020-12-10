@@ -1,10 +1,8 @@
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.*;
 
 public class WarehouseController {
     WarehouseBoundary warehouseBoundary = new WarehouseBoundary(this);
-    Warehouse warehouse;
 
     public void writeWarehouse(String name, String address, String city, String state, String zip, String phoneNumber)throws IOException {
         Main.warehouses.put(name, new Warehouse(name, address, city, state,zip,phoneNumber));
