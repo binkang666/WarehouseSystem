@@ -71,4 +71,18 @@ public class CustomerController {
             System.out.println("No customer with given ID was found");
         }
     }
+
+    public void changeStatusToFalse(Customer c) throws IOException {
+        c.setStatus(false);
+        if(Main.customers.containsKey(c.getCustomerID())){
+        modifyCustomer(c);
+        }
+    }
+
+    public void changeStatusToTrue(Customer c) throws IOException {
+        c.setStatus(true);
+        if(Main.customers.containsKey(c.getCustomerID())){
+            modifyCustomer(c);
+        }
+    }
 }

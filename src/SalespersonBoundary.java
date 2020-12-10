@@ -20,7 +20,8 @@ public class SalespersonBoundary {
                             1. Add new Salesperson
                             2. Check current Salesperson Performance
                             3. Search ID for specific Salesperson information
-                            4. return to main menu""");
+                            4. Set commission rate for salesperson
+                            5. return to main menu""");
         int sp_choice = input.nextInt();
         switch (sp_choice){
             case 1 -> {
@@ -135,7 +136,46 @@ public class SalespersonBoundary {
                 }
 
             }
+
             case 4 -> {
+                sop("setting commission rate");
+                if (new File("Salesperson.txt").exists()) {
+                    salespersonController = new SalespersonController();
+                    salespersonController.getSalespersons();
+                    salespersonController.displaySalespersons();
+                    sop("\n*********************************************");
+                    System.out.println("Enter the salesperson ID number you want to set commission rate");
+                    int key;
+                    try{
+                        key = input.nextInt();}
+                    catch (Exception e){
+                        sop("Please enter an correct ID (numbers only) !");
+                        return;
+                    }
+                    Salesperson salesperson = null;
+                    try {
+                        for (Salesperson sp: Main.salespeople.values()) {
+                            if (Main.salespeople.containsKey(key)) {
+                                salesperson = sp;
+                                salesperson = Main.salespeople.get(key);
+                            }
+                        }
+                    }
+                    catch (NullPointerException n) {
+                        System.out.println("Salesperson doesn't exist!");
+                        break;
+                    }
+
+                    assert salesperson !=null;
+                    salespersonController.setRate(salesperson);
+                    sop("the commission rate has been applied to the salesperson");
+                }
+                else{
+                    sop("currently the store do not have any salesperson");
+                }
+
+            }
+            case 5 -> {
                 Main.showMainUI();
             }
             default -> sop("Please choose number from 1 - 4");

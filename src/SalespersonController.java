@@ -3,6 +3,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class SalespersonController {
     SalespersonBoundary salespersonBoundary = new SalespersonBoundary(this);
@@ -65,7 +66,7 @@ public class SalespersonController {
 
     public void searchSalespersonID(int id)  {
         try{
-        System.out.println(Main.salespeople.get(id).toString());}
+            System.out.println(Main.salespeople.get(id).toString());}
         catch (Exception e){
             System.out.println("No salesperson with given ID was found");
         }
@@ -77,5 +78,14 @@ public class SalespersonController {
                 ((total.multiply((salesperson.getCommissionRate().multiply(BigDecimal.valueOf(.01)))))).setScale(2, RoundingMode.HALF_UP));
     }
 
+    public void setRate(Salesperson sp) throws IOException {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the commission rate for the salesperson");
+        BigDecimal choice = input.nextBigDecimal();
+        sp.setCommissionRate(choice);
+        if(Main.salespeople.containsKey(sp.getSalespersonID())){
+            modifySalespersons(sp);
+        }
+    }
 
 }
