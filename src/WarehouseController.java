@@ -1,8 +1,6 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class WarehouseController {
     WarehouseBoundary warehouseBoundary = new WarehouseBoundary(this);
@@ -80,31 +78,45 @@ public class WarehouseController {
 
     public void displayInStockProducts() {
         for (Warehouse w : Main.warehouses.values()) {
+            System.out.println("Warehouse Name: " + w.getName());
             for (Product p : w.getProductList()) {
                 if (p.getQuantity() > 0) {
-                    System.out.println(p.toString());
+                    System.out.println(p.getProductName() + ", Quantity: " + p.getQuantity() + " Selling Price: $" + p.getSellingPrice());
                 }
             }
         }
     }
-    // TODO: make sure that you cant input a higher quantity of items that are available in all warehouses
-    // TODO: i.e if all warehouses have 30 wire and the user wants 40, prevent this.
+
     public Product removeProduct(String name, int quantity) throws IOException {
+        boolean flag = false;
         Product product = null;
         for (Warehouse w : Main.warehouses.values()) {
-            for (Product p : w.getProductList()) {
-                if (p.getProductName().equals(name)) {
-                    product = p;
-                    p.setQuantity(p.getQuantity() - quantity);
-                    // If a warehouse's quantity of the product falls below 0, then that warehouse didn't have enough of it but you can still
-                    // get more from other warehouses, so take the absolute value of how much the quantity fell below 0 and keep searching through other warehouses.
-                    if (p.getQuantity() < 0) {
-                        quantity = Math.abs(p.getQuantity());
-                        // Set the stock in this warehouse to 0
-                        p.setQuantity(0);
+            // Flag is true when you don't need to search anymore warehouses for the quantity of a given item
+            if (!flag) {
+                for (Product p : w.getProductList()) {
+                    if (p.getProductName().equals(name)) {
+                        product = p;
+                        int temp = p.getQuantity();
+                        p.setQuantity(p.getQuantity() - quantity);
+                        // If a warehouse's quantity of the product falls below 0, then that warehouse didn't have enough of it but you can still
+                        // get more from other warehouses, so take the absolute value of how much the quantity fell below 0 and keep searching through other warehouses.
+                        if (p.getQuantity() < 0) {
+                            p.setQuantitySold(temp + p.getQuantity()); // Temp holds the original quantity, p.getQuantity holds a neg value, add that negative val to it so this warehouse doesn't sell more than it has
+                            quantity = Math.abs(p.getQuantity());
+                            // Set the stock in this warehouse to 0
+                            p.setQuantity(0);
+                            // modify the product list in the warehouse
+                            modifyWarehouse(w);
+                        }
+                        // If you make it here, you found the items and were able to get all the quantity within the current warehouse, so stop searching
+                        else {
+
+                            p.setQuantitySold(quantity);
+                            flag = true;
+                            modifyWarehouse(w);
+                            break;
+                        }
                     }
-                    // modify the product list in the warehouse
-                    modifyWarehouse(w);
                 }
             }
         }

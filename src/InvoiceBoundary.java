@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class InvoiceBoundary {
@@ -70,7 +71,7 @@ public class InvoiceBoundary {
                     // Buffer flush
                     sc.nextLine();
 
-                    //TODO: LOOK AT PRODUCTS IN EACH WAREHOUSE AND PRINT THEM
+                    // Get products user wants
                     ArrayList<Product> products = new ArrayList<>();
                     System.out.println("Type in the name of the item you want to add");
                     // TODO: Exit if there are no products in stock...
@@ -80,10 +81,6 @@ public class InvoiceBoundary {
                     while ((products.size() <= 0) || !productName.equals("-1")) {
                         if (productName.equals("-1"))
                             break;
-//
-//                        if (productName.equals("-1") && products.size() > 0) {
-//                            break;
-//                        }
 
                         // search through warehouses to see if item exists in them
                         if (warehouseController.productExists(productName)) {
@@ -100,6 +97,7 @@ public class InvoiceBoundary {
                         else {
                             System.out.println("Product doesn't exist!");
                         }
+                        warehouseController.getWarehouses();
                         warehouseController.displayInStockProducts();
                         System.out.println("Product added, type in another product name or -1 to finish adding items");
                         productName = sc.next();
@@ -184,7 +182,6 @@ public class InvoiceBoundary {
 
                     System.out.println("Enter amount to pay off: ");
                     BigDecimal amount = invoiceController.getBigDecimal(sc);
-
                     // removed set scale since amount and remaining total should always be setscale 2
                     while ((amount.compareTo(invoice.getRemainingTotal()) > 0)
                             && !(invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0)) {
@@ -197,13 +194,14 @@ public class InvoiceBoundary {
                     // Check if the invoice has been fully payed off
                     // if remaining total is less than .01, assume its closed
                     if (invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0) {
+                        //TODO:REMOVE
                         System.out.println("Invoice has been closed.");
-                        invoiceController.updateRemainingTotal(invoice, BigDecimal.ZERO);
                         invoiceController.closeInvoice(invoice);
+
+
                         // Apply early discount, if applicable
                         invoiceController.applyEarlyFinance(invoice);
                     }
-
                     // Overwrite the existing invoice in the customers hashmap
                     invoiceController.modifyInvoice(invoice, customer);
 

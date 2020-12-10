@@ -10,15 +10,14 @@ public class WarehouseBoundary {
     }
 
     public void showWarehouseUI () throws IOException, ClassNotFoundException {
-        //TODO: delete, was used to see if the warehouse and its products are persistent.
         Scanner input = new Scanner(System.in);
 
         if (new File("Warehouse.txt").exists()) {
             warehouseController.getWarehouses();
         }
-        for (Warehouse w : Main.warehouses.values()) {
-            System.out.println(w.toString());
-        }
+//        for (Warehouse w : Main.warehouses.values()) {
+//            System.out.println(w.toString());
+//        }
 
         sop("Warehouse");
         sop("""

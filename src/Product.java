@@ -1,8 +1,10 @@
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 public class Product implements Serializable {
     private String productName;
-    private double costPrice, sellingPrice;
+    private double costPrice;
+    private double sellingPrice;
     private int quantitySold;
     private int quantity;
     // Remove quantity and quantitySold from constructor because a product should have 0 quantity and should have been
@@ -28,22 +30,33 @@ public class Product implements Serializable {
         return productName;
     }
     public int getQuantity() {
-    	return quantity-quantitySold;
+    	return quantity;
     }
-    public double getTotalProfitPercent() {
-    	return (getTotalProfit() / (sellingPrice * quantitySold)) * 100;
+    //
+    public Double getTotalProfitPercent() {
+
+         return (getTotalProfit() / (sellingPrice * (quantitySold))) * 100;
+
     }
     public double getTotalCost() {
     	return costPrice * quantity;
     }
+
     public double getTotalProfit() {
-    	return (sellingPrice * quantitySold) - (costPrice * quantitySold);
+         return (sellingPrice * quantitySold) - (costPrice * quantitySold);
     }
     public double getTotalSales() {
-    	return quantitySold * sellingPrice;
+        return quantitySold * sellingPrice;
     }
-   
-    
+
+    public int getQuantitySold() {
+        return quantitySold;
+    }
+
+    public void setQuantitySold(int quantitySold) {
+        this.quantitySold = quantitySold;
+    }
+
     //setter
     public void setQuantity(int q) {
     	quantity = q;
@@ -51,13 +64,16 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "productName='" + productName + '\'' +
-                ", costPrice=" + costPrice +
-                ", sellingPrice=" + sellingPrice +
-                ", quantitySold=" + quantitySold +
-                ", quantity=" + quantity +
-                '}';
+    	DecimalFormat ft = new DecimalFormat("#.##");
+    	return "\n\nProduct name: "+ productName +
+    			"\nCost price: "+costPrice +
+    			"\nSelling price: "+sellingPrice+
+    			"\nQuantity: "+ quantity+
+    			"\nQuantity Sold: "+quantitySold+
+    			"\nTotal sales: "+getTotalSales()+
+    			"\nTotal cost: "+getTotalCost()+
+    			"\nTotal profit: "+ft.format(getTotalProfit())+
+    			"\nTotal Profit Percent: "+ft.format(getTotalProfitPercent())+"\n";
     }
 
     //TODO: have toString replace this method

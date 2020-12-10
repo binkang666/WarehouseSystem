@@ -47,8 +47,6 @@ public class Invoice implements Serializable {
         df.setRoundingMode(RoundingMode.DOWN);
         this.salesTax = salesTax;
         for (Product p : products) {
-            System.out.println(totalCharge);
-            // totalcharge += (p.sellingprice * p.quantity)
             totalCharge = totalCharge.add((BigDecimal.valueOf(p.getSellingPrice()).multiply(BigDecimal.valueOf(p.getQuantity())))).setScale(2, RoundingMode.HALF_UP);
         }
         status = true; // All invoices start as open

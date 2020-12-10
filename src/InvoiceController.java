@@ -42,7 +42,13 @@ public class InvoiceController {
     }
 
     public void updateRemainingTotal(Invoice invoice, BigDecimal amount) {
-        invoice.setRemainingTotal(invoice.getRemainingTotal().subtract(amount));
+        if (invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0) {
+            invoice.setRemainingTotal(BigDecimal.ZERO);
+        }
+        else {
+            invoice.setRemainingTotal(invoice.getRemainingTotal().subtract(amount));
+
+        }
     }
 
     public void closeInvoice(Invoice invoice) {
