@@ -7,11 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Invoice implements Serializable {
-    private Calendar cal1 = Calendar.getInstance();
-    private Calendar cal2 = Calendar.getInstance();
     private final DecimalFormat df = new DecimalFormat("#.##");
     private String cName;
-    //TODO: ADD salesperson
     private String sName;
     private ArrayList<Product> products;
     private int invoiceNumber;
@@ -40,21 +37,29 @@ public class Invoice implements Serializable {
         this.sName = sName;
         this.shippingAddress = shippingAddress;
         this.deliveryMethod = deliveryMethod;
+        this.salesTax = salesTax;
+        this.deliverCharge = deliverCharge;
+
+        Calendar cal1 = Calendar.getInstance(); // For order date
         orderDate = cal1.getTime();
+
+        Calendar cal2 = Calendar.getInstance(); // For late date
         cal2.setTime(orderDate);
         cal2.add(Calendar.DAY_OF_MONTH, 30);
         currentLateDate = cal2.getTime();
-        df.setRoundingMode(RoundingMode.DOWN);
-        this.salesTax = salesTax;
+
+        status = true; // All invoices start as open
+
+        // Summation of products product selling price
         for (Product p : products) {
             totalCharge = totalCharge.add((BigDecimal.valueOf(p.getSellingPrice()).multiply(BigDecimal.valueOf(p.getQuantity())))).setScale(2, RoundingMode.HALF_UP);
         }
+
         status = true; // All invoices start as open
-        // maybe create methods to apply tax and delivery charge since salespersons don't get payed based on tax
-        this.deliverCharge = deliverCharge;
         // (totalCharge + ((salesTax * .01) * totalCharge)) + deliverCharge
         finalTotal = totalCharge.add((salesTax.multiply(BigDecimal.valueOf(.01))).multiply(totalCharge)).add(deliverCharge).setScale(2, RoundingMode.HALF_UP);
         remainingTotal = finalTotal; // Amount that's modified as user pays off the invoice
+        df.setRoundingMode(RoundingMode.DOWN);
     }
 
     @Override
@@ -82,6 +87,7 @@ public class Invoice implements Serializable {
         return sb.toString();
     }
 
+    // Getters
     public Integer getInvoiceNumber() {
         return invoiceNumber;
     }
@@ -126,36 +132,16 @@ public class Invoice implements Serializable {
         return status;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
     public Date getCurrentLateDate() {
         return currentLateDate;
-    }
-
-    public void setCurrentLateDate(Date currentLateDate) {
-        this.currentLateDate = currentLateDate;
-    }
-
-    public void setFinanceLateCharge(double financeLateCharge) {
-        this.financeLateCharge = financeLateCharge;
-    }
-
-    public double getFinanceLateCharge() {
-        return financeLateCharge;
     }
 
     public BigDecimal getRemainingTotal() {
         return remainingTotal;
     }
 
-    public void setRemainingTotal(BigDecimal remainingTotal) {
-        this.remainingTotal = remainingTotal;
-    }
-
-    public void setFinalTotal(BigDecimal finalTotal) {
-        this.finalTotal = finalTotal;
+    public double getFinanceLateCharge() {
+        return financeLateCharge;
     }
 
     public double getFinanceEarlyCharge() {
@@ -164,6 +150,27 @@ public class Invoice implements Serializable {
 
     public String getsName() {
         return sName;
+    }
+
+    // Setters
+    public void setCurrentLateDate(Date currentLateDate) {
+        this.currentLateDate = currentLateDate;
+    }
+
+    public void setFinanceLateCharge(double financeLateCharge) {
+        this.financeLateCharge = financeLateCharge;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public void setRemainingTotal(BigDecimal remainingTotal) {
+        this.remainingTotal = remainingTotal;
+    }
+
+    public void setFinalTotal(BigDecimal finalTotal) {
+        this.finalTotal = finalTotal;
     }
 
     public void setFinanceEarlyCharge(double financeEarlyCharge) {

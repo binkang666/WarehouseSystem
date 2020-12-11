@@ -37,18 +37,27 @@ public class WarehouseController {
         o.close();
     }
 
-    public void showProductsUnder(Warehouse w, int n) {
+    public void showProductsUnder(Warehouse w, int n) throws IOException {
         List<Product> products = new ArrayList<>();
         for (int i=0; i<w.getProductList().size(); i++) {
             if (w.getProductList().get(i).getQuantity()<=n) {
-                products.add(w.getProductList().get(i));
+                Product p = w.getProductList().get(i);
+                products.add(p);
+                if (n <= 5) {
+                    Scanner sc = new Scanner(System.in);
+                    System.out.println(p.getProductName() + " has " + p.getQuantity() + " stock remaining. Enter an amount to replenish it to:");
+                    int replenish = sc.nextInt();
+                    replenishStock(w, p.getProductName(), replenish);
+                    WarehouseController warehouseController = new WarehouseController();
+                    warehouseController.modifyWarehouse(w);
+                }
             }
         }
         // Lambda function to sort by quantity
         Collections.sort(products, (a, b) -> a.getQuantity() - b.getQuantity());
+        System.out.println("Showing products under " + n + " stock (including now replenished items)");
         for (Product product : products) {
             System.out.println(product.toString());
-            ;
         }
     }
 
@@ -61,7 +70,8 @@ public class WarehouseController {
     public void replenishStock(Warehouse w, String product, int quantity) {
         for (int i=0; i<w.getProductList().size(); i++) {
             if (product.equals(w.getProductList().get(i).getProductName())) {
-                w.getProductList().get(i).setQuantity(quantity);
+                Product p = w.getProductList().get(i);
+                p.setQuantity(p.getQuantity() + quantity);
             }
         }
     }
@@ -74,15 +84,20 @@ public class WarehouseController {
         }
     }
 
-    public void displayInStockProducts() {
+    public boolean displayInStockProducts() {
+        boolean flag = false;
         for (Warehouse w : Main.warehouses.values()) {
-            System.out.println("Warehouse Name: " + w.getName());
+            System.out.println("Warehouse " + w.getName() + "'s stock:");
             for (Product p : w.getProductList()) {
                 if (p.getQuantity() > 0) {
-                    System.out.println(p.getProductName() + ", Quantity: " + p.getQuantity() + " Selling Price: $" + p.getSellingPrice());
+                    flag = true;
+                    System.out.println(p.getProductName() + ", Quantity: " + p.getQuantity() + ", Selling Price: $"
+                            + p.getSellingPrice() + ", Cost Price: $" + p.getCostPrice());
                 }
             }
+            System.out.println("");
         }
+        return flag;
     }
 
     public Product removeProduct(String name, int quantity) throws IOException {
@@ -108,8 +123,7 @@ public class WarehouseController {
                         }
                         // If you make it here, you found the items and were able to get all the quantity within the current warehouse, so stop searching
                         else {
-
-                            p.setQuantitySold(quantity);
+                            p.setQuantitySold(p.getQuantitySold() + quantity);
                             flag = true;
                             modifyWarehouse(w);
                             break;
@@ -143,15 +157,6 @@ public class WarehouseController {
             }
         }
         return quantity;
-    }
-
-
-    public void displayAllWarehouseProducts() {
-        for (Warehouse w : Main.warehouses.values()) {
-            for (Product p : w.getProductList()) {
-                System.out.println(p.toString());
-            }
-        }
     }
 
 

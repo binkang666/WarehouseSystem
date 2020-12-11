@@ -29,13 +29,11 @@ public class InvoiceBoundary {
         int input = sc.nextInt();
 
         // Apply 30 day late fees to any applicable invoices
-        // Can i leave this here and remove every other getCustomers call?
         if (new File("Customer.txt").exists()) {
             customerController = new CustomerController();
             customerController.getCustomers();
         }
         invoiceController.applyLateFinance();
-
 
         switch (input) {
             // OPEN INVOICE
@@ -45,72 +43,76 @@ public class InvoiceBoundary {
                     customerController = new CustomerController();
                     salespersonController = new SalespersonController();
                     warehouseController = new WarehouseController();
-                    customerController.getCustomers();
                     warehouseController.getWarehouses();
                     salespersonController.getSalespersons();
 
 
-                    System.out.println("*********************************************");
+                    System.out.println("**********************Employees*********************");
                     customerController.displayCustomers();
-                    System.out.println("Enter the customer ID you want to open an invoice for customer ID");
+                    System.out.println("\nEnter the customer ID you want to open an invoice for customer ID");
 
                     int key = invoiceController.getValidInt(sc);
-
                     Customer customer;
                     // Check to see of customer exists return to main menu if they don't.
                     if (!Main.customers.containsKey(key)) {
                         System.out.println("Customer doesn't exist!");
                         break;
                     }
+
                     customer = Main.customers.get(key);
                     // Check if the customer has an open invoice
                     if (invoiceController.hasOpenInvoice(customer)) {
                         System.out.println("Customer already has an open invoice!");
                         break;
                     }
+
                     // Buffer flush
                     sc.nextLine();
 
                     // Get products user wants
                     ArrayList<Product> products = new ArrayList<>();
-                    // TODO: Exit if there are no products in stock...
                     System.out.println("**********************In-Stock Products*********************");
-                    warehouseController.displayInStockProducts();
-                    System.out.println("Type in the name of the item you want to add");
-                    String productName = sc.next();
-                    // If user doesn't add products, don't allow them to continue
-                    while ((products.size() <= 0) || !productName.equals("-1")) {
-                        if (productName.equals("-1"))
-                            break;
+                    boolean stockExists = warehouseController.displayInStockProducts();
+                    if (stockExists) {
+                        System.out.println("Type in the name of the item you want to add");
+                        String productName = sc.next();
+                        // If user doesn't add products, don't allow them to continue
+                        while ((products.size() <= 0) || !productName.equals("-1")) {
+                            // search through warehouses to see if item exists in them
+                            if (warehouseController.productExists(productName)) {
+                                int quantity;
+                                int productQuantity = warehouseController.getQuantityForAllWarehouses(productName);
+                                // Make sure product actually has quantity
+                                if (productQuantity > 0) {
+                                    do {
+                                        System.out.println("Enter quantity");
+                                        quantity = sc.nextInt();
+                                    } while (quantity > productQuantity);
 
-                        // search through warehouses to see if item exists in them
-                        if (warehouseController.productExists(productName)) {
-                            int quantity;
-                            do {
-                                System.out.println("Enter quantity");
-                                quantity = sc.nextInt();
-                            } while (quantity > warehouseController.getQuantityForAllWarehouses(productName));
+                                    // REMOVE
+                                    Product p = warehouseController.removeProduct(productName, quantity);
+                                    p.setQuantity(quantity);
+                                    products.add(p);
 
-                            Product p = warehouseController.removeProduct(productName, quantity);
-                            p.setQuantity(quantity);
-                            products.add(p);
+                                    // Get warehouses again
+                                    System.out.println("**********************In-Stock Products*********************");
+                                    warehouseController.getWarehouses();
+                                    warehouseController.displayInStockProducts();
+                                    System.out.println("Product added, type in another product name or -1 to finish adding items");
+                                } else {
+                                    System.out.println("Product doesn't exist! Re-enter the exact name.");
+                                }
+                                productName = sc.next();
+                            }
                         }
-                        else {
-                            System.out.println("Product doesn't exist!");
-                        }
-                        // Get warehouses again
-                        warehouseController.getWarehouses();
-                        System.out.println("");
-                        warehouseController.displayInStockProducts();
-                        System.out.println("Product added, type in another product name or -1 to finish adding items");
-                        productName = sc.next();
                     }
-
-
-
-
-                    System.out.println("Enter the ID of the salesperson who is making this transaction:");
+                    else {
+                        System.out.println("No products have any stock! To add stock, select the \"Product\" from the main menu.");
+                        break;
+                    }
+                    System.out.println("**********************Current Employees*********************");
                     salespersonController.displaySalespersons();
+                    System.out.println("\nEnter the ID of the salesperson who is making this transaction:");
                     key = invoiceController.getValidInt(sc);
                     Salesperson salesperson;
                     if (!Main.customers.containsKey(key)) {
@@ -156,23 +158,21 @@ public class InvoiceBoundary {
             case 2 -> {
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
-                    customerController.getCustomers();
 
                     System.out.println("*********************************************");
-                    System.out.println("Enter the invoice number you want to pay off: ");
                     ArrayList<Invoice> open = invoiceController.getOpenInvoices();
                     if (open.size() == 0) {
                         System.out.println("No open invoices exist!");
                         break;
                     }
                     invoiceController.showOpenInvoices(open);
-
+                    System.out.println("Enter the invoice number you want to pay off: ");
                     int key = invoiceController.getValidInt(sc);
                     Invoice invoice = null;
                     Customer customer = null;
                     try {
                         for (Customer c: Main.customers.values()) {
-                            if (c.getInvoiceAssociated().containsKey(key)) {
+                            if (c.getInvoiceAssociated().containsKey(key) && (c.getInvoiceAssociated().get(key).getStatus())) {
                                 customer = c;
                                 invoice = c.getInvoiceAssociated().get(key);
                             }
@@ -219,7 +219,6 @@ public class InvoiceBoundary {
                 System.out.println("**********************Open Invoices*********************");
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
-                    customerController.getCustomers();
                     ArrayList<Invoice> open = invoiceController.getOpenInvoices();
                     if (open.size() == 0) {
                         System.out.println("No open invoices exist!");
@@ -235,7 +234,6 @@ public class InvoiceBoundary {
                 System.out.println("**********************Closed Invoices*********************");
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
-                    customerController.getCustomers();
                     ArrayList<Invoice> closed = invoiceController.getClosedInvoices();
                     if (closed.size() == 0) {
                         System.out.println("No closed invoices exist!");
@@ -251,12 +249,10 @@ public class InvoiceBoundary {
                 System.out.println("**********************All Invoices*********************");
                 if (new File("Customer.txt").exists()) {
                     customerController = new CustomerController();
-                    customerController.getCustomers();
                     invoiceController.showAllInvoices();
                 }
                 else System.out.println("No customers exist!");
             }
-            default -> System.out.println("Going back");
         }
     }
 }

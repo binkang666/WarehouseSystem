@@ -3,12 +3,12 @@ import java.util.*;
 
 
 public class Main {
-
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 		// LOGIN
 		LoginController loginController = new LoginController();
 		loginController.loginBoundary.showLoginUI();
+
 		// Only reached if user logs in
 		showMainUI();
 		int choice;

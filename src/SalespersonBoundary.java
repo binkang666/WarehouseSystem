@@ -92,7 +92,7 @@ public class SalespersonBoundary {
 
 
                 sop("Enter commission rate for new salesperson");
-                BigDecimal rate = BigDecimal.ZERO;
+                BigDecimal rate;
                 try{
                     rate = input.nextBigDecimal();}
                 catch (Exception e){
@@ -113,15 +113,14 @@ public class SalespersonBoundary {
             }
 
             case 2 -> {
-                sop("\n*********************************************");
-                sop("display all salesperson performance");
+                sop("**********************All Salesperson Performance's*********************");
                 if (new File("Salesperson.txt").exists()) {
                     // Retrieve salespeople from file
                     salespersonController.getSalespersons();
                     salespersonController.displaySalespersons();
                 }
                 else {
-                    sop("No salesperson exist!");
+                    sop("No salespersons exist!");
                 }
             }
 
@@ -138,7 +137,7 @@ public class SalespersonBoundary {
             }
 
             case 4 -> {
-                sop("setting commission rate");
+                sop("Setting Commission Rate");
                 if (new File("Salesperson.txt").exists()) {
                     salespersonController = new SalespersonController();
                     salespersonController.getSalespersons();
@@ -149,14 +148,13 @@ public class SalespersonBoundary {
                     try{
                         key = input.nextInt();}
                     catch (Exception e){
-                        sop("Please enter an correct ID (numbers only) !");
+                        sop("Please enter an correct ID (numbers only)!");
                         return;
                     }
                     Salesperson salesperson = null;
                     try {
                         for (Salesperson sp: Main.salespeople.values()) {
                             if (Main.salespeople.containsKey(key)) {
-                                salesperson = sp;
                                 salesperson = Main.salespeople.get(key);
                             }
                         }
@@ -175,10 +173,7 @@ public class SalespersonBoundary {
                 }
 
             }
-            case 5 -> {
-                Main.showMainUI();
-            }
-            default -> sop("Please choose number from 1 - 4");
+            case 5 -> Main.showMainUI();
         }
     }
     private static void sop(String s){

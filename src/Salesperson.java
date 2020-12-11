@@ -2,21 +2,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Salesperson extends Person implements Comparable<Salesperson> {
-    private int salespersonID;
+    private final int salespersonID;
     private BigDecimal totalCommissionEarned;
     private BigDecimal totalSales;
     private LocalDate startDate;
     private BigDecimal commissionRate;
-
-//    public Salesperson(){
-//        this.totalCommissionEarned = 0;
-//        this.totalSales = 0;
-//        this.startDate = LocalDate.now();
-//        this.commissionRate = 0;
-//        this.salespersonID = 0;
-//
-//    }
-
 
     public Salesperson(String firstName, String lastName, String phone, String address, LocalDate startDate,
                        BigDecimal commissionRate, int salespersonID) {
@@ -49,11 +39,8 @@ public class Salesperson extends Person implements Comparable<Salesperson> {
     //setter - Controller
     public void setTotalCommissionEarned(BigDecimal totalCommissionEarned) { this.totalCommissionEarned = totalCommissionEarned; }
     public void setTotalSales(BigDecimal totalSales) { this.totalSales = totalSales; }
-    public void setStartDate(int yy, int mm, int dd) {
-        this.startDate = LocalDate.of(yy,mm,dd); }
+
     public void setCommissionRate(BigDecimal commissionRate) { this.commissionRate = commissionRate; }
-
-
 
     @Override
     public int compareTo(Salesperson o) {

@@ -15,9 +15,6 @@ public class WarehouseBoundary {
         if (new File("Warehouse.txt").exists()) {
             warehouseController.getWarehouses();
         }
-//        for (Warehouse w : Main.warehouses.values()) {
-//            System.out.println(w.toString());
-//        }
 
         sop("Warehouse");
         sop("""
@@ -35,15 +32,15 @@ public class WarehouseBoundary {
                 Scanner scanner = new Scanner(System.in);
                 sop("Adding warehouse\n");
                 Warehouse wh;
-                sop("name: ");
+                sop("Name of warehouse: ");
                 String name = scanner.nextLine();
-                sop("address: ");
+                sop("Address: ");
                 String address = scanner.nextLine();
-                sop("city: ");
+                sop("City: ");
                 String city = scanner.nextLine();
-                sop("state: ");
+                sop("State: ");
                 String state = scanner.nextLine();
-                sop("zip: ");
+                sop("Zip: ");
                 String zip = scanner.nextLine();
                 sop("Phone number: ");
                 String phoneNumber = scanner.nextLine();
@@ -57,7 +54,7 @@ public class WarehouseBoundary {
                     warehouseController.getWarehouses();
 
                     Scanner scanner = new Scanner(System.in);
-                    sop(" Enter warehouse's name: ");
+                    sop("Enter warehouse's name: ");
                     String warehouse = scanner.nextLine();
                     if (Main.warehouses.containsKey(warehouse)) {
                         Warehouse foundWareHouse = Main.warehouses.get(warehouse);
@@ -71,7 +68,6 @@ public class WarehouseBoundary {
                     sop("No warehouses exist!");
                 }
             }
-            case 3 -> System.out.println("Going back");
         }
     }
     private static void sop(String s){

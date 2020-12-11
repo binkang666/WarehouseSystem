@@ -127,7 +127,6 @@ public class CustomerBoundary {
                     try {
                         for (Customer c: Main.customers.values()) {
                             if (Main.customers.containsKey(key)) {
-                                customer = c;
                                 customer = Main.customers.get(key);
                             }
                         }
@@ -144,13 +143,13 @@ public class CustomerBoundary {
                             assert customer != null;
                             customer.setStatus(false);
                             customerController.changeStatusToFalse(customer);
-                            sop("the customer is now set to inactive");
+                            sop("The customer is now set to inactive.");
                         }
                         case "Y" -> {
                             assert customer != null;
                             customer.setStatus(true);
                             customerController.changeStatusToTrue(customer);
-                            sop("the customer is now set to active");
+                            sop("The customer is now set to active.");
                         }
                         default -> {
                             sop("choose Y or N");
@@ -159,13 +158,13 @@ public class CustomerBoundary {
 
                 }
                 else{
-                    sop("currently the store do not have any customer");
+                    sop("No customers exist!");
                 }
 
             }
 
-            case 5 -> {Main.showMainUI();} //OK
-            default -> sop("Please choose number from 1 - 3");
+            case 5 -> Main.showMainUI(); //OK
+            default -> sop("Please choose number from 1 - 3.");
         }
     }
 

@@ -25,6 +25,7 @@ public class ProductBoundary {
 
         int choice2 = input.nextInt();
         switch (choice2) {
+            // Add a warehouse
             case 1 -> {
                 // load up warehouses
                 if (new File("Warehouse.txt").exists()) {
@@ -37,14 +38,14 @@ public class ProductBoundary {
                     if (Main.warehouses.containsKey(warehouse)) {
                         sop("Enter name of the product: ");
                         String product = scanner.nextLine();
-                        sop("Enter costPrice: ");
+                        sop("Enter cost price: ");
                         String cprice = scanner.nextLine();
-                        sop("Enter sellingPrice: ");
+                        sop("Enter selling price: ");
                         String sprice = scanner.nextLine();
                         Warehouse foundWarehouse = Main.warehouses.get(warehouse);
                         productController.addProduct(foundWarehouse, product, Double.parseDouble(cprice), Double.parseDouble(sprice));
                         warehouseController.modifyWarehouse(foundWarehouse);
-                        sop("New product added..");
+                        sop("New product added.");
                     } else {
                         sop("Unavailable warehouse: ");
                     }
@@ -52,8 +53,7 @@ public class ProductBoundary {
                     sop("There are no warehouses!");
                 }
             }
-
-
+            // Show all products
             case 2 -> {
                 // load up warehouses
                 if (new File("Warehouse.txt").exists()) {
@@ -73,6 +73,7 @@ public class ProductBoundary {
                     sop("No warehouses available!");
                 }
             }
+            // Show n or fewer products in a warehouse
             case 3 -> {
                 // load up warehouses
                 if (new File("Warehouse.txt").exists()) {
@@ -94,6 +95,7 @@ public class ProductBoundary {
                     sop("No warehouses available!");
                 }
             }
+            // Replenish stock
             case 4 -> {
                 // load up warehouses
                 if (new File("Warehouse.txt").exists()) {
@@ -113,44 +115,20 @@ public class ProductBoundary {
                         warehouseController.replenishStock(foundWarehouse, product, Integer.parseInt(quantity));
                         warehouseController.modifyWarehouse(foundWarehouse);
 
-                        sop("stock replenished..");
+                        sop("Stock Replenished.");
 
-                    } else {
-                        sop("Unavailable warehouse");
                     }
-                } else {
+                    else {
+                        sop("Unavailable warehouse!");
+                    }
+                }
+                else {
                     sop("No warehouses available!");
                 }
-            }
-//            case 5 ->{
-//            	//cannot enter quantity less than actual quantity that product has
-//            	Scanner scanner = new Scanner(System.in);
-//            	sop("What product you want to remove?: ");
-//            	String product = scanner.nextLine();
-//            	if(Warehouse.getProductList().contains(product)) {
-//            		sop("How many quantity you want to remove?: ");
-//            		int quantity = scanner.nextInt();
-//            		for (Product p : Warehouse.getProductList()) {
-//            			if(quantity > p.getQuantity()) {
-//            				sop("Unavailable quantity");
-//            			}
-//            			else {
-//            				warehouseController.removeProduct(product, quantity);
-//                    		sop("removed..");
-//            			}
-//            		}
-//            	}
-//            	else {
-//            		sop("Product not found");
-//            	}
-//            }
-            default -> {
-                sop("Going back");
             }
         }
     }
         private static void sop (String s){
             System.out.println(s);
         }
-
 }

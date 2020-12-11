@@ -41,6 +41,7 @@ public class InvoiceController {
         customerController.modifyCustomer(c);
     }
 
+    // Makes sure that the remaining total > 0 so it can close properly
     public void updateRemainingTotal(Invoice invoice, BigDecimal amount) {
         if (invoice.getRemainingTotal().compareTo(BigDecimal.valueOf(.01)) < 0) {
             invoice.setRemainingTotal(BigDecimal.ZERO);
@@ -98,6 +99,7 @@ public class InvoiceController {
         }
     }
 
+    // Sorts by invoice number
     public void showAllInvoices() {
         boolean flag = false;
         for (Customer c : Main.customers.values()) {
@@ -141,8 +143,7 @@ public class InvoiceController {
             for (Invoice i : c.getInvoiceAssociated().values()) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(new Date()); // sets time to now
-
-//                cal.add(Calendar.DAY_OF_MONTH, 200); //test late invoice
+//                cal.add(Calendar.DAY_OF_MONTH, 31); // tests late invoice
                 if (cal.getTime().after(i.getCurrentLateDate())) {
                     Calendar cal2 = Calendar.getInstance();
                     cal2.setTime(i.getCurrentLateDate());
@@ -155,7 +156,6 @@ public class InvoiceController {
             }
         }
     }
-
 
     public int getValidInt(Scanner sc) {
         while (!sc.hasNextInt()) {
@@ -172,6 +172,4 @@ public class InvoiceController {
         }
         return sc.nextBigDecimal().setScale(2, RoundingMode.HALF_UP);
     }
-
-
 }
